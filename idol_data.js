@@ -58,7 +58,7 @@
                 id: 2,
                 name: "芦田希未",
                 tag: "慵懒的随性天才",
-                image: "https://freeimage.host/i/Cf5x41a",
+                image: "https://iili.io/Cf5x41a.webp",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png", title: "闪耀的星辰" },
@@ -112,7 +112,7 @@
                 id: 3,
                 name: "鸭田志穂",
                 tag: "冷酷的孤高歌姬",
-                image: "https://freeimage.host/i/Cf5x6rJ",
+                image: "https://iili.io/Cf5x6rJ.webp",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png", title: "深蓝色咏叹调" },
