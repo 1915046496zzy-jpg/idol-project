@@ -3,7 +3,7 @@
                 id: 1,
                 name: "浅宫加爱",
                 tag: "极具感染力的小太阳",
-                image: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
+                image: "https://i.postimg.cc/pTDRm1Gj/ezgif-13673ed4ff927fd6.webp",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png", title: "最后一步是勇气" },
