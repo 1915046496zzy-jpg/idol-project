@@ -219,13 +219,13 @@ const idolDatabase = [
     "id": 4,
     "name": "益田春子",
     "tag": "迷途的温柔乡",
-    "image": "https://i.postimg.cc/3xB253VF/yi-tian-chun-zi-zuo-zai-sha-fa.png",
+    "image": "https://i.postimg.cc/3xBVF253/yi-tian-chun-zi-zuo-zai-sha-fa.png",
     "memories": {
         "sfw": [
-            { "url": "https://i.postimg.cc/3xB253VF/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "迷路后的等待" },
-            { "url": "https://i.postimg.cc/tCv4FvX4/yi-tian-chun-zi-zhao-pian.png", "title": "命运的咖啡" },
-            { "url": "https://i.postimg.cc/L6Rtj0FH/yi-tian-chun-zi-jie-tou.png", "title": "街心公园的长椅" },
-            { "url": "https://i.postimg.cc/k4MGgDXN/yi-tian-chun-zi-xue-sheng.png", "title": "短期大学的日常" },
+            { "url": "https://i.postimg.cc/3xBVF253/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "追忆的窗边" },
+            { "url": "https://i.postimg.cc/8cz935h2/yi-tian-chun-zi-he-fu-pin-cha.png", "title": "春凪の茶歇" },
+            { "url": "https://i.postimg.cc/Kj8wVznp/yi-tian-chun-zi-he-xiao-hai-zi.png", "title": "慈愛の箱庭" },
+            { "url": "https://i.postimg.cc/T13FSwrZ/yi-tian-chun-zi-na-zhe-ka-fei.png", "title": "微苦的清晨" },
             { "url": "https://i.postimg.cc/x8mXt1hN/yi-tian-chun-zi-wu-tai.png", "title": "初次登台" }
         ],
         "nsfw": [
