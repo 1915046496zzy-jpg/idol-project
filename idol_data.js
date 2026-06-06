@@ -226,10 +226,12 @@ const idolDatabase = [
             { "url": "https://i.postimg.cc/8cz935h2/yi-tian-chun-zi-he-fu-pin-cha.png", "title": "春凪の茶歇" },
             { "url": "https://i.postimg.cc/Kj8wVznp/yi-tian-chun-zi-he-xiao-hai-zi.png", "title": "慈愛の箱庭" },
             { "url": "https://i.postimg.cc/T13FSwrZ/yi-tian-chun-zi-na-zhe-ka-fei.png", "title": "微苦的清晨" },
-            { "url": "https://i.postimg.cc/x8mXt1hN/yi-tian-chun-zi-wu-tai.png", "title": "初次登台" }
+            { "url": "https://i.postimg.cc/44FXGkmW/yi-tian-chun-zi-chu-fang-liao-li.png", "title": "日常的香辛料" }
         ],
         "nsfw": [
-            { "url": "https://i.postimg.cc/3xB253VF/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "温暖的包容" }
+            { "url": "https://i.postimg.cc/qBZprVzj/yi-tian-chun-zi-chuan-jiao-shi.png", "title": "魔力临界·深渊之底" },
+            { "url": "https://i.postimg.cc/BZwJ39XN/yi-tian-chun-zi-hou-ru.png", "title": "夜暗的回眸" },
+            { "url": "https://i.postimg.cc/sf03zdvm/yi-tian-chun-zi-bu-ru.png", "title": "温暖的包容" }
         ]
     },
     "basic": {
@@ -254,7 +256,7 @@ const idolDatabase = [
     },
     "traits": {
         "✨ 特质A【方向剥夺】": "Dance成长速度降低50%；但Visual通告中Fame获取倍率增加30%。",
-        "💢 特质B【母性包容】": "初始Obedience极高。安排高压力或黑通告时，Stress增加量固定减半。"
+        "🌱 特质B【母性包容】": "初始Obedience极高。安排高压力或黑通告时，Stress增加量固定减半。"
     },
     "stats": {
         "🎤 Vocal (唱功)": { value: 65, max: 100, desc: "B级 - 实力派，声音温柔治愈，气息平稳", color: "#ec4899" },
