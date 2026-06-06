@@ -56,7 +56,7 @@ const idolDatabase = [
                 id: 1,
                 name: "浅宫加爱",
                 tag: "极具感染力的小太阳",
-                image: "https://iili.io/Cf5fqlV.webp",
+                image: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png", title: "最后一步是勇气" },
@@ -111,7 +111,7 @@ const idolDatabase = [
                 id: 2,
                 name: "芦田希未",
                 tag: "慵懒的随性天才",
-                image: "https://iili.io/Cf5x41a.webp",
+                image: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png", title: "闪耀的星辰" },
@@ -165,7 +165,7 @@ const idolDatabase = [
                 id: 3,
                 name: "鸭田志穂",
                 tag: "冷酷的孤高歌姬",
-                image: "https://iili.io/Cf5awnR.webp",
+                image: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png", title: "深蓝色咏叹调" },
