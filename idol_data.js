@@ -219,19 +219,24 @@ const idolDatabase = [
     "id": 4,
     "name": "益田春子",
     "tag": "迷途的温柔乡",
-    "image": "https://i.postimg.cc/3xBVF253/yi-tian-chun-zi-zuo-zai-sha-fa.png",
+    "image": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png",
     "memories": {
         "sfw": [
             { "url": "https://i.postimg.cc/3xBVF253/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "追忆的窗边" },
             { "url": "https://i.postimg.cc/8cz935h2/yi-tian-chun-zi-he-fu-pin-cha.png", "title": "春凪の茶歇" },
             { "url": "https://i.postimg.cc/Kj8wVznp/yi-tian-chun-zi-he-xiao-hai-zi.png", "title": "慈愛の箱庭" },
             { "url": "https://i.postimg.cc/T13FSwrZ/yi-tian-chun-zi-na-zhe-ka-fei.png", "title": "微苦的清晨" },
-            { "url": "https://i.postimg.cc/44FXGkmW/yi-tian-chun-zi-chu-fang-liao-li.png", "title": "日常的香辛料" }
+            { "url": "https://i.postimg.cc/44FXGkmW/yi-tian-chun-zi-chu-fang-liao-li.png", "title": "日常的香辛料" },
+            { "url": "https://i.postimg.cc/hPrBPX4j/yi-tian-chun-zi-wei-ni-da-san.png", "title": "突如其来的阵雨" },
+            { "url": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png", "title": "永远的首席女主角" },
+            { "url": "https://i.postimg.cc/vHMysryG/yi-tian-chun-zi-gong-yuan-de-zhang-yi.png", "title": "夜风中的片刻" },
+            { "url": "https://i.postimg.cc/44FXGkmW/yi-tian-chun-zi-chu-fang-liao-li.png", "title": "粉丝见面会" }
         ],
         "nsfw": [
             { "url": "https://i.postimg.cc/qBZprVzj/yi-tian-chun-zi-chuan-jiao-shi.png", "title": "魔力临界·深渊之底" },
             { "url": "https://i.postimg.cc/BZwJ39XN/yi-tian-chun-zi-hou-ru.png", "title": "夜暗的回眸" },
-            { "url": "https://i.postimg.cc/sf03zdvm/yi-tian-chun-zi-bu-ru.png", "title": "温暖的包容" }
+            { "url": "https://i.postimg.cc/sf03zdvm/yi-tian-chun-zi-bu-ru.png", "title": "温暖的包容" },
+            { "url": "https://i.postimg.cc/5N1JVBJx/yi-tian-chun-zi-chuan-jiao-shi-nei-she.png", "title": "灵魂交融的深层" }
         ]
     },
     "basic": {
@@ -268,6 +273,60 @@ const idolDatabase = [
         "❤️ Affection (羁绊)": { value: 60, max: 100, color: "#f43f5e" },
         "⛓️ Obedience (服从度)": { value: 80, max: 100, color: "#64748b" },
         "💰 Lust (堕落度)": { value: 15, max: 100, color: "#a855f7" }
+    }
+},
+    {
+    "id": 5,
+    "name": "本东姬乃",
+    "tag": "脱离常识的银色王女",
+    "image": "https://i.postimg.cc/9MscHKpQ/ben-dong-ji-nai-wu-tai.png",
+    "memories": {
+        "sfw": [
+            { "url": "https://i.postimg.cc/9MscHKpQ/ben-dong-ji-nai-wu-tai.png", "title": "星轨的交汇" },
+            { "url": "https://i.postimg.cc/ZRXJz2cn/ben-dong-ji-nai-chi-la-mian.png", "title": "深夜的豚骨汤底" },
+            { "url": "https://i.postimg.cc/j5BRYmXC/ben-dong-ji-nai-shou-huo-ji.png", "title": "售货机旁" },
+            { "url": "https://i.postimg.cc/placeholder_himeno_moon.png", "title": "遥望故乡之月" },
+            { "url": "https://i.postimg.cc/placeholder_himeno_secret.png", "title": "这是最高秘密" }
+        ],
+        "nsfw": [
+            { "url": "https://i.postimg.cc/placeholder_himeno_nsfw.png", "title": "浑浊的以太" }
+        ]
+    },
+    "basic": {
+        "🎓 职业": "来历不明的少女",
+        "🎂 年龄": "18岁",
+        "📏 身高/体型": "169cm / 高挑丰满",
+        "👙 罩杯": "巨乳 (F罩杯)",
+        "🎨 外观特征": "苍白肤色，银白及腰长直发(常戴深色天鹅绒发箍)，幽深紫瞳",
+        "✨ 特殊特征": "说话使用古典敬语，举止端庄严谨，经常长时间注视夜空",
+        "🏠 家庭与背景": "背景完全空白。不携带现金，缺乏现代常识。自称背负着“寻找某种事物”的使命。"
+    },
+    "psychology": {
+        "🧠 MBTI": "INFJ (提倡者/静谧的神秘)",
+        "🎭 性格底色": "严谨的古典教养与不可侵犯的高贵，主色调是认真且浑然天成的电波逻辑",
+        "💦 衍生行为": "被问及身世、来历或某些常识盲区时，会用食指抵住嘴唇，说出“这是最高秘密”"
+    },
+    "privacy": {
+        "🌱 阴毛状态": "稀疏型 (呈现淡淡的银色，范围极小)",
+        "🍒 乳头细节": "小乳头型 (颜色极浅，形状小巧)",
+        "🌸 小穴外观": "紧闭型 (阴唇严丝合缝，呈现浅粉色)",
+        "🍑 菊花外观": "紧致型 (周围皮肤光滑无褶皱)"
+    },
+    "traits": {
+        "✨ 特质A【银色王女】": "具备强烈神秘感。Visual白通告Fame获取翻倍；拒绝黑通告，强制安排时直接失败且Affection大幅下降。",
+        "💢 特质B【无底胃袋】": "每次结算固定扣除Funds用于餐饮；带她去拉面店进食能瞬间清空Stress。",
+        "🌟 特质C【最高秘密】": "参与综艺或访谈时，有概率以“这是最高秘密”拒答，导致通告评价两极分化（50%大成功/50%失败）。"
+    },
+    "stats": {
+        "🎤 Vocal (唱功)": { "value": 70, "max": 100, "desc": "B级 - 实力派，音色空灵清冷，具备极高的辨识度", "color": "#ec4899" },
+        "💃 Dance (舞蹈)": { "value": 50, "max": 100, "desc": "C级 - 职业及格线，动作优雅端庄，但缺乏流行舞爆发力", "color": "#8b5cf6" },
+        "🌟 Visual (视觉)": { "value": 92, "max": 100, "desc": "A级 - 业界顶流，无可挑剔的神秘气质与完美容貌", "color": "#eab308" }
+    },
+    "status": {
+        "💢 Stress (压力值)": { "value": 0, "max": 100, "color": "#ef4444" },
+        "❤️ Affection (羁绊)": { "value": 40, "max": 100, "color": "#f43f5e" },
+        "⛓️ Obedience (服从度)": { "value": 40, "max": 100, "color": "#64748b" },
+        "💰 Lust (堕落度)": { "value": 0, "max": 100, "color": "#a855f7" }
     }
 },
     {
