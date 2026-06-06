@@ -269,6 +269,63 @@ const idolDatabase = [
         "⛓️ Obedience (服从度)": { value: 80, max: 100, color: "#64748b" },
         "💰 Lust (堕落度)": { value: 15, max: 100, color: "#a855f7" }
     }
+},
+    {
+    "id": 6,
+    "name": "社奈虹花",
+    "tag": "早熟的小观察者",
+    "image": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png",
+    "memories": {
+        "sfw": [
+            { "url": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png", "title": "冰淇淋" },
+            { "url": "https://i.postimg.cc/Rhc7mQ4L/she-nai-hong-hua-hong-qi-pao.png", "title": "红旗袍" },
+            { "url": "https://i.postimg.cc/KzjpmWH6/she-nai-hong-hua-sheng-dan-jie.png", "title": "圣诞节" },
+            { "url": "https://i.postimg.cc/1tX7yddy/she-nai-hong-hua-xiao-fu.png", "title": "上学" },
+            { "url": "https://i.postimg.cc/PxJVd7R0/she-nai-hong-hua-si-ku-shui.png", "title": "死库水" },
+            { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "秋" }
+        ],
+        "nsfw": [
+            { "url": "https://i.postimg.cc/qq8srX4w/she-nai-hong-hua-jiao-tang.png", "title": "教堂" },
+            { "url": "https://i.postimg.cc/MHy7wbqg/she-nai-hong-hua-wan-shui-qiang.png", "title": "水枪" },
+            { "url": "https://i.postimg.cc/Fztywn56/she-nai-hong-hua-chuan-jiao-shi.png", "title": "传教士" },
+            { "url": "https://i.postimg.cc/HnQwm4d4/she-nai-hong-hua-hou-ru1.png", "title": "后入" }
+        ]
+    },
+    "basic": {
+        "🎓 职业": "初中生",
+        "🎂 年龄": "14岁",
+        "📏 身高/体型": "152cm / 娇小纤细",
+        "👙 罩杯": "平胸 (发育中)",
+        "🎨 外观特征": "铂金色波浪卷长发，双马尾绳编辫，灰色大眼睛，脸颊上一颗痣",
+        "✨ 特殊特征": "看人时歪着头、大眼睛直直盯着，让人招架不住",
+        "🏠 家庭与背景": "普通家庭，有父母但很少提起。从小习惯独处，喜欢自己琢磨事情"
+    },
+    "psychology": {
+        "🧠 MBTI": "ISTP (理性观察者/早熟的好奇心)",
+        "🎭 性格底色": "表面乖巧安静，内在早熟通透。习惯用那双灰眼睛观察世界，不主动但也不怯场",
+        "💦 衍生行为": "对同龄人不感兴趣，觉得幼稚。会用学术的口吻讨论成年人话题，但真遇到时会脸红"
+    },
+    "privacy": {
+        "🌱 阴毛状态": "白虎型 (无毛，光滑洁净)",
+        "🍒 乳头细节": "幼嫩型 (小且敏感，发育中)",
+        "🌸 小穴外观": "紧闭型 (处女，颜色浅粉)",
+        "🍑 菊花外观": "小巧型 (开口极小)"
+    },
+    "traits": {
+        "✨ 特质A【想长大】": "渴望被当大人对待。被认真征求意见时Affection上升+50%；被敷衍或当小孩时Stress增加+20。",
+        "🔍️ 特质B【好奇心驱动】": "对未知事物有探索欲。首次接触新类型通告时，学习速度+30%；但重复练习时耐心-15%。"
+    },
+    "stats": {
+        "🎤 Vocal (唱功)": { value: 50, max: 100, desc: "D级 - 初学阶段，声音干净有潜力，零技巧", color: "#ec4899" },
+        "💃 Dance (舞蹈)": { value: 35, max: 100, desc: "E级 - 纯素人，肢体不协调但态度认真", color: "#8b5cf6" },
+        "🌟 Visual (视觉)": { value: 75, max: 100, desc: "B级 - 实力派，铂金发灰瞳辨识度极高，盯着人看时有魔力", color: "#eab308" }
+    },
+    "status": {
+        "💢 Stress (压力值)": { value: 10, max: 100, color: "#ef4444" },
+        "❤️ Affection (羁绊)": { value: 10, max: 100, color: "#f43f5e" },
+        "⛓️ Obedience (服从度)": { value: 40, max: 100, color: "#64748b" },
+        "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
+    }
 }
         ];
 
