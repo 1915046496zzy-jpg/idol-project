@@ -19,7 +19,6 @@
                     ]
                 },
                 basic: {
-                    "🏢 事务所": "1030 Production (一零三零制作)",
                     "🎓 职业": "高中二年级学生",
                     "🎂 年龄": "16岁 (生日: 4月14日)",
                     "📏 身高/体型": "155cm / 娇小匀称",
@@ -59,7 +58,7 @@
                 id: 2,
                 name: "芦田希未",
                 tag: "慵懒的随性天才",
-                image: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
+                image: "https://freeimage.host/i/Cf5x41a",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png", title: "闪耀的星辰" },
@@ -74,7 +73,6 @@
                     ]
                 },
                 basic: {
-                    "🏢 事务所": "1030 Production (一零三零制作)",
                     "🎓 职业": "初中三年级学生",
                     "🎂 年龄": "15岁 (生日: 11月23日)",
                     "📏 身高/体型": "160cm / 标准苗条",
@@ -114,7 +112,7 @@
                 id: 3,
                 name: "鸭田志穂",
                 tag: "冷酷的孤高歌姬",
-                image: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png",
+                image: "https://freeimage.host/i/Cf5x6rJ",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png", title: "深蓝色咏叹调" },
@@ -128,7 +126,6 @@
                     ]
                 },
                 basic: {
-                    "🏢 事务所": "1030 Production (一零三零制作)",
                     "🎓 职业": "高中二年级学生",
                     "🎂 年龄": "16岁",
                     "📏 身高/体型": "162cm / 娇小干瘦",
