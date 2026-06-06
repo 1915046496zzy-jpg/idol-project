@@ -214,7 +214,60 @@ const idolDatabase = [
                     "⛓️ Obedience (服从度)": { value: 40, max: 100, color: "#64748b" },
                     "💰 Lust (堕落度)": { value: 0, max: 100, color: "#a855f7" }
                 }
-            }
+            },
+    {
+    "id": 4,
+    "name": "益田春子",
+    "tag": "迷途的温柔乡",
+    "image": "https://i.postimg.cc/3xB253VF/yi-tian-chun-zi-zuo-zai-sha-fa.png",
+    "memories": {
+        "sfw": [
+            { "url": "https://i.postimg.cc/3xB253VF/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "迷路后的等待" },
+            { "url": "https://i.postimg.cc/tCv4FvX4/yi-tian-chun-zi-zhao-pian.png", "title": "命运的咖啡" },
+            { "url": "https://i.postimg.cc/L6Rtj0FH/yi-tian-chun-zi-jie-tou.png", "title": "街心公园的长椅" },
+            { "url": "https://i.postimg.cc/k4MGgDXN/yi-tian-chun-zi-xue-sheng.png", "title": "短期大学的日常" },
+            { "url": "https://i.postimg.cc/x8mXt1hN/yi-tian-chun-zi-wu-tai.png", "title": "初次登台" }
+        ],
+        "nsfw": [
+            { "url": "https://i.postimg.cc/3xB253VF/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "温暖的包容" }
+        ]
+    },
+    "basic": {
+        "🎓 职业": "无业",
+        "🎂 年龄": "21岁",
+        "📏 身高/体型": "168cm / 丰满肉感",
+        "👙 罩杯": "巨乳 (G罩杯)",
+        "🎨 外观特征": "白皙肤色，墨紫色及腰长直发（发尾微卷），温和深紫色瞳孔",
+        "✨ 特殊特征": "永远挂着温和从容的微笑，眼角轻微下垂，极度缺乏方向感",
+        "🏠 家庭与背景": "地方城市普通中产家庭，父母关系和睦。短大毕业后靠打工积蓄生活，坚信会在演艺圈遇到命运之人。面试迷路时被制作人捡到"
+    },
+    "psychology": {
+        "🧠 MBTI": "ISFJ (温和守卫者)",
+        "🎭 性格底色": "极致的温和与包容，几乎不会生气。随遇而安的天然，将一切视为命运的安排",
+        "💦 衍生行为": "迷路时不会惊慌求助，而是找个地方坐下喝茶，等制作人来找她"
+    },
+    "privacy": {
+        "🌱 阴毛状态": "茂盛型 (修剪整齐，呈现倒三角形)",
+        "🍒 乳头细节": "熟女型 (颜色偏深粉，乳晕面积较大，乳头挺拔)",
+        "🌸 小穴外观": "丰满型 (阴阜脂肪丰厚，大阴唇饱满将内部完全包裹)",
+        "🍑 菊花外观": "柔软型 (周围肤色略深，肉感十足)"
+    },
+    "traits": {
+        "✨ 特质A【方向剥夺】": "Dance成长速度降低50%；但Visual通告中Fame获取倍率增加30%。",
+        "💢 特质B【母性包容】": "初始Obedience极高。安排高压力或黑通告时，Stress增加量固定减半。"
+    },
+    "stats": {
+        "🎤 Vocal (唱功)": { value: 65, max: 100, desc: "B级 - 实力派，声音温柔治愈，气息平稳", color: "#ec4899" },
+        "💃 Dance (舞蹈)": { value: 20, max: 100, desc: "E级 - 纯路人，毫无空间感，经常撞到队友", color: "#8b5cf6" },
+        "🌟 Visual (视觉)": { value: 85, max: 100, desc: "A级 - 业界顶流，成熟女性的极致肉体魅力与温婉气质", color: "#eab308" }
+    },
+    "status": {
+        "💢 Stress (压力值)": { value: 0, max: 100, color: "#ef4444" },
+        "❤️ Affection (羁绊)": { value: 60, max: 100, color: "#f43f5e" },
+        "⛓️ Obedience (服从度)": { value: 80, max: 100, color: "#64748b" },
+        "💰 Lust (堕落度)": { value: 15, max: 100, color: "#a855f7" }
+    }
+}
         ];
 
 // 扩充道具池与抽卡权重设定
