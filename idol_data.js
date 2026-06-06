@@ -112,7 +112,7 @@
                 id: 3,
                 name: "鸭田志穂",
                 tag: "冷酷的孤高歌姬",
-                image: "https://iili.io/Cf5x6rJ.webp",
+                image: "https://iili.io/Cf5awnR.webp",
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png", title: "深蓝色咏叹调" },
