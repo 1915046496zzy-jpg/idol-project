@@ -340,19 +340,19 @@ const idolDatabase = [
     "image": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png",
     "memories": {
         "sfw": [
-            { "url": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png", "title": "冰淇淋" },
-            { "url": "https://i.postimg.cc/Rhc7mQ4L/she-nai-hong-hua-hong-qi-pao.png", "title": "红旗袍" },
-            { "url": "https://i.postimg.cc/KzjpmWH6/she-nai-hong-hua-sheng-dan-jie.png", "title": "圣诞节" },
-            { "url": "https://i.postimg.cc/1tX7yddy/she-nai-hong-hua-xiao-fu.png", "title": "上学" },
-            { "url": "https://i.postimg.cc/PxJVd7R0/she-nai-hong-hua-si-ku-shui.png", "title": "死库水" },
-            { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "秋" },
+            { "url": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png", "title": "盛夏融梦" },
+            { "url": "https://i.postimg.cc/Rhc7mQ4L/she-nai-hong-hua-hong-qi-pao.png", "title": "红莲的走廊" },
+            { "url": "https://i.postimg.cc/KzjpmWH6/she-nai-hong-hua-sheng-dan-jie.png", "title": "被灯火与雪所祝福的、午夜赠礼" },
+            { "url": "https://i.postimg.cc/1tX7yddy/she-nai-hong-hua-xiao-fu.png", "title": "樱花的上学路" },
+            { "url": "https://i.postimg.cc/PxJVd7R0/she-nai-hong-hua-si-ku-shui.png", "title": "池畔的小天使" },
+            { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "枫语" },
             { "url": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png", "title": "小水手" }
         ],
         "nsfw": [
             { "url": "https://i.postimg.cc/qq8srX4w/she-nai-hong-hua-jiao-tang.png", "title": "教堂" },
             { "url": "https://i.postimg.cc/MHy7wbqg/she-nai-hong-hua-wan-shui-qiang.png", "title": "水枪" },
             { "url": "https://i.postimg.cc/Fztywn56/she-nai-hong-hua-chuan-jiao-shi.png", "title": "传教士" },
-            { "url": "https://i.postimg.cc/HnQwm4d4/she-nai-hong-hua-hou-ru1.png", "title": "后入" }
+            { "url": "https://i.postimg.cc/HnQwm4d4/she-nai-hong-hua-hou-ru1.png", "title": "甜美的献身" }
         ]
     },
     "basic": {
