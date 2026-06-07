@@ -230,7 +230,9 @@ const idolDatabase = [
             { "url": "https://i.postimg.cc/hPrBPX4j/yi-tian-chun-zi-wei-ni-da-san.png", "title": "突如其来的阵雨" },
             { "url": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png", "title": "永远的首席女主角" },
             { "url": "https://i.postimg.cc/vHMysryG/yi-tian-chun-zi-gong-yuan-de-zhang-yi.png", "title": "夜风中的片刻" },
-            { "url": "https://i.postimg.cc/44FXGkmW/yi-tian-chun-zi-chu-fang-liao-li.png", "title": "粉丝见面会" }
+            { "url": "https://i.postimg.cc/wvkzv720/yi-tian-chun-zi-fen-si-jian-mian-hui.png", "title": "粉丝见面会" },
+            { "url": "https://i.postimg.cc/yNYtPvyp/yi-tian-chun-zi-he-cha.png", "title": "贵妇人的嗜好" },
+            { "url": "https://i.postimg.cc/ZqK2cVxf/yi-tian-chun-zi-wu-dao-fu.png", "title": "带着热度的间歇" }
         ],
         "nsfw": [
             { "url": "https://i.postimg.cc/qBZprVzj/yi-tian-chun-zi-chuan-jiao-shi.png", "title": "魔力临界·深渊之底" },
@@ -279,17 +281,20 @@ const idolDatabase = [
     "id": 5,
     "name": "本东姬乃",
     "tag": "脱离常识的银色王女",
-    "image": "https://i.postimg.cc/9MscHKpQ/ben-dong-ji-nai-wu-tai.png",
+    "image": "https://i.postimg.cc/zf67gjtC/ben-dong-ji-nai-yao-wang-ye-kong.png",
     "memories": {
         "sfw": [
             { "url": "https://i.postimg.cc/9MscHKpQ/ben-dong-ji-nai-wu-tai.png", "title": "星轨的交汇" },
             { "url": "https://i.postimg.cc/ZRXJz2cn/ben-dong-ji-nai-chi-la-mian.png", "title": "深夜的豚骨汤底" },
             { "url": "https://i.postimg.cc/j5BRYmXC/ben-dong-ji-nai-shou-huo-ji.png", "title": "售货机旁" },
-            { "url": "https://i.postimg.cc/placeholder_himeno_moon.png", "title": "遥望故乡之月" },
-            { "url": "https://i.postimg.cc/placeholder_himeno_secret.png", "title": "这是最高秘密" }
+            { "url": "https://i.postimg.cc/zf67gjtC/ben-dong-ji-nai-yao-wang-ye-kong.png", "title": "遥望故乡之夜" },
+            { "url": "https://i.postimg.cc/5tTgC37S/ben-dong-ji-nai-zhe-shi-zui-gao-ji-mi.png", "title": "这是最高秘密" }
         ],
         "nsfw": [
-            { "url": "https://i.postimg.cc/placeholder_himeno_nsfw.png", "title": "浑浊的以太" }
+            { "url": "https://i.postimg.cc/FK8pLZWb/ben-dong-ji-nai-zhan-shi-xiao-xue.png", "title": "通往根源的邀请函" },
+            { "url": "https://i.postimg.cc/VNpgCRGS/ben-dong-ji-nai-chuan-jiao-shi.png", "title": "魔力融解·临界点" },
+            { "url": "https://i.postimg.cc/FK8pLZWY/ben-dong-ji-nai-hou-ru2.png", "title": "背对背的背德" },
+            { "url": "https://i.postimg.cc/SK3dMrTC/ben-dong-ji-nai-kou-jiao.png", "title": "对魔棒的亲吻" }
         ]
     },
     "basic": {
@@ -333,7 +338,7 @@ const idolDatabase = [
     "id": 6,
     "name": "社奈虹花",
     "tag": "早熟的小观察者",
-    "image": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png",
+    "image": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png",
     "memories": {
         "sfw": [
             { "url": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png", "title": "冰淇淋" },
@@ -342,6 +347,7 @@ const idolDatabase = [
             { "url": "https://i.postimg.cc/1tX7yddy/she-nai-hong-hua-xiao-fu.png", "title": "上学" },
             { "url": "https://i.postimg.cc/PxJVd7R0/she-nai-hong-hua-si-ku-shui.png", "title": "死库水" },
             { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "秋" }
+            { "url": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png", "title": "小水手" }
         ],
         "nsfw": [
             { "url": "https://i.postimg.cc/qq8srX4w/she-nai-hong-hua-jiao-tang.png", "title": "教堂" },
