@@ -165,8 +165,8 @@ const idolDatabase = [
                 },
                 stats: {
                     "🎤 Vocal (唱功)": { value: 45, max: 100, desc: "C级 - 职业及格线，声音清脆有辨识度", color: "#ec4899" },
-                    "💃 Dance (舞蹈)": { value: 25, max: 100, desc: "D级 - 勉强能看，经常跟不上节拍", color: "#8b5cf6" },
-                    "🌟 Visual (视觉)": { value: 55, max: 100, desc: "C级 - 职业及格线，极具亲和力的邻家感", color: "#eab308" }
+                    "💃 Dance (舞蹈)": { value: 15, max: 100, desc: "E级 - 纯路人，肢体极度不协调，经常顺拐", color: "#8b5cf6" },
+                    "🌟 Visual (视觉)": { value: 65, max: 100, desc: "B级 - 实力派，极具感染力的小太阳笑容，镜头亲和力高", color: "#eab308" }
                 },
                 status: {
                     "💢 Stress (压力值)": { value: 0, max: 100, color: "#ef4444" },
@@ -218,9 +218,9 @@ const idolDatabase = [
                     "💤 特质B【小憩一会】": "每日固定扣除大量Stress并恢复状态。但在持续集中注意力的通告时，有15%概率因睡着导致失败。"
                 },
                 stats: {
-                    "🎤 Vocal (唱功)": { value: 75, max: 100, desc: "B级 - 实力派，气息控制极佳但缺乏感情投入", color: "#ec4899" },
-                    "💃 Dance (舞蹈)": { value: 92, max: 100, desc: "A级 - 业界顶流，身体柔韧性与节奏感属于怪物级别", color: "#8b5cf6" },
-                    "🌟 Visual (视觉)": { value: 95, max: 100, desc: "S级 - 传说级，只需站在那里就能让全场失声的压倒性魅力", color: "#eab308" }
+                    "🎤 Vocal (唱功)": { value: 70, max: 100, desc: "B级 - 实力派，气息控制极佳但缺乏感情投入", color: "#ec4899" },
+                    "💃 Dance (舞蹈)": { value: 65, max: 100, desc: "B级 - 实力派，随意扭动也能精准踩点", color: "#8b5cf6" },
+                    "🌟 Visual (视觉)": { value: 75, max: 100, desc: "B级 - 实力派，金发大波浪带来的随性美感极度吸睛", color: "#eab308" }
                 },
                 status: {
                     "💢 Stress (压力值)": { value: 10, max: 100, color: "#ef4444" },
@@ -274,8 +274,8 @@ const idolDatabase = [
                     "💢 特质B【唯一执念】": "若连续3个通告未安排Vocal相关工作，Stress增加30点；强制接取非Vocal的黑通告时，Stress增加量翻倍。"
                 },
                 stats: {
-                    "🎤 Vocal (唱功)": { value: 96, max: 100, desc: "S级 - 传说级，具有穿透灵魂的爆发力", color: "#ec4899" },
-                    "💃 Dance (舞蹈)": { value: 65, max: 100, desc: "B级 - 实力派，基础扎实但缺乏情感表现", color: "#8b5cf6" },
+                    "🎤 Vocal (唱功)": { value: 85, max: 100, desc: "A级 - 业界顶流，出道即巅峰，具有穿透灵魂的爆发力", color: "#ec4899" },
+                    "💃 Dance (舞蹈)": { value: 45, max: 100, desc: "D级 - 勉强能看，将全部精力投入唱歌，舞蹈仅维持最低限度", color: "#8b5cf6" },
                     "🌟 Visual (视觉)": { value: 70, max: 100, desc: "B级 - 实力派，五官精致但常年面无表情，气质清冷", color: "#eab308" }
                 },
                 status: {
