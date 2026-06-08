@@ -346,12 +346,16 @@ const idolDatabase = [
             { "url": "https://i.postimg.cc/1tX7yddy/she-nai-hong-hua-xiao-fu.png", "title": "樱花的上学路" },
             { "url": "https://i.postimg.cc/PxJVd7R0/she-nai-hong-hua-si-ku-shui.png", "title": "池畔的小天使" },
             { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "枫语" },
-            { "url": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png", "title": "小水手" }
+            { "url": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png", "title": "小水手" },
+            { "url": "https://i.postimg.cc/h47fy8SJ/she-nai-hong-hua-ou-xiang-fu1.png", "title": "绽放于星尘的Pink Reverie" },
+            { "url": "https://i.postimg.cc/7PTfs1xf/she-nai-hong-hua-ou-xiang-fu3.png", "title": "咏叹" },
+            { "url": "https://i.postimg.cc/sfZv6PVW/she-nai-hong-hua-ou-xiang-fu2.png", "title": "把全部的视线、都献给我吧" }
         ],
         "nsfw": [
-            { "url": "https://i.postimg.cc/qq8srX4w/she-nai-hong-hua-jiao-tang.png", "title": "教堂" },
-            { "url": "https://i.postimg.cc/MHy7wbqg/she-nai-hong-hua-wan-shui-qiang.png", "title": "水枪" },
-            { "url": "https://i.postimg.cc/Fztywn56/she-nai-hong-hua-chuan-jiao-shi.png", "title": "传教士" },
+            { "url": "https://i.postimg.cc/qq8srX4w/she-nai-hong-hua-jiao-tang.png", "title": "琉璃彼岸的誓约" },
+            { "url": "https://i.postimg.cc/MHy7wbqg/she-nai-hong-hua-wan-shui-qiang.png", "title": "白浊的水枪之战" },
+            { "url": "https://i.postimg.cc/Fztywn56/she-nai-hong-hua-chuan-jiao-shi.png", "title": "纯真的祭坛" },
+            { "url": "https://i.postimg.cc/rsWsDTnM/she-nai-hong-hua-kou-jiao.png", "title": "未知の雫" },
             { "url": "https://i.postimg.cc/HnQwm4d4/she-nai-hong-hua-hou-ru1.png", "title": "甜美的献身" }
         ]
     },
