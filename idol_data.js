@@ -55,7 +55,7 @@ var mapDatabase = {
     "东京地区": [
         {
             name: "东京都港区",
-            coord: { top: "75%", left: "55%" },
+            coord: { top: "72%", left: "57%" },
             emoji: "🗼",
             desc: "繁华的核心地带，商业与娱乐的交汇处，也是众多大型企划的诞生地。",
             scenes: [
@@ -65,7 +65,7 @@ var mapDatabase = {
         },
         {
             name: "东京都涩谷区",
-            coord: { top: "60%", left: "25%" },
+            coord: { top: "54%", left: "20%" },
             emoji: "🛍️",
             desc: "时尚与潮流的中心，随处可见星探与怀揣梦想的年轻人。",
             scenes: [
@@ -74,7 +74,7 @@ var mapDatabase = {
         },
         {
             name: "东京都新宿区",
-            coord: { top: "40%", left: "35%" },
+            coord: { top: "33%", left: "32%" },
             emoji: "🌃",
             desc: "光怪陆离的不夜城，表面的繁华下隐藏着无数灰色交易。",
             scenes: [
@@ -83,21 +83,20 @@ var mapDatabase = {
         },
         {
             name: "东京都台东区",
-            coord: { top: "25%", left: "70%" },
+            coord: { top: "18%", left: "68%" },
             emoji: "⛩️",
             desc: "充满昭和风情的老街区，保留着时代的眼泪与人情味。",
             scenes: [
                 { name: "飞鸟旧社", emoji: "📻", desc: "破旧的昭和风老楼。曾经的老牌霸主，如今资金链濒临断裂，设施陈旧。" }
             ]
         },
-        // 以下东京地区暂无专属事务所，可作为常规探索地标
-        { name: "东京都千代田区", coord: { top: "45%", left: "55%" }, emoji: "🏯", desc: "政治与文化的中心区域，治安极佳。", scenes: [] },
-        { name: "东京都中央区", coord: { top: "50%", left: "75%" }, emoji: "🏬", desc: "传统的高级商业区。", scenes: [] },
-        { name: "东京都品川区", coord: { top: "85%", left: "40%" }, emoji: "🚄", desc: "重要的交通枢纽地带。", scenes: [] },
-        { name: "东京都练马区", coord: { top: "25%", left: "20%" }, emoji: "🏡", desc: "安静的住宅区与动画产业聚集地。", scenes: [] },
-        { name: "东京都丰岛区", coord: { top: "20%", left: "45%" }, emoji: "🦉", desc: "充满次文化气息的繁华地带。", scenes: [] },
-        { name: "东京都世田谷区", coord: { top: "80%", left: "15%" }, emoji: "🐈", desc: "高级住宅区，生活节奏缓慢。", scenes: [] },
-        { name: "东京都江东区", coord: { top: "70%", left: "85%" }, emoji: "🌊", desc: "临海副都心，常举办大型漫展与活动。", scenes: [] }
+        { name: "东京都千代田区", coord: { top: "42%", left: "54%" }, emoji: "🏯", desc: "政治与文化的中心区域，治安极佳。", scenes: [] },
+        { name: "东京都中央区", coord: { top: "52%", left: "70%" }, emoji: "🏬", desc: "传统的高级商业区。", scenes: [] },
+        { name: "东京都品川区", coord: { top: "72%", left: "41%" }, emoji: "🚄", desc: "重要的交通枢纽地带。", scenes: [] },
+        { name: "东京都练马区", coord: { top: "22%", left: "15%" }, emoji: "🏡", desc: "安静的住宅区与动画产业聚集地。", scenes: [] },
+        { name: "东京都丰岛区", coord: { top: "18%", left: "41%" }, emoji: "🦉", desc: "充满次文化气息的繁华地带。", scenes: [] },
+        { name: "东京都世田谷区", coord: { top: "75%", left: "14%" }, emoji: "🐈", desc: "高级住宅区，生活节奏缓慢。", scenes: [] },
+        { name: "东京都江东区", coord: { top: "68%", left: "84%" }, emoji: "🌊", desc: "临海副都心，常举办大型漫展与活动。", scenes: [] }
     ],
     "非东京地区": [
         {
@@ -117,6 +116,7 @@ var mapDatabase = {
         { name: "福冈县中洲", emoji: "🍜", desc: "九州的繁华夜街，屋台文化盛行。", scenes: [] }
     ]
 };
+
 
 
 const idolDatabase = [
