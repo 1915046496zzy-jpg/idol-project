@@ -45,7 +45,7 @@ var AssetsMap = {
     "地名_京都府京都市": "https://i.postimg.cc/GmKsvkRN/jing-dou-fu-jing-dou-shi.png",
     "地名_冲绳县那霸市": "https://i.postimg.cc/tRnP8ZdJ/chong-sheng-xian-na-ba-shi.png",
     "地名_千叶县千叶市": "https://i.postimg.cc/s22GmvfH/qian-ye-xian-qian-ye-shi.png",
-    "地名_岐阜县川越市": "https://i.postimg.cc/bvvSgsYC/qi-yu-xian-chuan-yue-shi.png",
+    "地名_埼玉县川越市": "https://i.postimg.cc/bvvSgsYC/qi-yu-xian-chuan-yue-shi.png",
     "地名_大阪府大阪市": "https://i.postimg.cc/ZYv3XBPC/da-ban-fu-da-ban-shi.png",
     "地名_神奈川县横滨市": "https://i.postimg.cc/GppTKH3Z/shen-nai-chuan-xian-heng-bin-shi.png",
     "地名_福冈县中洲": "https://i.postimg.cc/SxdzcW46/fu-gang-xian-zhong-zhou.png",
