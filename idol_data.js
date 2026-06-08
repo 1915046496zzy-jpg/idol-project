@@ -176,7 +176,10 @@ const idolDatabase = [
                         { url: "https://i.postimg.cc/4yLZGxbd/ya-tian-zhi-sui-du-gao-xian-qi.png", title: "这写的什么啊？" }
                     ],
                     nsfw: [
-                        { url: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png", title: "唯一的代价" }
+                        { url: "https://i.postimg.cc/Wz2p1Zkj/ya-tian-zhi-sui-chuan-jiao-shi.png", title: "看着我……别移开视线" },
+                        { url: "https://i.postimg.cc/ZRPKmHC5/ya-tian-zhi-sui-ce-ru.png", title: "星坠之夜的交融" },
+                        { url: "https://i.postimg.cc/VvYsktCr/ya-tian-zhi-sui-kou-jiao.png", title: "灯影里轻柔的侍奉" },
+                        { url: "https://i.postimg.cc/QCXNd7Tk/ya-tian-zhi-sui-nu-shang-wei.png", title: "别……别乱动啊" }
                     ]
                 },
                 basic: {
