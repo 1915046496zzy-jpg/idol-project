@@ -3,7 +3,6 @@
 function renderCultivatePage(parsedSysData) {
     let html = '';
 
-    // 确定当前偶像
     if(!currentIdolNameForCultivate) currentIdolNameForCultivate = (parsedSysData.status && parsedSysData.status['当前偶像']) || '';
     if(!currentIdolNameForCultivate && typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) currentIdolNameForCultivate = idolDatabase[0].name;
 
@@ -14,7 +13,7 @@ function renderCultivatePage(parsedSysData) {
     if(typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) {
         idolDatabase.forEach(idol => {
             let activeClass = (idol.name === currentIdolNameForCultivate) ? 'active' : '';
-            let lockedClass = checkIsUnlocked(idol.name) ? '' : 'locked';
+            let lockedClass = (typeof checkIsUnlocked === 'function' && !checkIsUnlocked(idol.name)) ? 'locked' : '';
             let avatarUrl = getAssetUrl(idol.name + "_头像", "avatar");
             html += `<div class="idol-mini-wrap ${activeClass} ${lockedClass}" onclick="switchCultivateIdol('${idol.name}')" title="${idol.name}">
                         <img src="${avatarUrl}" class="idol-mini-avatar">
@@ -24,7 +23,7 @@ function renderCultivatePage(parsedSysData) {
     }
     html += '</div>';
 
-    let currentCultivateUnlocked = checkIsUnlocked(currentIdolNameForCultivate);
+    let currentCultivateUnlocked = (typeof checkIsUnlocked === 'function') ? checkIsUnlocked(currentIdolNameForCultivate) : true;
 
     // 2. 培养主视窗 (立绘与气泡)
     html += '<div class="cultivate-layout">';
@@ -68,14 +67,14 @@ function renderCultivatePage(parsedSysData) {
     // 提取背包数据
     let stardustCount = "0";
     let realItems = [];
-    if(Array.isArray(parsedSysData.inventory)) {
+    if(parsedSysData.inventory && Array.isArray(parsedSysData.inventory)) {
         parsedSysData.inventory.forEach(itemName => {
             if(itemName.includes("星尘")) stardustCount = itemName.replace(/[^0-9]/ig,"");
             else realItems.push(itemName);
         });
     }
 
-    // 5. 弹出式背包抽屉
+    // 5. 弹出式背包面板
     html += `<div class="inventory-popup" id="cultivate-inv-popup">
                 <div class="inv-header">
                     <span style="font-size: 16px; font-weight: bold; color: #475569;">🎒 培养背包</span>
