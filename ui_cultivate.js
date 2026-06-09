@@ -1,10 +1,36 @@
 // ui_cultivate.js - 培养模块独立渲染逻辑
 
+// 智能道具查找函数（完美兼容数组和对象格式，绝不报错）
+function findItemInfo(itemName) {
+    if (typeof itemPool === 'undefined') return null;
+
+    // 如果哥哥用的是数组格式
+    if (Array.isArray(itemPool)) {
+        return itemPool.find(i => itemName.includes(i.name));
+    }
+    // 如果哥哥用的是对象格式（之前青子教错的地方，现在修复了）
+    else {
+        for (let key in itemPool) {
+            if (itemName.includes(key)) {
+                let item = itemPool[key];
+                return {
+                    name: key,
+                    type: item.type || 'unknown',
+                    isEmoji: item.icon ? true : (item.isEmoji || false),
+                    img: item.icon || item.img || '📦',
+                    desc: item.desc || '暂无详细描述'
+                };
+            }
+        }
+    }
+    return null;
+}
+
 function renderCultivatePage(parsedSysData) {
     let html = '';
 
-    if(!currentIdolNameForCultivate) currentIdolNameForCultivate = (parsedSysData.status && parsedSysData.status['当前偶像']) || '';
-    if(!currentIdolNameForCultivate && typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) currentIdolNameForCultivate = idolDatabase[0].name;
+    if(!window.currentIdolNameForCultivate) window.currentIdolNameForCultivate = (parsedSysData.status && parsedSysData.status['当前偶像']) || '';
+    if(!window.currentIdolNameForCultivate && typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) window.currentIdolNameForCultivate = idolDatabase[0].name;
 
     html += '<div id="page-cultivate" class="page">';
 
@@ -12,9 +38,9 @@ function renderCultivatePage(parsedSysData) {
     html += '<div class="idol-list-container">';
     if(typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) {
         idolDatabase.forEach(idol => {
-            let activeClass = (idol.name === currentIdolNameForCultivate) ? 'active' : '';
+            let activeClass = (idol.name === window.currentIdolNameForCultivate) ? 'active' : '';
             let lockedClass = (typeof checkIsUnlocked === 'function' && !checkIsUnlocked(idol.name)) ? 'locked' : '';
-            let avatarUrl = getAssetUrl(idol.name + "_头像", "avatar");
+            let avatarUrl = typeof getAssetUrl === 'function' ? getAssetUrl(idol.name + "_头像", "avatar") : '';
             html += `<div class="idol-mini-wrap ${activeClass} ${lockedClass}" onclick="switchCultivateIdol('${idol.name}')" title="${idol.name}">
                         <img src="${avatarUrl}" class="idol-mini-avatar">
                         <div class="idol-mini-name">${idol.name}</div>
@@ -23,11 +49,11 @@ function renderCultivatePage(parsedSysData) {
     }
     html += '</div>';
 
-    let currentCultivateUnlocked = (typeof checkIsUnlocked === 'function') ? checkIsUnlocked(currentIdolNameForCultivate) : true;
+    let currentCultivateUnlocked = (typeof checkIsUnlocked === 'function') ? checkIsUnlocked(window.currentIdolNameForCultivate) : true;
 
     // 2. 培养主视窗 (立绘与气泡)
     html += '<div class="cultivate-layout">';
-    let currentIdolImgCultivate = getAssetUrl(currentIdolNameForCultivate + "_立绘");
+    let currentIdolImgCultivate = typeof getAssetUrl === 'function' ? getAssetUrl(window.currentIdolNameForCultivate + "_立绘") : '';
     html += '<div class="cultivate-view">';
     if(currentIdolImgCultivate) html += `<img src="${currentIdolImgCultivate}" class="cultivate-avatar ${currentCultivateUnlocked ? '' : 'locked'}">`;
     else html += '<div style="text-align:center; padding-top:40%; color:#94a3b8;">暂无立绘数据</div>';
@@ -92,12 +118,12 @@ function renderCultivatePage(parsedSysData) {
         realItems.forEach(itemName => {
             let countMatch = itemName.match(/\*\s*(\d+)/); let count = countMatch ? countMatch[1] : 1; let cleanName = itemName.split('*')[0].trim();
             if(cleanName.includes('偶像印记')) {
-                let idolN = cleanName.split('·')[0]; let bgImg = getAssetUrl(idolN + "_头像", "avatar"); let desc = `用于解锁 ${idolN} 潜力上限与强化专属特质。`;
+                let idolN = cleanName.split('·')[0]; let bgImg = typeof getAssetUrl === 'function' ? getAssetUrl(idolN + "_头像", "avatar") : ''; let desc = `用于解锁 ${idolN} 潜力上限与强化专属特质。`;
                 html += `<div class="inv-item mark-item" style="--mark-bg: url('${bgImg}')" data-type="business" onclick="openItemModal('${cleanName}', 'https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png', false, '${desc}')">
                             <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png"><div class="inv-count">${count}</div>
                          </div>`;
             } else {
-                let matchedItem = (typeof itemPool !== 'undefined') ? itemPool.find(i => cleanName.includes(i.name)) : null;
+                let matchedItem = findItemInfo(cleanName); // 使用全新的智能查找函数
                 if (matchedItem) {
                     let imgHtml = matchedItem.isEmoji ? `<div class="inv-item-emoji">${matchedItem.img}</div>` : `<img src="${matchedItem.img}">`;
                     let safeDesc = matchedItem.desc.replace(/'/g, "\\'");
