@@ -75,6 +75,11 @@ var bubbleTexts = {
     }
 };
 
+var itemPool = {
+    "星尘": { type: "currency", icon: "✨", desc: "用于升级的通用资源" },
+    "体力药水": { type: "consumable", icon: "🧪", desc: "恢复偶像大量压力值" },
+    // 哥哥可以在这里把所有非抽卡的、背包专用的道具都写进去~
+};
 
 
 // ====== 系统主题配置 ======
