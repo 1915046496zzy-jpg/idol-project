@@ -1,6 +1,6 @@
 // ====== 全局游戏配置 ======
 var GAME_CONFIG = {
-    DEBUG_ALL_UNLOCKED: true  // 测试模式开关。设为 true 时无视数据强制解锁全图鉴；设为 false 时未解锁角色将变为黑色剪影。
+    DEBUG_ALL_UNLOCKED: true  // 测试模式开关。设为 true 时无视数据强制解锁全图鉴；设为 false 时未解锁角色将变为黑色的剪影。
 };
 
 // ====== 互动语料库 ======
