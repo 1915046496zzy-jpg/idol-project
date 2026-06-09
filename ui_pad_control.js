@@ -14,7 +14,26 @@ function toggleSubmenu(event, btnEl) {
 }
 
 /* ========== 悬浮球拖拽与平板交互逻辑 ========== */
-const ball = document.getElementById('drag-ball');
+let ball = document.getElementById('drag-ball');
+
+// 【核心修改】：将悬浮球拔出到最外层窗口
+if (ball) {
+    try {
+        // 尝试获取酒馆的最外层文档对象
+        let topDoc = window.parent.document || document;
+
+        // 如果悬浮球还没有在最外层，就把它移过去
+        if (ball.parentNode !== topDoc.body) {
+            topDoc.body.appendChild(ball);
+            // 确保悬浮球的层级绝对最高，并且定位基准是整个屏幕
+            ball.style.position = 'fixed';
+            ball.style.zIndex = '999999';
+        }
+    } catch (e) {
+        console.warn("无法突破跨域限制，悬浮球保留在当前沙盒内。");
+    }
+}
+
 let isDragging = false;
 let hasMoved = false;
 let startX, startY, initialLeft, initialTop;
@@ -24,7 +43,9 @@ function getEventPos(e) {
 }
 
 function onDragStart(e) {
-    if (e.target !== ball) return;
+    // 因为 ball 可能被移到了 parent，这里的事件目标判断要兼容一下
+    if (e.target.id !== 'drag-ball' && e.target.closest('#drag-ball') === null) return;
+
     isDragging = true;
     hasMoved = false;
     ball.classList.remove('snap-anim');
@@ -48,8 +69,13 @@ function onDragMove(e) {
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
     let newLeft = initialLeft + dx;
     let newTop = initialTop + dy;
-    const maxX = window.innerWidth - ball.offsetWidth;
-    const maxY = window.innerHeight - ball.offsetHeight;
+
+    // 获取当前悬浮球所在的窗口尺寸（可能是顶层窗口）
+    let winWidth = window.parent.innerWidth || window.innerWidth;
+    let winHeight = window.parent.innerHeight || window.innerHeight;
+
+    const maxX = winWidth - ball.offsetWidth;
+    const maxY = winHeight - ball.offsetHeight;
     newLeft = Math.max(0, Math.min(newLeft, maxX));
     newTop = Math.max(0, Math.min(newTop, maxY));
     ball.style.left = newLeft + 'px';
@@ -63,24 +89,34 @@ function onDragEnd() {
         ball.classList.add('snap-anim');
         const rect = ball.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
-        if (centerX < window.innerWidth / 2) ball.style.left = '10px';
-        else ball.style.left = (window.innerWidth - rect.width - 10) + 'px';
+        let winWidth = window.parent.innerWidth || window.innerWidth;
+
+        if (centerX < winWidth / 2) ball.style.left = '10px';
+        else ball.style.left = (winWidth - rect.width - 10) + 'px';
     }
 }
 
-function onBallClick() {
+function onBallClick(e) {
+    // 阻止事件冒泡，防止触发其他不必要的点击
+    if (e) e.stopPropagation();
     if (!hasMoved) openPad();
 }
 
-// 绑定事件（兼容鼠标和触摸）
+// 重新绑定事件（注意监听器要绑定在最外层文档上，保证拖拽流畅）
 if (ball) {
+    let topDoc = window.parent.document || document;
+
     ball.addEventListener('mousedown', onDragStart);
-    document.addEventListener('mousemove', onDragMove);
-    document.addEventListener('mouseup', onDragEnd);
+    topDoc.addEventListener('mousemove', onDragMove);
+    topDoc.addEventListener('mouseup', onDragEnd);
     ball.addEventListener('touchstart', onDragStart, {passive: false});
-    document.addEventListener('touchmove', onDragMove, {passive: false});
-    document.addEventListener('touchend', onDragEnd);
+    topDoc.addEventListener('touchmove', onDragMove, {passive: false});
+    topDoc.addEventListener('touchend', onDragEnd);
+
+    // 给悬浮球绑定点击事件
+    ball.onclick = onBallClick;
 }
+
 
 /* ========== 平板开关控制 ========== */
 function openPad() {
