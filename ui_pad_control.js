@@ -16,33 +16,37 @@ function toggleSubmenu(event, btnEl) {
 /* ========== 悬浮球拖拽与平板交互逻辑 ========== */
 
 /* ========== 平板开关控制 ========== */
-function openPad() {
+/* ========== ui_pad_control.js 中的平板开关控制 ========== */
+
+// 把函数挂载到 window 上，这样外面的新悬浮球脚本才能调用到它！
+window.openPad = function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
         overlay.style.display = 'flex';
         setTimeout(() => overlay.classList.add('active'), 10);
-        updatePadTime();
+        if (typeof updatePadTime === 'function') updatePadTime();
     }
-}
+};
 
-function closePad() {
+window.closePad = function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
         overlay.classList.remove('active');
         setTimeout(() => overlay.style.display = 'none', 300);
-        closePadApp();
+        if (typeof window.closePadApp === 'function') window.closePadApp();
     }
-}
+};
 
-function openPadApp(appId) {
+window.openPadApp = function(appId) {
     document.querySelectorAll('.pad-app-window').forEach(el => el.classList.remove('active'));
     const appWindow = document.getElementById('pad-app-' + appId);
     if(appWindow) appWindow.classList.add('active');
-}
+};
 
-function closePadApp() {
+window.closePadApp = function() {
     document.querySelectorAll('.pad-app-window').forEach(el => el.classList.remove('active'));
-}
+};
+
 
 function updatePadTime() {
     const now = new Date();
