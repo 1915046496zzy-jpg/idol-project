@@ -15,19 +15,22 @@ function toggleSubmenu(event, btnEl) {
 
 /* ========== 悬浮球拖拽与平板交互逻辑 ========== */
 
-/* ========== 平板开关控制 ========== */
-/* ========== ui_pad_control.js 中的平板开关控制 ========== */
+/* ========== ui_pad_control.js 中的平板开关控制 (信号监听版) ========== */
 
-// 把函数挂载到 window 上，这样外面的新悬浮球脚本才能调用到它！
-window.openPad = function() {
+// 获取最外层的 document，作为信号接收站
+const topDoc = window.parent.document || document;
+
+// 监听外面悬浮球发来的“打开平板”信号
+topDoc.addEventListener('qingzi-open-pad', function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
         overlay.style.display = 'flex';
         setTimeout(() => overlay.classList.add('active'), 10);
         if (typeof updatePadTime === 'function') updatePadTime();
     }
-};
+});
 
+// 平板内部的关闭按钮，还是挂载到当前 window 上，因为是在平板内部点击的
 window.closePad = function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
@@ -46,6 +49,7 @@ window.openPadApp = function(appId) {
 window.closePadApp = function() {
     document.querySelectorAll('.pad-app-window').forEach(el => el.classList.remove('active'));
 };
+
 
 
 function updatePadTime() {
