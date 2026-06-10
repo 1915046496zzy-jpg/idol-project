@@ -1,4 +1,4 @@
-// ====== ui_pad_control.js ======
+// ====== ui_pad_control.js (青子修复版) ======
 
 /* ========== 全局点击收起子菜单 ========== */
 document.addEventListener('click', function() {
@@ -13,24 +13,40 @@ function toggleSubmenu(event, btnEl) {
     if (!wasOpen) submenu.classList.add('open');
 }
 
-/* ========== 悬浮球拖拽与平板交互逻辑 ========== */
+/* ========== ui_pad_control.js 中的平板开关控制 (三重信号监听版) ========== */
 
-/* ========== ui_pad_control.js 中的平板开关控制 (信号监听版) ========== */
-
-// 获取最外层的 document，作为信号接收站
-const topDoc = window.parent.document || document;
-
-// 监听外面悬浮球发来的“打开平板”信号
-topDoc.addEventListener('qingzi-open-pad', function() {
+// 打开平板的核心函数
+function openPadFunction() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
         overlay.style.display = 'flex';
         setTimeout(() => overlay.classList.add('active'), 10);
         if (typeof updatePadTime === 'function') updatePadTime();
     }
+}
+
+// 渠道1：监听当前页面的事件 (防跨域兜底)
+document.addEventListener('qingzi-open-pad', openPadFunction);
+
+// 渠道2：尝试监听外层文档的事件
+try {
+    if (window.parent && window.parent.document) {
+        window.parent.document.addEventListener('qingzi-open-pad', openPadFunction);
+    }
+} catch(e) {
+    console.warn("【秋青子】跨域限制，无法在外层文档注册监听器，已降级。");
+}
+
+// 渠道3：监听跨域广播 (最稳妥的方法)
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'qingzi-open-pad') {
+        openPadFunction();
+    }
 });
 
-// 平板内部的关闭按钮，还是挂载到当前 window 上，因为是在平板内部点击的
+
+// ========== 平板内部关闭与应用切换逻辑 ==========
+
 window.closePad = function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
@@ -49,8 +65,6 @@ window.openPadApp = function(appId) {
 window.closePadApp = function() {
     document.querySelectorAll('.pad-app-window').forEach(el => el.classList.remove('active'));
 };
-
-
 
 function updatePadTime() {
     const now = new Date();
