@@ -1,111 +1,126 @@
 // ====== ui_pad_control.js ======
 
-/* ========== 全局点击收起子菜单 ========== */
-document.addEventListener('click', function() {
-    document.querySelectorAll('.interact-submenu').forEach(el => el.classList.remove('open'));
-});
+/* ========== 1. 悬浮球的全局注入与全屏拖拽 ========== */
+(function initGlobalFloatBall() {
+    // 尝试获取最外层的文档对象（突破 iframe）
+    const topDoc = window.parent.document || document;
 
-function toggleSubmenu(event, btnEl) {
-    event.stopPropagation();
-    let submenu = btnEl.querySelector('.interact-submenu');
-    let wasOpen = submenu.classList.contains('open');
-    document.querySelectorAll('.interact-submenu').forEach(el => el.classList.remove('open'));
-    if (!wasOpen) submenu.classList.add('open');
-}
+    // 如果已经注入过，就不要重复注入啦
+    if (topDoc.getElementById('qingzi-drag-ball')) return;
 
-/* ========== 悬浮球拖拽与平板交互逻辑 ========== */
-let ball = document.getElementById('drag-ball');
+    // 创建悬浮球 DOM
+    const ball = topDoc.createElement('div');
+    ball.id = 'qingzi-drag-ball';
+    ball.innerHTML = '📱';
+    ball.title = '打开终端平板';
+    // 将样式直接写在行内，确保跨层级生效
+    Object.assign(ball.style, {
+        position: 'fixed',
+        right: '20px',
+        bottom: '120px',
+        width: '56px',
+        height: '56px',
+        background: 'rgba(255, 255, 255, 0.9)',
+        border: '2px solid #db2777',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '28px',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.15), inset 0 0 10px rgba(219,39,119,0.1)',
+        cursor: 'grab',
+        zIndex: '999999', // 绝对顶层
+        userSelect: 'none',
+        touchAction: 'none',
+        transition: 'transform 0.2s, box-shadow 0.2s'
+    });
 
-// 【核心修改】：将悬浮球拔出到最外层窗口
-if (ball) {
-    try {
-        // 尝试获取酒馆的最外层文档对象
-        let topDoc = window.parent.document || document;
+    topDoc.body.appendChild(ball);
 
-        // 如果悬浮球还没有在最外层，就把它移过去
-        if (ball.parentNode !== topDoc.body) {
-            topDoc.body.appendChild(ball);
-            // 确保悬浮球的层级绝对最高，并且定位基准是整个屏幕
-            ball.style.position = 'fixed';
-            ball.style.zIndex = '999999';
-        }
-    } catch (e) {
-        console.warn("无法突破跨域限制，悬浮球保留在当前沙盒内。");
+    // 拖拽相关变量
+    let isDragging = false;
+    let hasMoved = false;
+    let startX, startY, initialLeft, initialTop;
+
+    function getEventPos(e) {
+        return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : { x: e.clientX, y: e.clientY };
     }
-}
 
-let isDragging = false;
-let hasMoved = false;
-let startX, startY, initialLeft, initialTop;
+    function onDragStart(e) {
+        if (e.target.id !== 'qingzi-drag-ball' && e.target.closest('#qingzi-drag-ball') === null) return;
+        isDragging = true;
+        hasMoved = false;
+        ball.style.transition = 'none'; // 拖拽时取消动画
+        ball.style.cursor = 'grabbing';
 
-function getEventPos(e) {
-    return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : { x: e.clientX, y: e.clientY };
-}
+        const pos = getEventPos(e);
+        startX = pos.x;
+        startY = pos.y;
 
-function onDragStart(e) {
-    // 因为 ball 可能被移到了 parent，这里的事件目标判断要兼容一下
-    if (e.target.id !== 'drag-ball' && e.target.closest('#drag-ball') === null) return;
-
-    isDragging = true;
-    hasMoved = false;
-    ball.classList.remove('snap-anim');
-    const pos = getEventPos(e);
-    startX = pos.x;
-    startY = pos.y;
-    const rect = ball.getBoundingClientRect();
-    initialLeft = rect.left;
-    initialTop = rect.top;
-    ball.style.right = 'auto';
-    ball.style.bottom = 'auto';
-    ball.style.left = initialLeft + 'px';
-    ball.style.top = initialTop + 'px';
-}
-
-function onDragMove(e) {
-    if (!isDragging) return;
-    const pos = getEventPos(e);
-    const dx = pos.x - startX;
-    const dy = pos.y - startY;
-    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
-    let newLeft = initialLeft + dx;
-    let newTop = initialTop + dy;
-
-    // 获取当前悬浮球所在的窗口尺寸（可能是顶层窗口）
-    let winWidth = window.parent.innerWidth || window.innerWidth;
-    let winHeight = window.parent.innerHeight || window.innerHeight;
-
-    const maxX = winWidth - ball.offsetWidth;
-    const maxY = winHeight - ball.offsetHeight;
-    newLeft = Math.max(0, Math.min(newLeft, maxX));
-    newTop = Math.max(0, Math.min(newTop, maxY));
-    ball.style.left = newLeft + 'px';
-    ball.style.top = newTop + 'px';
-}
-
-function onDragEnd() {
-    if (!isDragging) return;
-    isDragging = false;
-    if (hasMoved) {
-        ball.classList.add('snap-anim');
         const rect = ball.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        let winWidth = window.parent.innerWidth || window.innerWidth;
+        initialLeft = rect.left;
+        initialTop = rect.top;
 
-        if (centerX < winWidth / 2) ball.style.left = '10px';
-        else ball.style.left = (winWidth - rect.width - 10) + 'px';
+        // 强制使用 left 和 top 定位
+        ball.style.right = 'auto';
+        ball.style.bottom = 'auto';
+        ball.style.left = initialLeft + 'px';
+        ball.style.top = initialTop + 'px';
     }
-}
 
-function onBallClick(e) {
-    // 阻止事件冒泡，防止触发其他不必要的点击
-    if (e) e.stopPropagation();
-    if (!hasMoved) openPad();
-}
+    function onDragMove(e) {
+        if (!isDragging) return;
+        const pos = getEventPos(e);
+        const dx = pos.x - startX;
+        const dy = pos.y - startY;
 
-// 重新绑定事件（注意监听器要绑定在最外层文档上，保证拖拽流畅）
-if (ball) {
-    let topDoc = window.parent.document || document;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
 
+        let newLeft = initialLeft + dx;
+        let newTop = initialTop + dy;
+
+        const winWidth = topDoc.defaultView.innerWidth;
+        const winHeight = topDoc.defaultView.innerHeight;
+
+        // 边界限制
+        newLeft = Math.max(0, Math.min(newLeft, winWidth - ball.offsetWidth));
+        newTop = Math.max(0, Math.min(newTop, winHeight - ball.offsetHeight));
+
+        ball.style.left = newLeft + 'px';
+        ball.style.top = newTop + 'px';
+    }
+
+    function onDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        ball.style.cursor = 'grab';
+
+        if (hasMoved) {
+            // 贴边动画
+            ball.style.transition = 'left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.2s';
+            const rect = ball.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const winWidth = topDoc.defaultView.innerWidth;
+
+            if (centerX < winWidth / 2) {
+                ball.style.left = '10px';
+            } else {
+                ball.style.left = (winWidth - rect.width - 10) + 'px';
+            }
+        }
+    }
+
+    function onBallClick(e) {
+        if (e) e.stopPropagation();
+        if (!hasMoved) {
+            // 因为悬浮球在最外层，调用当前 iframe 内的打开函数
+            if (typeof window.openPad === 'function') {
+                window.openPad();
+            }
+        }
+    }
+
+    // 绑定事件到最外层
     ball.addEventListener('mousedown', onDragStart);
     topDoc.addEventListener('mousemove', onDragMove);
     topDoc.addEventListener('mouseup', onDragEnd);
@@ -113,44 +128,55 @@ if (ball) {
     topDoc.addEventListener('touchmove', onDragMove, {passive: false});
     topDoc.addEventListener('touchend', onDragEnd);
 
-    // 给悬浮球绑定点击事件
-    ball.onclick = onBallClick;
-}
+    ball.addEventListener('click', onBallClick);
+})();
 
-
-/* ========== 平板开关控制 ========== */
-function openPad() {
+/* ========== 2. 平板界面的开关与切换 ========== */
+window.openPad = function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
         overlay.style.display = 'flex';
         setTimeout(() => overlay.classList.add('active'), 10);
-        updatePadTime();
+        if(typeof updatePadTime === 'function') updatePadTime();
     }
-}
+};
 
-function closePad() {
+window.closePad = function() {
     const overlay = document.getElementById('pad-overlay');
     if(overlay) {
         overlay.classList.remove('active');
         setTimeout(() => overlay.style.display = 'none', 300);
         closePadApp();
     }
-}
+};
 
-function openPadApp(appId) {
+window.openPadApp = function(appId) {
     document.querySelectorAll('.pad-app-window').forEach(el => el.classList.remove('active'));
     const appWindow = document.getElementById('pad-app-' + appId);
     if(appWindow) appWindow.classList.add('active');
-}
+};
 
-function closePadApp() {
+window.closePadApp = function() {
     document.querySelectorAll('.pad-app-window').forEach(el => el.classList.remove('active'));
-}
+};
 
-function updatePadTime() {
+window.updatePadTime = function() {
     const now = new Date();
     let h = now.getHours().toString().padStart(2, '0');
     let m = now.getMinutes().toString().padStart(2, '0');
     const timeEl = document.getElementById('pad-time');
     if(timeEl) timeEl.innerText = `${h}:${m} 🔋 98%`;
-}
+};
+
+/* ========== 3. 全局收起子菜单 ========== */
+document.addEventListener('click', function() {
+    document.querySelectorAll('.interact-submenu').forEach(el => el.classList.remove('open'));
+});
+
+window.toggleSubmenu = function(event, btnEl) {
+    event.stopPropagation();
+    let submenu = btnEl.querySelector('.interact-submenu');
+    let wasOpen = submenu.classList.contains('open');
+    document.querySelectorAll('.interact-submenu').forEach(el => el.classList.remove('open'));
+    if (!wasOpen) submenu.classList.add('open');
+};
