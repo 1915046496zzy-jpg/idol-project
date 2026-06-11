@@ -107,7 +107,14 @@ var mapDatabase = {
                 { name: "野猫演艺", emoji: "🐾", desc: "商店街关东煮店二楼的单间。极度草根，偶像为了生计甚至需要打工。" }
             ]
         },
-        { name: "北海道札幌市", emoji: "❄️", desc: "北国的中心，常年积雪的浪漫之都。", scenes: [] },
+        { 
+            name: "北海道札幌市", 
+            emoji: "❄️", 
+            desc: "北国的中心，常年积雪的浪漫之都。", 
+            scenes: [
+                { name: "温泉旅馆", emoji: "♨️", desc: "温泉旅馆。" }
+            ] 
+        },
         { name: "京都府京都市", emoji: "🍵", desc: "千年古都，随处可见穿着和服的少女。", scenes: [] },
         { name: "大阪府大阪市", emoji: "🐙", desc: "热情似火的美食之都。", scenes: [] },
         { name: "冲绳县那霸市", emoji: "🌺", desc: "阳光、沙滩与海浪的南国度假胜地。", scenes: [] },
