@@ -50,11 +50,12 @@ var AssetsMap = {
     "地名_神奈川县横滨市": "https://i.postimg.cc/GppTKH3Z/shen-nai-chuan-xian-heng-bin-shi.png",
     "地名_福冈县中洲": "https://i.postimg.cc/SxdzcW46/fu-gang-xian-zhong-zhou.png",
 
-    // ================= 【事务所场景】 =================
+    // ================= 【场景】 =================
     "事务所_一零三零制作": "https://i.postimg.cc/TwL9kkYX/yi-ling-san-ling-zhi-zuo.png",
     "事务所_微梦制作": "https://i.postimg.cc/NM94NNGn/wei-meng-zhi-zuo.png",
     "事务所_白之光演艺": "https://i.postimg.cc/xCJRssjs/bai-zhi-guang-yan-yi.png",
     "事务所_野猫演艺": "https://i.postimg.cc/MTMDssZg/ye-mao-yan-yi.png",
     "事务所_铃兰制作": "https://i.postimg.cc/50Y3PP9s/ling-lan-zhi-zuo.png",
-    "事务所_飞鸟旧社": "https://i.postimg.cc/Ss2rZZQT/fei-niao-jiu-she.png"
+    "事务所_飞鸟旧社": "https://i.postimg.cc/Ss2rZZQT/fei-niao-jiu-she.png",
+    "北海道_温泉旅馆": "https://i.postimg.cc/dtT7F04P/bei-hai-dao-zha-huang-shi-wen-quan-lu-guan.png"
 };
