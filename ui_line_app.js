@@ -26,7 +26,7 @@
             .btn-create-group { background: #10b981; color: #fff; border: none; padding: 10px 18px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 10px rgba(16,185,129,0.2); transition: 0.2s; display: flex; align-items: center; gap: 6px;}
             .btn-create-group:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 6px 15px rgba(16,185,129,0.3);}
 
-            .chat-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-bottom: 20px; flex: 1;}
+            .chat-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-bottom: 80px; flex: 1;}
             .chat-list::-webkit-scrollbar { width: 6px; }
             .chat-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
             .chat-list-item { display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 16px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
