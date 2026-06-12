@@ -1,47 +1,94 @@
-// ui_cultivate.js - 培养模块独立渲染逻辑 (含状态监视面板升级版)
+// ui_cultivate.js - 培养模块独立渲染逻辑 (修复数值抓取Bug & UI弹窗升级版)
 
 // ==========================================
-// 1. 自动注入专属 CSS (哥哥不需要手动去加样式啦)
+// 1. 自动注入专属 CSS (包含面板的弹窗动画与新按钮)
 // ==========================================
 (function() {
     if (document.getElementById('cultivate-monitor-style')) return;
     const style = document.createElement('style');
     style.id = 'cultivate-monitor-style';
     style.innerHTML = `
+        .btn-open-monitor {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 46px;
+            height: 46px;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            transition: 0.2s;
+            color: #64748b;
+        }
+        .btn-open-monitor:hover {
+            border-color: var(--theme-text-main, #db2777);
+            color: var(--theme-text-main, #db2777);
+            transform: scale(1.1);
+        }
+
         .status-monitor-panel {
             position: absolute;
-            left: 15px;
-            top: 15px;
-            width: 220px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 16px;
-            padding: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            z-index: 5;
+            left: 20px;
+            top: 75px;
+            width: 240px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 50;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            pointer-events: none; /* 让它不影响底层立绘的拖拽或点击 */
-            transition: 0.3s;
+            transform-origin: top left;
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .status-monitor-panel.open {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--theme-text-main, #db2777);
+            padding-bottom: 8px;
         }
         .monitor-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 900;
             color: #334155;
-            border-bottom: 2px solid var(--theme-text-main, #db2777);
-            padding-bottom: 5px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .monitor-section { display: flex; flex-direction: column; gap: 8px; }
-        .monitor-subtitle { font-size: 12px; color: #94a3b8; font-weight: bold; margin-bottom: 2px; }
+        .monitor-close {
+            cursor: pointer;
+            font-size: 18px;
+            color: #94a3b8;
+            transition: 0.2s;
+        }
+        .monitor-close:hover { color: #ef4444; transform: rotate(90deg); }
 
-        .stat-row, .status-row { display: flex; flex-direction: column; gap: 4px; }
+        .monitor-section { display: flex; flex-direction: column; gap: 10px; }
+        .monitor-subtitle { font-size: 12px; color: #94a3b8; font-weight: bold; margin-bottom: -2px; }
+
+        .stat-row, .status-row { display: flex; flex-direction: column; gap: 5px; }
         .stat-label, .status-label { font-size: 12px; font-weight: bold; color: #475569; display: flex; justify-content: space-between;}
-        .stat-val, .status-val { font-size: 11px; font-weight: 900; color: #64748b; text-align: right; margin-top: -16px;}
+        .stat-val, .status-val { font-size: 12px; font-weight: 900; color: #64748b; text-align: right; margin-top: -18px;}
 
         .stat-bar-bg, .status-bar-bg {
             width: 100%;
@@ -62,6 +109,12 @@
     `;
     document.head.appendChild(style);
 })();
+
+// 全局暴露开/关监视面板的函数
+window.toggleMonitorPanel = function() {
+    let p = document.getElementById('cultivate-monitor-popup');
+    if(p) p.classList.toggle('open');
+};
 
 // ==========================================
 // 2. 智能道具查找函数
@@ -88,10 +141,9 @@ function findItemInfo(itemName) {
 }
 
 // ==========================================
-// 3. 智能获取当前偶像状态数据的函数 (新增)
+// 3. 高精度提取偶像状态数据 (修复同行数值干扰Bug)
 // ==========================================
 function getCurrentIdolData(idolName, parsedSysData) {
-    // 先从数据库找到该偶像的基础数据
     let dbData = typeof idolDatabase !== 'undefined' ? idolDatabase.find(i => i.name === idolName) : null;
 
     let stats = {
@@ -107,7 +159,7 @@ function getCurrentIdolData(idolName, parsedSysData) {
         lust: { val: 0, color: "#a855f7", icon: "bi-droplet-fill", name: "Lust" }
     };
 
-    // 填入数据库初始值
+    // 先填入数据库初始值作为打底
     if (dbData) {
         if (dbData.stats) {
             if (dbData.stats["🎤 Vocal (唱功)"]) { stats.vocal.val = dbData.stats["🎤 Vocal (唱功)"].value; stats.vocal.desc = dbData.stats["🎤 Vocal (唱功)"].desc.split('-')[0].trim(); }
@@ -122,31 +174,35 @@ function getCurrentIdolData(idolName, parsedSysData) {
         }
     }
 
-    // 提取当前 AI 回复里更新的动态数据并覆盖
+    // 从 AI 最新回复中提取动态数据并精准覆盖
     if (parsedSysData && parsedSysData.status) {
-        let sys = parsedSysData.status;
-        let vKey = Object.keys(sys).find(k => k.includes('唱功') || k.includes('Vocal'));
-        if (vKey) { let m = sys[vKey].match(/(\d+)/); if(m) stats.vocal.val = parseInt(m[1]); }
-        let dKey = Object.keys(sys).find(k => k.includes('舞蹈') || k.includes('Dance'));
-        if (dKey) { let m = sys[dKey].match(/(\d+)/); if(m) stats.dance.val = parseInt(m[1]); }
-        let visKey = Object.keys(sys).find(k => k.includes('视觉') || k.includes('Visual'));
-        if (visKey) { let m = sys[visKey].match(/(\d+)/); if(m) stats.visual.val = parseInt(m[1]); }
+        // 将状态对象拍平成一个长字符串，方便正则全局搜索
+        let sysStr = Object.keys(parsedSysData.status).map(k => k + ":" + parsedSysData.status[k]).join(' | ');
 
-        let strKey = Object.keys(sys).find(k => k.includes('压力') || k.includes('Stress'));
-        if (strKey) { let m = sys[strKey].match(/(\d+)/); if(m) status.stress.val = parseInt(m[1]); }
-        let affKey = Object.keys(sys).find(k => k.includes('羁绊') || k.includes('Affection'));
-        if (affKey) { let m = sys[affKey].match(/(\d+)/); if(m) status.affection.val = parseInt(m[1]); }
-        let obeKey = Object.keys(sys).find(k => k.includes('服从') || k.includes('Obedience'));
-        if (obeKey) { let m = sys[obeKey].match(/(\d+)/); if(m) status.obedience.val = parseInt(m[1]); }
-        let lusKey = Object.keys(sys).find(k => k.includes('堕落') || k.includes('Lust'));
-        if (lusKey) { let m = sys[lusKey].match(/(\d+)/); if(m) status.lust.val = parseInt(m[1]); }
+        // 强力提取函数：查找关键词，并向后抓取遇到的第一个数字
+        function extractNum(str, keyword) {
+            let regex = new RegExp(keyword + "[^\\d]*(\\d+)", "i");
+            let m = str.match(regex);
+            return m ? parseInt(m[1]) : null;
+        }
+
+        // 业务能力
+        let vVal = extractNum(sysStr, '(?:Vocal|唱功)'); if(vVal !== null) stats.vocal.val = vVal;
+        let dVal = extractNum(sysStr, '(?:Dance|舞蹈)'); if(dVal !== null) stats.dance.val = dVal;
+        let visVal = extractNum(sysStr, '(?:Visual|视觉)'); if(visVal !== null) stats.visual.val = visVal;
+
+        // 心理状态
+        let strVal = extractNum(sysStr, '(?:Stress|压力)'); if(strVal !== null) status.stress.val = strVal;
+        let affVal = extractNum(sysStr, '(?:Affection|羁绊)'); if(affVal !== null) status.affection.val = affVal;
+        let obeVal = extractNum(sysStr, '(?:Obedience|服从)'); if(obeVal !== null) status.obedience.val = obeVal;
+        let lusVal = extractNum(sysStr, '(?:Lust|堕落)'); if(lusVal !== null) status.lust.val = lusVal;
     }
 
     return { stats, status };
 }
 
 // ==========================================
-// 4. 渲染培养主页 (整合了状态监视面板)
+// 4. 渲染培养主页
 // ==========================================
 function renderCultivatePage(parsedSysData) {
     let html = '';
@@ -176,11 +232,17 @@ function renderCultivatePage(parsedSysData) {
     // 2. 培养主视窗布局开始
     html += '<div class="cultivate-layout">';
 
-    // 【新增核心功能】获取并渲染左侧状态监视面板
+    // 【新增】左上角呼出监视面板的悬浮按钮
+    html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看状态面板"><i class="bi bi-radar"></i></div>`;
+
+    // 【新增】隐藏式的弹出状态监视面板
     let currentData = getCurrentIdolData(window.currentIdolNameForCultivate, parsedSysData);
 
-    html += `<div class="status-monitor-panel" ${currentCultivateUnlocked ? '' : 'style="filter: grayscale(1); opacity: 0.5;"'}>
-                <div class="monitor-title"><i class="bi bi-cpu-fill"></i> 实时监视</div>
+    html += `<div class="status-monitor-panel" id="cultivate-monitor-popup" ${currentCultivateUnlocked ? '' : 'style="filter: grayscale(1); opacity: 0.5;"'}>
+                <div class="monitor-header">
+                    <div class="monitor-title"><i class="bi bi-cpu-fill"></i> 实时终端监视</div>
+                    <i class="bi bi-x-lg monitor-close" onclick="window.toggleMonitorPanel()"></i>
+                </div>
 
                 <!-- 业务能力区 -->
                 <div class="monitor-section">
