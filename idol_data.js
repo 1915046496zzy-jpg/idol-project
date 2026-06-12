@@ -60,7 +60,9 @@ var mapDatabase = {
             desc: "繁华的核心地带，商业与娱乐的交汇处，也是众多大型企划的诞生地。",
             scenes: [
                 { name: "一零三零制作", emoji: "🏢", desc: "业界最大综合事务所大楼，一切梦开始的地方。核心理念是“大家像家人一样共同进步”。" },
-                { name: "微梦制作", emoji: "🎠", desc: "1030制作下属特设区域，U15低龄特化厂牌。主打纯粹的陪伴与治愈。" }
+                { name: "微梦制作", emoji: "🎠", desc: "1030制作下属特设区域，U15低龄特化厂牌。主打纯粹的陪伴与治愈。" },
+                { name: "偶像服陈列室", emoji: "👘", desc: "东京都港区，收藏着历代偶像打歌服与珍贵演出装备的陈列室。" },
+                { name: "购物中心", emoji: "🛒", desc: "东京都港区，大型综合购物中心，情侣约会的热门地点。" }
             ]
         },
         {
@@ -94,7 +96,15 @@ var mapDatabase = {
         { name: "东京都中央区", coord: { top: "52%", left: "70%" }, emoji: "🏬", desc: "传统的高级商业区。", scenes: [] },
         { name: "东京都品川区", coord: { top: "72%", left: "41%" }, emoji: "🚄", desc: "重要的交通枢纽地带。", scenes: [] },
         { name: "东京都练马区", coord: { top: "22%", left: "15%" }, emoji: "🏡", desc: "安静的住宅区与动画产业聚集地。", scenes: [] },
-        { name: "东京都丰岛区", coord: { top: "18%", left: "41%" }, emoji: "🦉", desc: "充满次文化气息的繁华地带。", scenes: [] },
+        {
+            name: "东京都丰岛区",
+            coord: { top: "18%", left: "41%" },
+            emoji: "🦉",
+            desc: "充满次文化气息的繁华地带。",
+            scenes: [
+                { name: "地下livehouse", emoji: "🎸", desc: "东京都丰岛区的小型地下演出现场，氛围亲密，常有地下偶像在此演出。" }
+            ]
+        },
         { name: "东京都世田谷区", coord: { top: "75%", left: "14%" }, emoji: "🐈", desc: "高级住宅区，生活节奏缓慢。", scenes: [] },
         { name: "东京都江东区", coord: { top: "68%", left: "84%" }, emoji: "🌊", desc: "临海副都心，常举办大型漫展与活动。", scenes: [] }
     ],
@@ -112,18 +122,24 @@ var mapDatabase = {
             emoji: "❄️", 
             desc: "北国的中心，常年积雪的浪漫之都。", 
             scenes: [
-                { name: "温泉旅馆", emoji: "♨️", desc: "温泉旅馆。" }
+                { name: "温泉旅馆", emoji: "♨️", desc: "需重写介绍" }  // 这里留给你来填充新的描述
             ] 
         },
         { name: "京都府京都市", emoji: "🍵", desc: "千年古都，随处可见穿着和服的少女。", scenes: [] },
         { name: "大阪府大阪市", emoji: "🐙", desc: "热情似火的美食之都。", scenes: [] },
-        { name: "冲绳县那霸市", emoji: "🌺", desc: "阳光、沙滩与海浪的南国度假胜地。", scenes: [] },
+        {
+            name: "冲绳县那霸市",
+            emoji: "🌺",
+            desc: "阳光、沙滩与海浪的南国度假胜地。",
+            scenes: [
+                { name: "私人海滩", emoji: "🏖️", desc: "冲绳县那霸市专属的幽静沙滩，海浪声中的治愈空间。" }
+            ]
+        },
         { name: "神奈川县横滨市", emoji: "🎡", desc: "充满异国风情的港口城市。", scenes: [] },
         { name: "千叶县千叶市", emoji: "🎢", desc: "拥有大型主题乐园的欢乐之城。", scenes: [] },
         { name: "福冈县中洲", emoji: "🍜", desc: "九州的繁华夜街，屋台文化盛行。", scenes: [] }
     ]
 };
-
 
 
 var idolDatabase = [
