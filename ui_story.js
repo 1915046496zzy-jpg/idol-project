@@ -10,18 +10,18 @@ function renderStoryPage(parsedSysData) {
         if (parsedSysData.env && Object.keys(parsedSysData.env).length > 0) {
             html += '<div class="story-env">';
             if (parsedSysData.env['日期']) {
-                html += '<span class="env-tag">📅 ' + parsedSysData.env['日期'] + '</span>';
+                html += '<span class="env-tag"><i class="bi bi-calendar3"></i> ' + parsedSysData.env['日期'] + '</span>';
                 // 尝试同步更新顶部状态栏的日期（如果存在）
                 let topDate = document.getElementById('header-time');
-                if (topDate) topDate.innerText = '📅 ' + parsedSysData.env['日期'] + ' 🕒 ' + (parsedSysData.env['时段'] || '未知');
+                if (topDate) topDate.innerHTML = '<i class="bi bi-calendar3"></i> ' + parsedSysData.env['日期'] + ' &nbsp;<i class="bi bi-clock"></i> ' + (parsedSysData.env['时段'] || '未知');
             }
             if (parsedSysData.env['时段']) {
                 let timeStr = parsedSysData.env['时段'];
                 if (parsedSysData.env['具体时间']) timeStr += ' ' + parsedSysData.env['具体时间'];
-                html += '<span class="env-tag">🕒 ' + timeStr + '</span>';
+                html += '<span class="env-tag"><i class="bi bi-clock"></i> ' + timeStr + '</span>';
             }
-            if (parsedSysData.env['地点']) html += '<span class="env-tag">📍 ' + parsedSysData.env['地点'] + '</span>';
-            if (parsedSysData.env['天气']) html += '<span class="env-tag">⛅ ' + parsedSysData.env['天气'] + '</span>';
+            if (parsedSysData.env['地点']) html += '<span class="env-tag"><i class="bi bi-geo-alt-fill"></i> ' + parsedSysData.env['地点'] + '</span>';
+            if (parsedSysData.env['天气']) html += '<span class="env-tag"><i class="bi bi-cloud-sun"></i> ' + parsedSysData.env['天气'] + '</span>';
             html += '</div>';
         }
 
@@ -39,15 +39,15 @@ function renderStoryPage(parsedSysData) {
                 html += `<div class="story-img-toggle" onclick="
                     let target = this.nextElementSibling;
                     target.classList.toggle('open');
-                    this.innerHTML = target.classList.contains('open') ? '▲ 收起剧情插图' : '▼ 查看剧情插图';
-                ">▼ 查看剧情插图</div>`;
+                    this.innerHTML = target.classList.contains('open') ? '<i class=\\'bi bi-caret-up-fill\\'></i> 收起剧情插图' : '<i class=\\'bi bi-caret-down-fill\\'></i> 查看剧情插图';
+                "><i class="bi bi-caret-down-fill"></i> 查看剧情插图</div>`;
                 html += '<div class="story-img-collapse"><div class="story-img-wrap"><img src="' + imgUrl + '" loading="lazy"></div></div>';
             }
         }
 
         // 4. 渲染数值变化
         if (parsedSysData.changes && parsedSysData.changes !== "无") {
-            html += '<div class="story-changes">📈 状态更新：' + parsedSysData.changes + '</div>';
+            html += '<div class="story-changes"><i class="bi bi-graph-up-arrow"></i> 状态更新：' + parsedSysData.changes + '</div>';
         }
 
         // 5. 渲染选项
@@ -67,7 +67,7 @@ function renderStoryPage(parsedSysData) {
         html += '</div>';
     } catch (err) {
         console.error("渲染剧情页时出错:", err);
-        html += `<div id="page-story" class="page active"><div style="padding:50px;text-align:center;color:#ef4444;font-weight:bold;">📖 剧情数据报错了：<br>${err.message}</div></div>`;
+        html += `<div id="page-story" class="page active"><div style="padding:50px;text-align:center;color:#ef4444;font-weight:bold;"><i class="bi bi-book"></i> 剧情数据报错了：<br>${err.message}</div></div>`;
     }
     return html;
 }
