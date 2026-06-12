@@ -1,7 +1,7 @@
-// ui_cultivate.js - 培养模块独立渲染逻辑 (终极数值修复 & UI弹窗升级版)
+// ui_cultivate.js - 培养模块独立渲染逻辑 (终极容错抓取 & 悬浮弹窗UI升级版)
 
 // ==========================================
-// 1. 自动注入专属 CSS (包含面板的弹窗动画与新按钮)
+// 1. 自动注入专属 CSS (包含面板的弹窗动画与新排版)
 // ==========================================
 (function() {
     if (document.getElementById('cultivate-monitor-style')) return;
@@ -86,9 +86,21 @@
         .monitor-section { display: flex; flex-direction: column; gap: 10px; }
         .monitor-subtitle { font-size: 12px; color: #94a3b8; font-weight: bold; margin-bottom: -2px; }
 
-        .stat-row, .status-row { display: flex; flex-direction: column; gap: 5px; }
-        .stat-label, .status-label { font-size: 12px; font-weight: bold; color: #475569; display: flex; justify-content: space-between;}
-        .stat-val, .status-val { font-size: 12px; font-weight: 900; color: #64748b; text-align: right; margin-top: -18px;}
+        .stat-row, .status-row { display: flex; flex-direction: column; gap: 4px; }
+        .stat-label, .status-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #475569;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .stat-label span:last-child, .status-label span:last-child {
+            font-size: 14px;
+            font-weight: 900;
+            color: #1e293b;
+            line-height: 1;
+        }
 
         .stat-bar-bg, .status-bar-bg {
             width: 100%;
@@ -103,12 +115,15 @@
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* 压力值过高时的闪烁警告 */
         @keyframes stressFlash { 0% { opacity: 1; } 50% { opacity: 0.5; filter: drop-shadow(0 0 5px #ef4444); } 100% { opacity: 1; } }
         .stress-warning .status-label { color: #ef4444; animation: stressFlash 1s infinite; }
+        .stress-warning .status-label span:last-child { color: #ef4444; }
     `;
     document.head.appendChild(style);
 })();
 
+// 全局暴露开/关监视面板的函数
 window.toggleMonitorPanel = function() {
     let p = document.getElementById('cultivate-monitor-popup');
     if(p) p.classList.toggle('open');
@@ -139,85 +154,87 @@ function findItemInfo(itemName) {
 }
 
 // ==========================================
-// 3. 终极队列分配提取算法 (解决同行数值覆盖Bug)
+// 3. 终极版：高容错提取偶像状态数据
 // ==========================================
 function getCurrentIdolData(idolName, parsedSysData) {
     let dbData = typeof idolDatabase !== 'undefined' ? idolDatabase.find(i => i.name === idolName) : null;
 
     let stats = {
-        vocal: { val: 0, desc: <q>"E级"</q>, color: <q>"#ec4899"</q>, icon: <q>"bi-mic-fill"</q> },
-        dance: { val: 0, desc: <q>"E级"</q>, color: <q>"#8b5cf6"</q>, icon: <q>"bi-music-player-fill"</q> },
-        visual: { val: 0, desc: <q>"E级"</q>, color: <q>"#eab308"</q>, icon: <q>"bi-camera-fill"</q> }
+        vocal: { val: 0, desc: "E级", color: "#ec4899", icon: "bi-mic-fill" },
+        dance: { val: 0, desc: "E级", color: "#8b5cf6", icon: "bi-music-player-fill" },
+        visual: { val: 0, desc: "E级", color: "#eab308", icon: "bi-camera-fill" }
     };
 
     let status = {
-        stress: { val: 0, color: <q>"#ef4444"</q>, icon: <q>"bi-exclamation-triangle-fill"</q>, name: <q>"Stress"</q> },
-        affection: { val: 0, color: <q>"#f43f5e"</q>, icon: <q>"bi-heart-fill"</q>, name: <q>"Affection"</q> },
-        obedience: { val: 0, color: <q>"#64748b"</q>, icon: <q>"bi-link"</q>, name: <q>"Obedience"</q> },
-        lust: { val: 0, color: <q>"#a855f7"</q>, icon: <q>"bi-droplet-fill"</q>, name: <q>"Lust"</q> }
+        stress: { val: 0, color: "#ef4444", icon: "bi-exclamation-triangle-fill", name: "Stress" },
+        affection: { val: 0, color: "#f43f5e", icon: "bi-heart-fill", name: "Affection" },
+        obedience: { val: 0, color: "#64748b", icon: "bi-link", name: "Obedience" },
+        lust: { val: 0, color: "#a855f7", icon: "bi-droplet-fill", name: "Lust" }
     };
 
-    // 填入数据库初始值作为打底
+    // 先填入数据库初始值作为打底
     if (dbData) {
         if (dbData.stats) {
-            if (dbData.stats[<q>"🎤 Vocal (唱功)"</q>]) { stats.vocal.val = dbData.stats[<q>"🎤 Vocal (唱功)"</q>].value; stats.vocal.desc = dbData.stats[<q>"🎤 Vocal (唱功)"</q>].desc.split('-')[0].trim(); }
-            if (dbData.stats[<q>"💃 Dance (舞蹈)"</q>]) { stats.dance.val = dbData.stats[<q>"💃 Dance (舞蹈)"</q>].value; stats.dance.desc = dbData.stats[<q>"💃 Dance (舞蹈)"</q>].desc.split('-')[0].trim(); }
-            if (dbData.stats[<q>"🌟 Visual (视觉)"</q>]) { stats.visual.val = dbData.stats[<q>"🌟 Visual (视觉)"</q>].value; stats.visual.desc = dbData.stats[<q>"🌟 Visual (视觉)"</q>].desc.split('-')[0].trim(); }
+            if (dbData.stats["🎤 Vocal (唱功)"]) { stats.vocal.val = dbData.stats["🎤 Vocal (唱功)"].value; stats.vocal.desc = dbData.stats["🎤 Vocal (唱功)"].desc.split('-')[0].trim(); }
+            if (dbData.stats["💃 Dance (舞蹈)"]) { stats.dance.val = dbData.stats["💃 Dance (舞蹈)"].value; stats.dance.desc = dbData.stats["💃 Dance (舞蹈)"].desc.split('-')[0].trim(); }
+            if (dbData.stats["🌟 Visual (视觉)"]) { stats.visual.val = dbData.stats["🌟 Visual (视觉)"].value; stats.visual.desc = dbData.stats["🌟 Visual (视觉)"].desc.split('-')[0].trim(); }
         }
         if (dbData.status) {
-            if (dbData.status[<q>"💢 Stress (压力值)"</q>]) status.stress.val = dbData.status[<q>"💢 Stress (压力值)"</q>].value;
-            if (dbData.status[<q>"❤️ Affection (羁绊)"</q>]) status.affection.val = dbData.status[<q>"❤️ Affection (羁绊)"</q>].value;
-            if (dbData.status[<q>"⛓️ Obedience (服从度)"</q>]) status.obedience.val = dbData.status[<q>"⛓️ Obedience (服从度)"</q>].value;
-            if (dbData.status[<q>"💰 Lust (堕落度)"</q>]) status.lust.val = dbData.status[<q>"💰 Lust (堕落度)"</q>].value;
+            if (dbData.status["💢 Stress (压力值)"]) status.stress.val = dbData.status["💢 Stress (压力值)"].value;
+            if (dbData.status["❤️ Affection (羁绊)"]) status.affection.val = dbData.status["❤️ Affection (羁绊)"].value;
+            if (dbData.status["⛓️ Obedience (服从度)"]) status.obedience.val = dbData.status["⛓️ Obedience (服从度)"].value;
+            if (dbData.status["💰 Lust (堕落度)"]) status.lust.val = dbData.status["💰 Lust (堕落度)"].value;
         }
     }
 
-    // 核心修复逻辑：从 AI 最新回复中精准排队分配数据
-    if (parsedSysData && parsedSysData.status) {
-        // 定义我们需要寻找的所有关键词和对应的目标对象
-        let keywordsMap = [
-            { keys: ['vocal', '唱功'], target: stats.vocal },
-            { keys: ['dance', '舞蹈'], target: stats.dance },
-            { keys: ['visual', '视觉'], target: stats.visual },
-            { keys: ['stress', '压力'], target: status.stress },
-            { keys: ['affection', '羁绊'], target: status.affection },
-            { keys: ['obedience', '服从'], target: status.obedience },
-            { keys: ['lust', '堕落'], target: status.lust }
-        ];
+    // 获取当前最新回合的完整文本（从底层抓取，避免 parseSysUI 漏掉）
+    let fullText = "";
+    if (typeof getMessageData === 'function') {
+        fullText = getMessageData() || "";
+    }
+    if (!fullText && parsedSysData) {
+        fullText = JSON.stringify(parsedSysData) + (parsedSysData.text || "") + (parsedSysData.changes || "");
+    }
 
-        for (let key in parsedSysData.status) {
-            // 将键和值拼接在一起，例如 <q>"Stress/Affection: 5% / 40%"</q>
-            let combinedStr = (key + <q>":"</q> + parsedSysData.status[key]).toLowerCase();
+    // 强力提取函数：不仅搜索偶像状态区，还兼容数值变化区
+    function extractCurrentValue(text, keywords) {
+        let lines = text.split('\n');
+        // 从下往上找，确保拿到的是最新结算后的最终值
+        for (let i = lines.length - 1; i >= 0; i--) {
+            let line = lines[i];
+            if (keywords.some(kw => line.toLowerCase().includes(kw.toLowerCase()))) {
+                // 优先匹配：当前为XX、变成了XX、=XX、：XX
+                let curMatch = line.match(/(?:当前|变成|为|=|：|:|>|->)\s*(\d+)/);
+                if (curMatch) return parseInt(curMatch[1]);
 
-            // 1. 找出这句话里出现的所有关键词，并记录它们出现的位置索引
-            let foundTargets = [];
-            keywordsMap.forEach(kwObj => {
-                // 只要该组关键词里有一个匹配到了，就记录位置（避免中英文混用导致重复提取）
-                let firstFoundIdx = -1;
-                for (let i = 0; i < kwObj.keys.length; i++) {
-                    let idx = combinedStr.indexOf(kwObj.keys[i]);
-                    if (idx !== -1) {
-                        firstFoundIdx = idx;
-                        break;
-                    }
+                // 备用方案：如果一行里有多个数字（如 Stress +5 -> 15%），提取最后一个出现的数字
+                let nums = line.match(/\d+/g);
+                if (nums && nums.length > 0) {
+                    return parseInt(nums[nums.length - 1]);
                 }
-                if (firstFoundIdx !== -1) {
-                    foundTargets.push({ idx: firstFoundIdx, target: kwObj.target });
-                }
-            });
-
-            // 按照关键词出现的先后顺序排序
-            foundTargets.sort((a, b) => a.idx - b.idx);
-
-            // 2. 找出这句话里所有的数字顺序
-            let numMatches = [...combinedStr.matchAll(/(\d+)/g)];
-
-            // 3. 一对一分配座位！排在第几个的词，就拿第几个数字
-            for (let i = 0; i < Math.min(foundTargets.length, numMatches.length); i++) {
-                foundTargets[i].target.val = parseInt(numMatches[i][1]);
             }
         }
+        return null;
     }
+
+    // 开始全局深层提取
+    let vVal = extractCurrentValue(fullText, ['Vocal', '唱功']); if(vVal !== null) stats.vocal.val = vVal;
+    let dVal = extractCurrentValue(fullText, ['Dance', '舞蹈']); if(dVal !== null) stats.dance.val = dVal;
+    let visVal = extractCurrentValue(fullText, ['Visual', '视觉']); if(visVal !== null) stats.visual.val = visVal;
+
+    let strVal = extractCurrentValue(fullText, ['Stress', '压力']); if(strVal !== null) status.stress.val = strVal;
+    let affVal = extractCurrentValue(fullText, ['Affection', '羁绊']); if(affVal !== null) status.affection.val = affVal;
+    let obeVal = extractCurrentValue(fullText, ['Obedience', '服从']); if(obeVal !== null) status.obedience.val = obeVal;
+    let lusVal = extractCurrentValue(fullText, ['Lust', '堕落']); if(lusVal !== null) status.lust.val = lusVal;
+
+    // 业务能力评级动态重算防呆机制（防止 AI 没写评级）
+    const calcRank = (val) => {
+        if(val >= 96) return "S级"; if(val >= 81) return "A级"; if(val >= 61) return "B级";
+        if(val >= 41) return "C级"; if(val >= 21) return "D级"; return "E级";
+    };
+    stats.vocal.desc = calcRank(stats.vocal.val);
+    stats.dance.desc = calcRank(stats.dance.val);
+    stats.visual.desc = calcRank(stats.visual.val);
 
     return { stats, status };
 }
@@ -233,12 +250,13 @@ function renderCultivatePage(parsedSysData) {
 
     html += '<div id="page-cultivate" class="page">';
 
+    // 1. 顶部头像栏
     html += '<div class="idol-list-container">';
     if(typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) {
         idolDatabase.forEach(idol => {
             let activeClass = (idol.name === window.currentIdolNameForCultivate) ? 'active' : '';
             let lockedClass = (typeof checkIsUnlocked === 'function' && !checkIsUnlocked(idol.name)) ? 'locked' : '';
-            let avatarUrl = typeof getAssetUrl === 'function' ? getAssetUrl(idol.name + <q>"_头像"</q>, <q>"avatar"</q>) : '';
+            let avatarUrl = typeof getAssetUrl === 'function' ? getAssetUrl(idol.name + "_头像", "avatar") : '';
             html += `<div class="idol-mini-wrap ${activeClass} ${lockedClass}" onclick="switchCultivateIdol('${idol.name}')" title="${idol.name}">
                         <img src="${avatarUrl}" class="idol-mini-avatar">
                         <div class="idol-mini-name">${idol.name}</div>
@@ -249,10 +267,13 @@ function renderCultivatePage(parsedSysData) {
 
     let currentCultivateUnlocked = (typeof checkIsUnlocked === 'function') ? checkIsUnlocked(window.currentIdolNameForCultivate) : true;
 
+    // 2. 培养主视窗布局开始
     html += '<div class="cultivate-layout">';
 
-    html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看状态面板"><i class="bi bi-radar"></i></div>`;
+    // 【新增】左上角呼出监视面板的悬浮按钮
+    html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看实时状态"><i class="bi bi-radar"></i></div>`;
 
+    // 【新增】隐藏式的弹出状态监视面板
     let currentData = getCurrentIdolData(window.currentIdolNameForCultivate, parsedSysData);
 
     html += `<div class="status-monitor-panel" id="cultivate-monitor-popup" ${currentCultivateUnlocked ? '' : 'style="filter: grayscale(1); opacity: 0.5;"'}>
@@ -261,35 +282,42 @@ function renderCultivatePage(parsedSysData) {
                     <i class="bi bi-x-lg monitor-close" onclick="window.toggleMonitorPanel()"></i>
                 </div>
 
+                <!-- 业务能力区 -->
                 <div class="monitor-section">
                     <div class="monitor-subtitle">业务评级 (Stats)</div>`;
     Object.values(currentData.stats).forEach(stat => {
         html += `   <div class="stat-row">
-                        <div class="stat-label"><i class="bi ${stat.icon}" style="color:${stat.color}"></i> ${stat.desc}</div>
+                        <div class="stat-label">
+                            <span><i class="bi ${stat.icon}" style="color:${stat.color}"></i> ${stat.desc}</span>
+                            <span style="color:${stat.color}">${stat.val}</span>
+                        </div>
                         <div class="stat-bar-bg">
                             <div class="stat-bar-fill" style="width: ${stat.val}%; background: ${stat.color};"></div>
                         </div>
-                        <div class="stat-val">${stat.val}</div>
                     </div>`;
     });
     html += `   </div>
 
+                <!-- 心理状态区 -->
                 <div class="monitor-section">
                     <div class="monitor-subtitle">心理状态 (Status)</div>`;
     Object.values(currentData.status).forEach(st => {
         let warningAnim = (st.name === 'Stress' && st.val >= 80) ? 'stress-warning' : '';
         html += `   <div class="status-row ${warningAnim}">
-                        <div class="status-label"><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</div>
+                        <div class="status-label">
+                            <span><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</span>
+                            <span>${st.val}%</span>
+                        </div>
                         <div class="status-bar-bg">
                             <div class="status-bar-fill" style="width: ${st.val}%; background: ${st.color};"></div>
                         </div>
-                        <div class="status-val">${st.val}%</div>
                     </div>`;
     });
     html += `   </div>
              </div>`;
 
-    let currentIdolImgCultivate = typeof getAssetUrl === 'function' ? getAssetUrl(window.currentIdolNameForCultivate + <q>"_立绘"</q>) : '';
+    // 3. 立绘与气泡
+    let currentIdolImgCultivate = typeof getAssetUrl === 'function' ? getAssetUrl(window.currentIdolNameForCultivate + "_立绘") : '';
     html += '<div class="cultivate-view">';
     if(currentIdolImgCultivate) html += `<img src="${currentIdolImgCultivate}" class="cultivate-avatar ${currentCultivateUnlocked ? '' : 'locked'}">`;
     else html += '<div style="text-align:center; padding-top:40%; color:#94a3b8;">暂无立绘数据</div>';
@@ -301,6 +329,7 @@ function renderCultivatePage(parsedSysData) {
     }
     html += '</div>';
 
+    // 4. 互动按钮组
     html += `<div class="interact-btns" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}>`;
     html += `<div class="interact-btn" onclick="toggleSubmenu(event, this)"><i class="bi bi-cup-hot-fill" style="font-size: 24px; margin-bottom: -2px;"></i><span>日常</span>
                 <div class="interact-submenu">
@@ -322,17 +351,20 @@ function renderCultivatePage(parsedSysData) {
              </div>`;
     html += '</div>';
 
+    // 5. 背包展开按钮
     html += `<div class="btn-open-inv" onclick="toggleCultivateInv()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}><i class="bi bi-bag-fill"></i></div>`;
 
-    let stardustCount = <q>"0"</q>;
+    // 提取背包数据
+    let stardustCount = "0";
     let realItems = [];
     if(parsedSysData.inventory && Array.isArray(parsedSysData.inventory)) {
         parsedSysData.inventory.forEach(itemName => {
-            if(itemName.includes(<q>"星尘"</q>)) stardustCount = itemName.replace(/[^0-9]/ig,<q>""</q>);
+            if(itemName.includes("星尘")) stardustCount = itemName.replace(/[^0-9]/ig,"");
             else realItems.push(itemName);
         });
     }
 
+    // 6. 弹出式背包面板
     html += `<div class="inventory-popup" id="cultivate-inv-popup">
                 <div class="inv-header">
                     <span style="font-size: 16px; font-weight: bold; color: #475569;"><i class="bi bi-bag-fill"></i> 培养背包</span>
@@ -350,7 +382,7 @@ function renderCultivatePage(parsedSysData) {
         realItems.forEach(itemName => {
             let countMatch = itemName.match(/\*\s*(\d+)/); let count = countMatch ? countMatch[1] : 1; let cleanName = itemName.split('*')[0].trim();
             if(cleanName.includes('偶像印记')) {
-                let idolN = cleanName.split('·')[0]; let bgImg = typeof getAssetUrl === 'function' ? getAssetUrl(idolN + <q>"_头像"</q>, <q>"avatar"</q>) : ''; let desc = `用于解锁 ${idolN} 潜力上限与强化专属特质。`;
+                let idolN = cleanName.split('·')[0]; let bgImg = typeof getAssetUrl === 'function' ? getAssetUrl(idolN + "_头像", "avatar") : ''; let desc = `用于解锁 ${idolN} 潜力上限与强化专属特质。`;
                 html += `<div class="inv-item mark-item" style="--mark-bg: url('${bgImg}')" data-type="business" onclick="openItemModal('${cleanName}', 'https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png', false, '${desc}')">
                             <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png"><div class="inv-count">${count}</div>
                          </div>`;
@@ -358,7 +390,7 @@ function renderCultivatePage(parsedSysData) {
                 let matchedItem = findItemInfo(cleanName);
                 if (matchedItem) {
                     let imgHtml = matchedItem.isEmoji ? `<div class="inv-item-emoji">${matchedItem.img}</div>` : `<img src="${matchedItem.img}">`;
-                    let safeDesc = matchedItem.desc.replace(/'/g, <q>"\\'"</q>);
+                    let safeDesc = matchedItem.desc.replace(/'/g, "\\'");
                     html += `<div class="inv-item" data-type="${matchedItem.type}" onclick="openItemModal('${matchedItem.name}', '${matchedItem.img}', ${matchedItem.isEmoji}, '${safeDesc}')">${imgHtml}<div class="inv-count">${count}</div></div>`;
                 } else {
                     html += `<div class="inv-item" data-type="unknown" onclick="openItemModal('${cleanName}', '<i class=\\\'bi bi-box-seam\\\'></i>', true, '暂无详细描述')"><div class="inv-item-emoji"><i class="bi bi-box-seam"></i></div><div class="inv-count">${count}</div></div>`;
