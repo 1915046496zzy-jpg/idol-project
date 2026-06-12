@@ -1,4 +1,4 @@
-// ui_cultivate.js - 培养模块独立渲染逻辑 (修复数值抓取Bug & UI弹窗升级版)
+// ui_cultivate.js - 培养模块独立渲染逻辑 (终极修复版：精准初始数值 + 精准抓取 + UI修正)
 
 // ==========================================
 // 1. 自动注入专属 CSS (包含面板的弹窗动画与新按钮)
@@ -103,14 +103,12 @@
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 压力值过高时的闪烁警告 */
         @keyframes stressFlash { 0% { opacity: 1; } 50% { opacity: 0.5; filter: drop-shadow(0 0 5px #ef4444); } 100% { opacity: 1; } }
         .stress-warning .status-label { color: #ef4444; animation: stressFlash 1s infinite; }
     `;
     document.head.appendChild(style);
 })();
 
-// 全局暴露开/关监视面板的函数
 window.toggleMonitorPanel = function() {
     let p = document.getElementById('cultivate-monitor-popup');
     if(p) p.classList.toggle('open');
@@ -141,7 +139,7 @@ function findItemInfo(itemName) {
 }
 
 // ==========================================
-// 3. 高精度提取偶像状态数据 (修复同行数值干扰Bug)
+// 3. 高精度提取偶像状态数据 (彻底修复初始值读取与动态覆盖)
 // ==========================================
 function getCurrentIdolData(idolName, parsedSysData) {
     let dbData = typeof idolDatabase !== 'undefined' ? idolDatabase.find(i => i.name === idolName) : null;
@@ -159,39 +157,47 @@ function getCurrentIdolData(idolName, parsedSysData) {
         lust: { val: 0, color: "#a855f7", icon: "bi-droplet-fill", name: "Lust" }
     };
 
-    // 先填入数据库初始值作为打底
+    // 1. 精准提取数据库中的初始数值（兼容Emoji键名）
     if (dbData) {
         if (dbData.stats) {
-            if (dbData.stats["🎤 Vocal (唱功)"]) { stats.vocal.val = dbData.stats["🎤 Vocal (唱功)"].value; stats.vocal.desc = dbData.stats["🎤 Vocal (唱功)"].desc.split('-')[0].trim(); }
-            if (dbData.stats["💃 Dance (舞蹈)"]) { stats.dance.val = dbData.stats["💃 Dance (舞蹈)"].value; stats.dance.desc = dbData.stats["💃 Dance (舞蹈)"].desc.split('-')[0].trim(); }
-            if (dbData.stats["🌟 Visual (视觉)"]) { stats.visual.val = dbData.stats["🌟 Visual (视觉)"].value; stats.visual.desc = dbData.stats["🌟 Visual (视觉)"].desc.split('-')[0].trim(); }
+            let vKey = Object.keys(dbData.stats).find(k => k.includes('Vocal') || k.includes('唱功'));
+            if(vKey) { stats.vocal.val = dbData.stats[vKey].value; stats.vocal.desc = dbData.stats[vKey].desc.split('-')[0].trim(); }
+
+            let dKey = Object.keys(dbData.stats).find(k => k.includes('Dance') || k.includes('舞蹈'));
+            if(dKey) { stats.dance.val = dbData.stats[dKey].value; stats.dance.desc = dbData.stats[dKey].desc.split('-')[0].trim(); }
+
+            let visKey = Object.keys(dbData.stats).find(k => k.includes('Visual') || k.includes('视觉'));
+            if(visKey) { stats.visual.val = dbData.stats[visKey].value; stats.visual.desc = dbData.stats[visKey].desc.split('-')[0].trim(); }
         }
         if (dbData.status) {
-            if (dbData.status["💢 Stress (压力值)"]) status.stress.val = dbData.status["💢 Stress (压力值)"].value;
-            if (dbData.status["❤️ Affection (羁绊)"]) status.affection.val = dbData.status["❤️ Affection (羁绊)"].value;
-            if (dbData.status["⛓️ Obedience (服从度)"]) status.obedience.val = dbData.status["⛓️ Obedience (服从度)"].value;
-            if (dbData.status["💰 Lust (堕落度)"]) status.lust.val = dbData.status["💰 Lust (堕落度)"].value;
+            let sKey = Object.keys(dbData.status).find(k => k.includes('Stress') || k.includes('压力'));
+            if(sKey) status.stress.val = dbData.status[sKey].value;
+
+            let aKey = Object.keys(dbData.status).find(k => k.includes('Affection') || k.includes('羁绊'));
+            if(aKey) status.affection.val = dbData.status[aKey].value;
+
+            let oKey = Object.keys(dbData.status).find(k => k.includes('Obedience') || k.includes('服从'));
+            if(oKey) status.obedience.val = dbData.status[oKey].value;
+
+            let lKey = Object.keys(dbData.status).find(k => k.includes('Lust') || k.includes('堕落'));
+            if(lKey) status.lust.val = dbData.status[lKey].value;
         }
     }
 
-    // 从 AI 最新回复中提取动态数据并精准覆盖
-    if (parsedSysData && parsedSysData.status) {
-        // 将状态对象拍平成一个长字符串，方便正则全局搜索
+    // 2. 如果 AI 在本次回复中输出了状态变化，则覆盖初始值
+    if (parsedSysData && parsedSysData.status && Object.keys(parsedSysData.status).length > 0) {
         let sysStr = Object.keys(parsedSysData.status).map(k => k + ":" + parsedSysData.status[k]).join(' | ');
 
-        // 强力提取函数：查找关键词，并向后抓取遇到的第一个数字
         function extractNum(str, keyword) {
             let regex = new RegExp(keyword + "[^\\d]*(\\d+)", "i");
             let m = str.match(regex);
             return m ? parseInt(m[1]) : null;
         }
 
-        // 业务能力
         let vVal = extractNum(sysStr, '(?:Vocal|唱功)'); if(vVal !== null) stats.vocal.val = vVal;
         let dVal = extractNum(sysStr, '(?:Dance|舞蹈)'); if(dVal !== null) stats.dance.val = dVal;
         let visVal = extractNum(sysStr, '(?:Visual|视觉)'); if(visVal !== null) stats.visual.val = visVal;
 
-        // 心理状态
         let strVal = extractNum(sysStr, '(?:Stress|压力)'); if(strVal !== null) status.stress.val = strVal;
         let affVal = extractNum(sysStr, '(?:Affection|羁绊)'); if(affVal !== null) status.affection.val = affVal;
         let obeVal = extractNum(sysStr, '(?:Obedience|服从)'); if(obeVal !== null) status.obedience.val = obeVal;
@@ -229,13 +235,10 @@ function renderCultivatePage(parsedSysData) {
 
     let currentCultivateUnlocked = (typeof checkIsUnlocked === 'function') ? checkIsUnlocked(window.currentIdolNameForCultivate) : true;
 
-    // 2. 培养主视窗布局开始
     html += '<div class="cultivate-layout">';
 
-    // 【新增】左上角呼出监视面板的悬浮按钮
     html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看状态面板"><i class="bi bi-radar"></i></div>`;
 
-    // 【新增】隐藏式的弹出状态监视面板
     let currentData = getCurrentIdolData(window.currentIdolNameForCultivate, parsedSysData);
 
     html += `<div class="status-monitor-panel" id="cultivate-monitor-popup" ${currentCultivateUnlocked ? '' : 'style="filter: grayscale(1); opacity: 0.5;"'}>
@@ -244,7 +247,6 @@ function renderCultivatePage(parsedSysData) {
                     <i class="bi bi-x-lg monitor-close" onclick="window.toggleMonitorPanel()"></i>
                 </div>
 
-                <!-- 业务能力区 -->
                 <div class="monitor-section">
                     <div class="monitor-subtitle">业务评级 (Stats)</div>`;
     Object.values(currentData.stats).forEach(stat => {
@@ -258,17 +260,18 @@ function renderCultivatePage(parsedSysData) {
     });
     html += `   </div>
 
-                <!-- 心理状态区 -->
                 <div class="monitor-section">
                     <div class="monitor-subtitle">心理状态 (Status)</div>`;
     Object.values(currentData.status).forEach(st => {
         let warningAnim = (st.name === 'Stress' && st.val >= 80) ? 'stress-warning' : '';
+        // 【修正】仅对 Stress 显示百分号
+        let unit = st.name === 'Stress' ? '%' : '';
         html += `   <div class="status-row ${warningAnim}">
                         <div class="status-label"><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</div>
                         <div class="status-bar-bg">
                             <div class="status-bar-fill" style="width: ${st.val}%; background: ${st.color};"></div>
                         </div>
-                        <div class="status-val">${st.val}%</div>
+                        <div class="status-val">${st.val}${unit}</div>
                     </div>`;
     });
     html += `   </div>
@@ -312,7 +315,6 @@ function renderCultivatePage(parsedSysData) {
     // 5. 背包展开按钮
     html += `<div class="btn-open-inv" onclick="toggleCultivateInv()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}><i class="bi bi-bag-fill"></i></div>`;
 
-    // 提取背包数据
     let stardustCount = "0";
     let realItems = [];
     if(parsedSysData.inventory && Array.isArray(parsedSysData.inventory)) {
