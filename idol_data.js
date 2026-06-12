@@ -126,7 +126,7 @@ var mapDatabase = {
 
 
 
-const idolDatabase = [
+var idolDatabase = [
             {
                 id: 1,
                 name: "浅宫加爱",
