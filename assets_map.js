@@ -52,16 +52,36 @@ var AssetsMap = {
     "地名_神奈川县横滨市": "https://i.postimg.cc/GppTKH3Z/shen-nai-chuan-xian-heng-bin-shi.png",
     "地名_福冈县中洲": "https://i.postimg.cc/SxdzcW46/fu-gang-xian-zhong-zhou.png",
 
-    // ================= 【场景】 =================
-    "事务所_一零三零制作": "https://i.postimg.cc/TwL9kkYX/yi-ling-san-ling-zhi-zuo.png",
-    "事务所_微梦制作": "https://i.postimg.cc/NM94NNGn/wei-meng-zhi-zuo.png",
-    "事务所_白之光演艺": "https://i.postimg.cc/xCJRssjs/bai-zhi-guang-yan-yi.png",
-    "事务所_野猫演艺": "https://i.postimg.cc/MTMDssZg/ye-mao-yan-yi.png",
-    "事务所_铃兰制作": "https://i.postimg.cc/50Y3PP9s/ling-lan-zhi-zuo.png",
-    "事务所_飞鸟旧社": "https://i.postimg.cc/Ss2rZZQT/fei-niao-jiu-she.png",
-    "事务所_温泉旅馆": "https://i.postimg.cc/dtT7F04P/bei-hai-dao-zha-huang-shi-wen-quan-lu-guan.png",
-    "事务所_地下livehouse": "https://i.postimg.cc/3rm8Sthm/dong-jing-dou-feng-dao-qu-de-xialivehouse.png",
-    "事务所_偶像服陈列室": "https://i.postimg.cc/7P0HsK4M/dong-jing-dou-gang-qu-ou-xiang-da-ge-fu-chen-lie-shi.png",
-    "事务所_购物中心": "https://i.postimg.cc/ryxVnfT5/dong-jing-dou-gang-qu-gou-wu-zhong-xin.png",
-    "事务所_私人海滩": "https://i.postimg.cc/QCQjFdS8/chong-sheng-xian-na-ba-shi-si-ren-sha-tan.png"
+// ================= 【场景】 =================
+// --- 第一批（原有）---
+"事务所_一零三零制作": "https://i.postimg.cc/TwL9kkYX/yi-ling-san-ling-zhi-zuo.png",
+"事务所_微梦制作": "https://i.postimg.cc/NM94NNGn/wei-meng-zhi-zuo.png",
+"事务所_白之光演艺": "https://i.postimg.cc/xCJRssjs/bai-zhi-guang-yan-yi.png",
+"事务所_野猫演艺": "https://i.postimg.cc/MTMDssZg/ye-mao-yan-yi.png",
+"事务所_铃兰制作": "https://i.postimg.cc/50Y3PP9s/ling-lan-zhi-zuo.png",
+"事务所_飞鸟旧社": "https://i.postimg.cc/Ss2rZZQT/fei-niao-jiu-she.png",
+"事务所_温泉旅馆": "https://i.postimg.cc/dtT7F04P/bei-hai-dao-zha-huang-shi-wen-quan-lu-guan.png",
+"事务所_地下livehouse": "https://i.postimg.cc/3rm8Sthm/dong-jing-dou-feng-dao-qu-de-xialivehouse.png",
+"事务所_偶像服陈列室": "https://i.postimg.cc/7P0HsK4M/dong-jing-dou-gang-qu-ou-xiang-da-ge-fu-chen-lie-shi.png",
+"事务所_购物中心": "https://i.postimg.cc/ryxVnfT5/dong-jing-dou-gang-qu-gou-wu-zhong-xin.png",
+"事务所_私人海滩": "https://i.postimg.cc/QCQjFdS8/chong-sheng-xian-na-ba-shi-si-ren-sha-tan.png",
+
+// --- 第二批（新增）---
+"事务所_深夜便利店": "https://i.postimg.cc/2y2pgcwp/dong-jing-dou-zhong-yang-qu-shen-ye-bian-li-dian.png",
+"事务所_东京巨蛋": "https://i.postimg.cc/4dvRQN7q/dong-jing-dou-qian-dai-tian-qu-dong-jing-ju-dan.png",
+"事务所_女仆咖啡厅": "https://i.postimg.cc/5yxd7d8B/dong-jing-dou-qian-dai-tian-qu-nu-pu-ka-fei-ting.png",
+"事务所_街机店": "https://i.postimg.cc/qqkVbV2J/dong-jing-dou-qian-dai-tian-qu-jie-ji-dian.png",
+"事务所_初中": "https://i.postimg.cc/50WMzF0Q/dong-jing-dou-pin-chuan-qu-chu-zhong.png",
+"事务所_新干线站台": "https://i.postimg.cc/cHGN38HP/dong-jing-dou-pin-chuan-qu-xin-gan-xian-zhan-tai.png",
+"事务所_水族馆": "https://i.postimg.cc/kgZCnHd9/dong-jing-dou-jiang-dong-qu-shui-zu-guan.png",
+"事务所_可丽饼店": "https://i.postimg.cc/nr08NR1R/dong-jing-dou-se-gu-qu-ke-li-bing-dian.png",
+"事务所_唱片店": "https://i.postimg.cc/qqjfWbG1/dong-jing-dou-se-gu-qu-chang-pian-dian.png",
+"事务所_魔镜号": "https://i.postimg.cc/Y0bcTnxZ/dong-jing-dou-se-gu-qu-mo-jing-hao.png",
+"事务所_医院": "https://i.postimg.cc/L87SHWFc/dong-jing-dou-gang-qu-yi-yuan.png",
+"事务所_小学": "https://i.postimg.cc/P5cHt7ks/dong-jing-dou-gang-qu-xiao-xue.png",
+"事务所_高中": "https://i.postimg.cc/CKqgd4Fg/dong-jing-dou-lian-ma-qu-gao-zhong.png",
+"事务所_传统茶室": "https://i.postimg.cc/XN80Zq0Z/jing-dou-fu-jing-dou-shi-chuan-tong-cha-shi.png",
+"事务所_24小时家庭餐厅": "https://i.postimg.cc/8kHVFcVW/qi-yu-xian-chuan-yue-shi-24xiao-shi-jia-ting-can-ting.png",
+"事务所_豪华游轮甲板": "https://i.postimg.cc/8kHVFcVh/shen-nai-chuan-xian-heng-bin-shi-hao-hua-you-lun-jia-ban.png",
+"事务所_拉面店": "https://i.postimg.cc/wxVdtMdB/fu-gang-xian-fu-gang-shi-la-mian-dian.png"
 };
