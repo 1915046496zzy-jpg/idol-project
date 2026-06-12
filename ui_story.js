@@ -9,19 +9,42 @@ function renderStoryPage(parsedSysData) {
         // 1. 渲染环境标签
         if (parsedSysData.env && Object.keys(parsedSysData.env).length > 0) {
             html += '<div class="story-env">';
+            
             if (parsedSysData.env['日期']) {
                 html += '<span class="env-tag"><i class="bi bi-calendar3"></i> ' + parsedSysData.env['日期'] + '</span>';
                 // 尝试同步更新顶部状态栏的日期（如果存在）
                 let topDate = document.getElementById('header-time');
                 if (topDate) topDate.innerHTML = '<i class="bi bi-calendar3"></i> ' + parsedSysData.env['日期'] + ' &nbsp;<i class="bi bi-clock"></i> ' + (parsedSysData.env['时段'] || '未知');
             }
+            
             if (parsedSysData.env['时段']) {
                 let timeStr = parsedSysData.env['时段'];
                 if (parsedSysData.env['具体时间']) timeStr += ' ' + parsedSysData.env['具体时间'];
                 html += '<span class="env-tag"><i class="bi bi-clock"></i> ' + timeStr + '</span>';
             }
-            if (parsedSysData.env['地点']) html += '<span class="env-tag"><i class="bi bi-geo-alt-fill"></i> ' + parsedSysData.env['地点'] + '</span>';
-            if (parsedSysData.env['天气']) html += '<span class="env-tag"><i class="bi bi-cloud-sun"></i> ' + parsedSysData.env['天气'] + '</span>';
+            
+            if (parsedSysData.env['地点']) {
+                html += '<span class="env-tag"><i class="bi bi-geo-alt-fill"></i> ' + parsedSysData.env['地点'] + '</span>';
+            }
+            
+            // ================= 动态天气图标逻辑 =================
+            if (parsedSysData.env['天气']) {
+                let wStr = parsedSysData.env['天气'];
+                let wIcon = 'bi-cloud-sun'; // 默认图标
+                
+                // 根据关键字动态匹配对应的 Bootstrap Icon
+                if (/雨/.test(wStr)) wIcon = 'bi-cloud-rain-fill';
+                else if (/雪/.test(wStr)) wIcon = 'bi-cloud-snow-fill';
+                else if (/雷|电/.test(wStr)) wIcon = 'bi-cloud-lightning-fill';
+                else if (/阴|云/.test(wStr)) wIcon = 'bi-clouds-fill';
+                else if (/风/.test(wStr)) wIcon = 'bi-wind';
+                else if (/夜|晚/.test(wStr)) wIcon = 'bi-moon-stars-fill';
+                else if (/晴/.test(wStr)) wIcon = 'bi-sun-fill';
+                
+                html += '<span class="env-tag"><i class="bi ' + wIcon + '"></i> ' + wStr + '</span>';
+            }
+            // ====================================================
+
             html += '</div>';
         }
 
