@@ -1,4 +1,4 @@
-// ui_cultivate.js - 培养模块独立渲染逻辑 (修复数值抓取Bug & UI弹窗升级版)
+// ui_cultivate.js - 培养模块独立渲染逻辑 (终极防干扰精准抓取版)
 
 // ==========================================
 // 1. 自动注入专属 CSS (包含面板的弹窗动画与新按钮)
@@ -141,7 +141,7 @@ function findItemInfo(itemName) {
 }
 
 // ==========================================
-// 3. 高精度提取偶像状态数据 (修复同行数值干扰Bug)
+// 3. 终极高精度提取偶像状态数据 (解决同行数值覆盖Bug)
 // ==========================================
 function getCurrentIdolData(idolName, parsedSysData) {
     let dbData = typeof idolDatabase !== 'undefined' ? idolDatabase.find(i => i.name === idolName) : null;
@@ -176,26 +176,38 @@ function getCurrentIdolData(idolName, parsedSysData) {
 
     // 从 AI 最新回复中提取动态数据并精准覆盖
     if (parsedSysData && parsedSysData.status) {
-        // 将状态对象拍平成一个长字符串，方便正则全局搜索
+        // 将状态对象合并成大字符串，方便全局正则
         let sysStr = Object.keys(parsedSysData.status).map(k => k + ":" + parsedSysData.status[k]).join(' | ');
 
-        // 强力提取函数：查找关键词，并向后抓取遇到的第一个数字
-        function extractNum(str, keyword) {
-            let regex = new RegExp(keyword + "[^\\d]*(\\d+)", "i");
-            let m = str.match(regex);
-            return m ? parseInt(m[1]) : null;
+        // 【业务能力】提取逻辑
+        // 先尝试捕获紧凑格式 (例: Vocal/Dance/Visual: 45/27/55)
+        let combinedStatsMatch = sysStr.match(/(?:Vocal|唱功).*?(?:Dance|舞蹈).*?(?:Visual|视觉)[^\d]*(\d+)[^\d]*(\d+)[^\d]*(\d+)/i);
+        if (combinedStatsMatch) {
+            stats.vocal.val = parseInt(combinedStatsMatch[1]);
+            stats.dance.val = parseInt(combinedStatsMatch[2]);
+            stats.visual.val = parseInt(combinedStatsMatch[3]);
+        } else {
+            // 若为独立格式，使用严谨的短距捕获(最多允许跳过15个字符)，防止越界抓取
+            let v = sysStr.match(/(?:Vocal|唱功)[^\d]{0,15}?(\d+)/i); if (v) stats.vocal.val = parseInt(v[1]);
+            let d = sysStr.match(/(?:Dance|舞蹈)[^\d]{0,15}?(\d+)/i); if (d) stats.dance.val = parseInt(d[1]);
+            let vi = sysStr.match(/(?:Visual|视觉)[^\d]{0,15}?(\d+)/i); if (vi) stats.visual.val = parseInt(vi[1]);
         }
 
-        // 业务能力
-        let vVal = extractNum(sysStr, '(?:Vocal|唱功)'); if(vVal !== null) stats.vocal.val = vVal;
-        let dVal = extractNum(sysStr, '(?:Dance|舞蹈)'); if(dVal !== null) stats.dance.val = dVal;
-        let visVal = extractNum(sysStr, '(?:Visual|视觉)'); if(visVal !== null) stats.visual.val = visVal;
-
-        // 心理状态
-        let strVal = extractNum(sysStr, '(?:Stress|压力)'); if(strVal !== null) status.stress.val = strVal;
-        let affVal = extractNum(sysStr, '(?:Affection|羁绊)'); if(affVal !== null) status.affection.val = affVal;
-        let obeVal = extractNum(sysStr, '(?:Obedience|服从)'); if(obeVal !== null) status.obedience.val = obeVal;
-        let lusVal = extractNum(sysStr, '(?:Lust|堕落)'); if(lusVal !== null) status.lust.val = lusVal;
+        // 【心理状态】提取逻辑
+        // 先尝试捕获紧凑格式 (例: Stress/Affection/Obedience/Lust: 5/40/60/0)
+        let combinedStatusMatch = sysStr.match(/(?:Stress|压力).*?(?:Affection|羁绊).*?(?:Obedience|服从).*?(?:Lust|堕落)[^\d]*(\d+)[^\d]*(\d+)[^\d]*(\d+)[^\d]*(\d+)/i);
+        if (combinedStatusMatch) {
+            status.stress.val = parseInt(combinedStatusMatch[1]);
+            status.affection.val = parseInt(combinedStatusMatch[2]);
+            status.obedience.val = parseInt(combinedStatusMatch[3]);
+            status.lust.val = parseInt(combinedStatusMatch[4]);
+        } else {
+            // 若为独立格式，同样使用防越界锁
+            let st = sysStr.match(/(?:Stress|压力)[^\d]{0,15}?(\d+)/i); if (st) status.stress.val = parseInt(st[1]);
+            let af = sysStr.match(/(?:Affection|羁绊)[^\d]{0,15}?(\d+)/i); if (af) status.affection.val = parseInt(af[1]);
+            let ob = sysStr.match(/(?:Obedience|服从)[^\d]{0,15}?(\d+)/i); if (ob) status.obedience.val = parseInt(ob[1]);
+            let lu = sysStr.match(/(?:Lust|堕落)[^\d]{0,15}?(\d+)/i); if (lu) status.lust.val = parseInt(lu[1]);
+        }
     }
 
     return { stats, status };
@@ -264,11 +276,11 @@ function renderCultivatePage(parsedSysData) {
     Object.values(currentData.status).forEach(st => {
         let warningAnim = (st.name === 'Stress' && st.val >= 80) ? 'stress-warning' : '';
         html += `   <div class="status-row ${warningAnim}">
-                        <div class="status-label"><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</div>
-                        <div class="status-bar-bg">
-                            <div class="status-bar-fill" style="width: ${st.val}%; background: ${st.color};"></div>
+                        <div class="status-label"><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}" style="width: ${st.val}%; background: ${st.color};"></div>
                         </div>
-                        <div class="status-val">${st.val}%</div>
+</div>
+                        <div class="status-bar-bg">
+                            <div class="status-bar-fill                        <div class="status-val">${st.val}%</div>
                     </div>`;
     });
     html += `   </div>
