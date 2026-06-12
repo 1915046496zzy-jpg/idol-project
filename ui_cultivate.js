@@ -69,7 +69,7 @@ function renderCultivatePage(parsedSysData) {
     // 3. 互动按钮组
     html += `<div class="interact-btns" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}>`;
     // 【图标修改 2】日常互动的 👋 替换为矢量挥手图标
-    html += `<div class="interact-btn" onclick="toggleSubmenu(event, this)"><i class="bi bi-hand-wave-fill" style="font-size: 26px;"></i><span>日常</span>
+    html += `<div class="interact-btn" onclick="toggleSubmenu(event, this)"><i class="bi bi-cup-hot-fill" style="font-size: 24px; margin-bottom: -2px;"></i><span>日常</span>
                 <div class="interact-submenu">
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('挠痒')">挠痒</div>
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('送礼')">送礼</div>
