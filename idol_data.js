@@ -56,73 +56,75 @@ var mapDatabase = {
         {
             name: "东京都港区",
             coord: { top: "72%", left: "57%" },
-            emoji: "<i class=\"bi bi-broadcast\"></i>",
+            emoji: "🗼",
             desc: "繁华的核心地带，商业与娱乐的交汇处，也是众多大型企划的诞生地。",
             scenes: [
-                { name: "一零三零制作", emoji: "<i class=\"bi bi-building\"></i>", desc: "业界最大综合事务所大楼，一切梦开始的地方。核心理念是“大家像家人一样共同进步”。" },
-                { name: "微梦制作", emoji: "<i class=\"bi bi-balloon-heart\"></i>", desc: "1030制作下属特设区域，U15低龄特化厂牌。主打纯粹的陪伴与治愈。" }
+                { name: "一零三零制作", emoji: "🏢", desc: "业界最大综合事务所大楼，一切梦开始的地方。核心理念是“大家像家人一样共同进步”。" },
+                { name: "微梦制作", emoji: "🎠", desc: "1030制作下属特设区域，U15低龄特化厂牌。主打纯粹的陪伴与治愈。" }
             ]
         },
         {
             name: "东京都涩谷区",
             coord: { top: "54%", left: "20%" },
-            emoji: "<i class=\"bi bi-bag-heart\"></i>",
+            emoji: "🛍️",
             desc: "时尚与潮流的中心，随处可见星探与怀揣梦想的年轻人。",
             scenes: [
-                { name: "白之光演艺", emoji: "<i class=\"bi bi-stars\"></i>", desc: "位于表参道高奢区。顶尖艺术与高雅路线，绝不迎合下沉市场。" }
+                { name: "白之光演艺", emoji: "✨", desc: "位于表参道高奢区。顶尖艺术与高雅路线，绝不迎合下沉市场。" }
             ]
         },
         {
             name: "东京都新宿区",
             coord: { top: "33%", left: "32%" },
-            emoji: "<i class=\"bi bi-moon-stars\"></i>",
+            emoji: "🌃",
             desc: "光怪陆离的不夜城，表面的繁华下隐藏着无数灰色交易。",
             scenes: [
-                { name: "铃兰制作", emoji: "<i class=\"bi bi-flower3\"></i>", desc: "位于西新宿外表光鲜的高级写字楼。公众形象纯洁无瑕，私下却极度黑暗。" }
+                { name: "铃兰制作", emoji: "🥀", desc: "位于西新宿外表光鲜的高级写字楼。公众形象纯洁无瑕，私下却极度黑暗。" }
             ]
         },
         {
             name: "东京都台东区",
             coord: { top: "18%", left: "68%" },
-            emoji: "<i class=\"bi bi-signpost-split\"></i>",
+            emoji: "⛩️",
             desc: "充满昭和风情的老街区，保留着时代的眼泪与人情味。",
             scenes: [
-                { name: "飞鸟旧社", emoji: "<i class=\"bi bi-radio\"></i>", desc: "破旧的昭和风老楼。曾经的老牌霸主，如今资金链濒临断裂，设施陈旧。" }
+                { name: "飞鸟旧社", emoji: "📻", desc: "破旧的昭和风老楼。曾经的老牌霸主，如今资金链濒临断裂，设施陈旧。" }
             ]
         },
-        { name: "东京都千代田区", coord: { top: "42%", left: "54%" }, emoji: "<i class=\"bi bi-bank\"></i>", desc: "政治与文化的中心区域，治安极佳。", scenes: [] },
-        { name: "东京都中央区", coord: { top: "52%", left: "70%" }, emoji: "<i class=\"bi bi-shop\"></i>", desc: "传统的高级商业区。", scenes: [] },
-        { name: "东京都品川区", coord: { top: "72%", left: "41%" }, emoji: "<i class=\"bi bi-train-front\"></i>", desc: "重要的交通枢纽地带。", scenes: [] },
-        { name: "东京都练马区", coord: { top: "22%", left: "15%" }, emoji: "<i class=\"bi bi-house-door\"></i>", desc: "安静的住宅区与动画产业聚集地。", scenes: [] },
-        { name: "东京都丰岛区", coord: { top: "18%", left: "41%" }, emoji: "<i class=\"bi bi-moon\"></i>", desc: "充满次文化气息的繁华地带。", scenes: [] },
-        { name: "东京都世田谷区", coord: { top: "75%", left: "14%" }, emoji: "<i class=\"bi bi-gitlab\"></i>", desc: "高级住宅区，生活节奏缓慢。", scenes: [] },
-        { name: "东京都江东区", coord: { top: "68%", left: "84%" }, emoji: "<i class=\"bi bi-water\"></i>", desc: "临海副都心，常举办大型漫展与活动。", scenes: [] }
+        { name: "东京都千代田区", coord: { top: "42%", left: "54%" }, emoji: "🏯", desc: "政治与文化的中心区域，治安极佳。", scenes: [] },
+        { name: "东京都中央区", coord: { top: "52%", left: "70%" }, emoji: "🏬", desc: "传统的高级商业区。", scenes: [] },
+        { name: "东京都品川区", coord: { top: "72%", left: "41%" }, emoji: "🚄", desc: "重要的交通枢纽地带。", scenes: [] },
+        { name: "东京都练马区", coord: { top: "22%", left: "15%" }, emoji: "🏡", desc: "安静的住宅区与动画产业聚集地。", scenes: [] },
+        { name: "东京都丰岛区", coord: { top: "18%", left: "41%" }, emoji: "🦉", desc: "充满次文化气息的繁华地带。", scenes: [] },
+        { name: "东京都世田谷区", coord: { top: "75%", left: "14%" }, emoji: "🐈", desc: "高级住宅区，生活节奏缓慢。", scenes: [] },
+        { name: "东京都江东区", coord: { top: "68%", left: "84%" }, emoji: "🌊", desc: "临海副都心，常举办大型漫展与活动。", scenes: [] }
     ],
     "非东京地区": [
         {
             name: "埼玉县川越市",
-            emoji: "<i class=\"bi bi-shop-window\"></i>",
+            emoji: "🍢",
             desc: "保留着小江户风情的城市，充满市井的烟火气。",
             scenes: [
-                { name: "野猫演艺", emoji: "<i class=\"bi bi-fingerprint\"></i>", desc: "商店街关东煮店二楼的单间。极度草根，偶像为了生计甚至需要打工。" }
+                { name: "野猫演艺", emoji: "🐾", desc: "商店街关东煮店二楼的单间。极度草根，偶像为了生计甚至需要打工。" }
             ]
         },
         { 
             name: "北海道札幌市", 
-            emoji: "<i class=\"bi bi-snow\"></i>", 
+            emoji: "❄️", 
             desc: "北国的中心，常年积雪的浪漫之都。", 
             scenes: [
-                { name: "温泉旅馆", emoji: "<i class=\"bi bi-cup-hot\"></i>", desc: "温泉旅馆。" }
+                { name: "温泉旅馆", emoji: "♨️", desc: "温泉旅馆。" }
             ] 
         },
-        { name: "京都府京都市", emoji: "<i class=\"bi bi-cup\"></i>", desc: "千年古都，随处可见穿着和服的少女。", scenes: [] },
-        { name: "大阪府大阪市", emoji: "<i class=\"bi bi-fire\"></i>", desc: "热情似火的美食之都。", scenes: [] },
-        { name: "冲绳县那霸市", emoji: "<i class=\"bi bi-flower1\"></i>", desc: "阳光、沙滩与海浪的南国度假胜地。", scenes: [] },
-        { name: "神奈川县横滨市", emoji: "<i class=\"bi bi-vinyl\"></i>", desc: "充满异国风情的港口城市。", scenes: [] },
-        { name: "千叶县千叶市", emoji: "<i class=\"bi bi-rocket\"></i>", desc: "拥有大型主题乐园的欢乐之城。", scenes: [] },
-        { name: "福冈县中洲", emoji: "<i class=\"bi bi-cup-hot\"></i>", desc: "九州的繁华夜街，屋台文化盛行。", scenes: [] }
+        { name: "京都府京都市", emoji: "🍵", desc: "千年古都，随处可见穿着和服的少女。", scenes: [] },
+        { name: "大阪府大阪市", emoji: "🐙", desc: "热情似火的美食之都。", scenes: [] },
+        { name: "冲绳县那霸市", emoji: "🌺", desc: "阳光、沙滩与海浪的南国度假胜地。", scenes: [] },
+        { name: "神奈川县横滨市", emoji: "🎡", desc: "充满异国风情的港口城市。", scenes: [] },
+        { name: "千叶县千叶市", emoji: "🎢", desc: "拥有大型主题乐园的欢乐之城。", scenes: [] },
+        { name: "福冈县中洲", emoji: "🍜", desc: "九州的繁华夜街，屋台文化盛行。", scenes: [] }
     ]
 };
+
+
 
 const idolDatabase = [
             {
@@ -145,39 +147,39 @@ const idolDatabase = [
                     ]
                 },
                 basic: {
-                    "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "高中二年级学生",
-                    "<i class=\"bi bi-gift-fill\"></i> 年龄": "16岁 (生日: 4月14日)",
-                    "<i class=\"bi bi-rulers\"></i> 身高/体型": "155cm / 娇小匀称",
-                    "<i class=\"bi bi-heart-half\"></i> 罩杯": "微乳 (B罩杯)",
-                    "<i class=\"bi bi-palette-fill\"></i> 外观特征": "白皙粉嫩肤色，自然深棕及肩短发，清澈棕瞳",
-                    "<i class=\"bi bi-stars\"></i> 特殊特征": "笑容极具感染力",
-                    "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "普通工薪家庭，父母非常支持梦想。零花钱仅够电车票和便宜零食。因看到商场演出决定站在舞台上。"
+                    "🎓 职业": "高中二年级学生",
+                    "🎂 年龄": "16岁 (生日: 4月14日)",
+                    "📏 身高/体型": "155cm / 娇小匀称",
+                    "👙 罩杯": "微乳 (B罩杯)",
+                    "🎨 外观特征": "白皙粉嫩肤色，自然深棕及肩短发，清澈棕瞳",
+                    "✨ 特殊特征": "笑容极具感染力",
+                    "🏠 家庭与背景": "普通工薪家庭，父母非常支持梦想。零花钱仅够电车票和便宜零食。因看到商场演出决定站在舞台上。"
                 },
                 psychology: {
-                    "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "ENFP (小太阳)",
-                    "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "天然纯真，习惯用元气掩饰不安",
-                    "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "紧张时会揪裙角并疯狂鞠躬道歉"
+                    "🧠 MBTI": "ENFP (小太阳)",
+                    "🎭 性格底色": "天然纯真，习惯用元气掩饰不安",
+                    "💦 衍生行为": "紧张时会揪裙角并疯狂鞠躬道歉"
                 },
                 privacy: {
-                    "<i class=\"bi bi-flower2\"></i> 阴毛状态": "稀疏型 (只有少量几根，范围很小)",
-                    "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "浅色乳头型 (颜色偏粉红，尺寸较小)",
-                    "<i class=\"bi bi-flower1\"></i> 小穴外观": "一线天型 (阴唇紧闭，缝隙极细几乎不可见)",
-                    "<i class=\"bi bi-bullseye\"></i> 菊花外观": "紧致型 (开口很小，皮肤绷得很紧)"
+                    "🌱 阴毛状态": "稀疏型 (只有少量几根，范围很小)",
+                    "🍒 乳头细节": "浅色乳头型 (颜色偏粉红，尺寸较小)",
+                    "🌸 小穴外观": "一线天型 (阴唇紧闭，缝隙极细几乎不可见)",
+                    "🍑 菊花外观": "紧致型 (开口很小，皮肤绷得很紧)"
                 },
                 traits: {
-                    "<i class=\"bi bi-stars\"></i> 特质A【天生感染力】": "笑容极具亲和力。常规白通告成功率提升10%，粉丝获取倍率增加20%。",
-                    "<i class=\"bi bi-exclamation-circle-fill\"></i> 特质B【肢体不协调】": "极易平地摔。舞蹈训练与通告失败率增加15%；若失败，压力值额外增加10点。"
+                    "✨ 特质A【天生感染力】": "笑容极具亲和力。常规白通告成功率提升10%，粉丝获取倍率增加20%。",
+                    "💢 特质B【肢体不协调】": "极易平地摔。舞蹈训练与通告失败率增加15%；若失败，压力值额外增加10点。"
                 },
                 stats: {
-                    "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 45, max: 100, desc: "C级 - 职业及格线，声音清脆有辨识度", color: "#ec4899" },
-                    "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 15, max: 100, desc: "E级 - 纯路人，肢体极度不协调，经常顺拐", color: "#8b5cf6" },
-                    "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 65, max: 100, desc: "B级 - 实力派，极具感染力的小太阳笑容，镜头亲和力高", color: "#eab308" }
+                    "🎤 Vocal (唱功)": { value: 45, max: 100, desc: "C级 - 职业及格线，声音清脆有辨识度", color: "#ec4899" },
+                    "💃 Dance (舞蹈)": { value: 15, max: 100, desc: "E级 - 纯路人，肢体极度不协调，经常顺拐", color: "#8b5cf6" },
+                    "🌟 Visual (视觉)": { value: 65, max: 100, desc: "B级 - 实力派，极具感染力的小太阳笑容，镜头亲和力高", color: "#eab308" }
                 },
                 status: {
-                    "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 0, max: 100, color: "#ef4444" },
-                    "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 40, max: 100, color: "#f43f5e" },
-                    "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 60, max: 100, color: "#64748b" },
-                    "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 0, max: 100, color: "#a855f7" }
+                    "💢 Stress (压力值)": { value: 0, max: 100, color: "#ef4444" },
+                    "❤️ Affection (羁绊)": { value: 40, max: 100, color: "#f43f5e" },
+                    "⛓️ Obedience (服从度)": { value: 60, max: 100, color: "#64748b" },
+                    "💰 Lust (堕落度)": { value: 0, max: 100, color: "#a855f7" }
                 }
             },
             {
@@ -199,39 +201,39 @@ const idolDatabase = [
                     ]
                 },
                 basic: {
-                    "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "初中三年级学生",
-                    "<i class=\"bi bi-gift-fill\"></i> 年龄": "15岁 (生日: 11月23日)",
-                    "<i class=\"bi bi-rulers\"></i> 身高/体型": "160cm / 标准苗条",
-                    "<i class=\"bi bi-heart-half\"></i> 罩杯": "标准 (C罩杯)",
-                    "<i class=\"bi bi-palette-fill\"></i> 外观特征": "白皙粉嫩肤色，耀眼灿金及腰大波浪长卷，明亮翠绿瞳",
-                    "<i class=\"bi bi-stars\"></i> 特殊特征": "随时随地都在打哈欠，眼神总是带着没睡醒的迷离",
-                    "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "父母皆为外派高管，资金极其宽裕但对金钱无概念。在长椅睡觉时被吵醒，觉得当偶像能打发时间便签约了。"
+                    "🎓 职业": "初中三年级学生",
+                    "🎂 年龄": "15岁 (生日: 11月23日)",
+                    "📏 身高/体型": "160cm / 标准苗条",
+                    "👙 罩杯": "标准 (C罩杯)",
+                    "🎨 外观特征": "白皙粉嫩肤色，耀眼灿金及腰大波浪长卷，明亮翠绿瞳",
+                    "✨ 特殊特征": "随时随地都在打哈欠，眼神总是带着没睡醒的迷离",
+                    "🏠 家庭与背景": "父母皆为外派高管，资金极其宽裕但对金钱无概念。在长椅睡觉时被吵醒，觉得当偶像能打发时间便签约了。"
                 },
                 psychology: {
-                    "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "ISTP (慵懒随性/逻辑怪)",
-                    "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "极度慵懒，对周遭事物漠不关心，主色调是随性亲昵",
-                    "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "遇到不想参加的训练，会直接抱着制作人的手臂喊darling来逃避"
+                    "🧠 MBTI": "ISTP (慵懒随性/逻辑怪)",
+                    "🎭 性格底色": "极度慵懒，对周遭事物漠不关心，主色调是随性亲昵",
+                    "💦 衍生行为": "遇到不想参加的训练，会直接抱着制作人的手臂喊darling来逃避"
                 },
                 privacy: {
-                    "<i class=\"bi bi-flower2\"></i> 阴毛状态": "白虎型 (天生几乎不长阴毛，外阴光滑无毛)",
-                    "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "浅色乳头型 (颜色偏粉红，尺寸饱满)",
-                    "<i class=\"bi bi-flower1\"></i> 小穴外观": "馒头型 (阴阜饱满隆起，整体圆润突出)",
-                    "<i class=\"bi bi-bullseye\"></i> 菊花外观": "平滑型 (褶皱很少，相对光滑)"
+                    "🌱 阴毛状态": "白虎型 (天生几乎不长阴毛，外阴光滑无毛)",
+                    "🍒 乳头细节": "浅色乳头型 (颜色偏粉红，尺寸饱满)",
+                    "🌸 小穴外观": "馒头型 (阴阜饱满隆起，整体圆润突出)",
+                    "🍑 菊花外观": "平滑型 (褶皱很少，相对光滑)"
                 },
                 traits: {
-                    "<i class=\"bi bi-stars\"></i> 特质A【随性天才】": "拥有恐怖的舞台直觉。Visual(视觉)与Dance(舞蹈)属性成长速度提升200%。",
-                    "<i class=\"bi bi-moon-stars-fill\"></i> 特质B【小憩一会】": "每日固定扣除大量Stress并恢复状态。但在持续集中注意力的通告时，有15%概率因睡着导致失败。"
+                    "✨ 特质A【随性天才】": "拥有恐怖的舞台直觉。Visual(视觉)与Dance(舞蹈)属性成长速度提升200%。",
+                    "💤 特质B【小憩一会】": "每日固定扣除大量Stress并恢复状态。但在持续集中注意力的通告时，有15%概率因睡着导致失败。"
                 },
                 stats: {
-                    "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 70, max: 100, desc: "B级 - 实力派，气息控制极佳但缺乏感情投入", color: "#ec4899" },
-                    "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 65, max: 100, desc: "B级 - 实力派，随意扭动也能精准踩点", color: "#8b5cf6" },
-                    "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 75, max: 100, desc: "B级 - 实力派，金发大波浪带来的随性美感极度吸睛", color: "#eab308" }
+                    "🎤 Vocal (唱功)": { value: 70, max: 100, desc: "B级 - 实力派，气息控制极佳但缺乏感情投入", color: "#ec4899" },
+                    "💃 Dance (舞蹈)": { value: 65, max: 100, desc: "B级 - 实力派，随意扭动也能精准踩点", color: "#8b5cf6" },
+                    "🌟 Visual (视觉)": { value: 75, max: 100, desc: "B级 - 实力派，金发大波浪带来的随性美感极度吸睛", color: "#eab308" }
                 },
                 status: {
-                    "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 10, max: 100, color: "#ef4444" },
-                    "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 40, max: 100, color: "#f43f5e" },
-                    "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 20, max: 100, color: "#64748b" },
-                    "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
+                    "💢 Stress (压力值)": { value: 10, max: 100, color: "#ef4444" },
+                    "❤️ Affection (羁绊)": { value: 40, max: 100, color: "#f43f5e" },
+                    "⛓️ Obedience (服从度)": { value: 20, max: 100, color: "#64748b" },
+                    "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
                 }
             },
             {
@@ -255,39 +257,39 @@ const idolDatabase = [
                     ]
                 },
                 basic: {
-                    "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "高中二年级学生",
-                    "<i class=\"bi bi-gift-fill\"></i> 年龄": "16岁",
-                    "<i class=\"bi bi-rulers\"></i> 身高/体型": "162cm / 娇小干瘦",
-                    "<i class=\"bi bi-heart-half\"></i> 罩杯": "贫乳 (A罩杯)",
-                    "<i class=\"bi bi-palette-fill\"></i> 外观特征": "苍白肤色，水蓝色及腰长直发，宝石蓝瞳",
-                    "<i class=\"bi bi-stars\"></i> 特殊特征": "眼神常年冰冷，身形单薄",
-                    "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "父母离异，极度疼爱的弟弟因车祸离世。独自居住在廉价公寓，极度节俭。将唱歌视为延续弟弟生命与证明存在的唯一方式。"
+                    "🎓 职业": "高中二年级学生",
+                    "🎂 年龄": "16岁",
+                    "📏 身高/体型": "162cm / 娇小干瘦",
+                    "👙 罩杯": "贫乳 (A罩杯)",
+                    "🎨 外观特征": "苍白肤色，水蓝色及腰长直发，宝石蓝瞳",
+                    "✨ 特殊特征": "眼神常年冰冷，身形单薄",
+                    "🏠 家庭与背景": "父母离异，极度疼爱的弟弟因车祸离世。独自居住在廉价公寓，极度节俭。将唱歌视为延续弟弟生命与证明存在的唯一方式。"
                 },
                 psychology: {
-                    "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "INTJ (冷酷理性/效率至上)",
-                    "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "表面冷漠封闭，抗拒社交，主色调是唱歌至上",
-                    "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "看到身材丰满的偶像时会紧咬嘴唇，加大声乐训练强度来发泄"
+                    "🧠 MBTI": "INTJ (冷酷理性/效率至上)",
+                    "🎭 性格底色": "表面冷漠封闭，抗拒社交，主色调是唱歌至上",
+                    "💦 衍生行为": "看到身材丰满的偶像时会紧咬嘴唇，加大声乐训练强度来发泄"
                 },
                 privacy: {
-                    "<i class=\"bi bi-flower2\"></i> 阴毛状态": "自然蔓延型 (顺着大腿内侧自然生长)",
-                    "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "小乳头型 (尺寸很小，扁平或微突)",
-                    "<i class=\"bi bi-flower1\"></i> 小穴外观": "一线天型 (阴唇紧闭，缝隙极细几乎不可见)",
-                    "<i class=\"bi bi-bullseye\"></i> 菊花外观": "紧致型 (开口很小，皮肤绷得很紧)"
+                    "🌱 阴毛状态": "自然蔓延型 (顺着大腿内侧自然生长)",
+                    "🍒 乳头细节": "小乳头型 (尺寸很小，扁平或微突)",
+                    "🌸 小穴外观": "一线天型 (阴唇紧闭，缝隙极细几乎不可见)",
+                    "🍑 菊花外观": "紧致型 (开口很小，皮肤绷得很紧)"
                 },
                 traits: {
-                    "<i class=\"bi bi-stars\"></i> 特质A【孤高歌姬】": "极致的声乐天赋。Vocal成长速度提升200%；但极度抵触唱歌以外工作，Visual与Dance白通告失败率增加20%。",
-                    "<i class=\"bi bi-exclamation-circle-fill\"></i> 特质B【唯一执念】": "若连续3个通告未安排Vocal相关工作，Stress增加30点；强制接取非Vocal的黑通告时，Stress增加量翻倍。"
+                    "✨ 特质A【孤高歌姬】": "极致的声乐天赋。Vocal成长速度提升200%；但极度抵触唱歌以外工作，Visual与Dance白通告失败率增加20%。",
+                    "💢 特质B【唯一执念】": "若连续3个通告未安排Vocal相关工作，Stress增加30点；强制接取非Vocal的黑通告时，Stress增加量翻倍。"
                 },
                 stats: {
-                    "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 85, max: 100, desc: "A级 - 业界顶流，出道即巅峰，具有穿透灵魂的爆发力", color: "#ec4899" },
-                    "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 45, max: 100, desc: "D级 - 勉强能看，将全部精力投入唱歌，舞蹈仅维持最低限度", color: "#8b5cf6" },
-                    "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 70, max: 100, desc: "B级 - 实力派，五官精致但常年面无表情，气质清冷", color: "#eab308" }
+                    "🎤 Vocal (唱功)": { value: 85, max: 100, desc: "A级 - 业界顶流，出道即巅峰，具有穿透灵魂的爆发力", color: "#ec4899" },
+                    "💃 Dance (舞蹈)": { value: 45, max: 100, desc: "D级 - 勉强能看，将全部精力投入唱歌，舞蹈仅维持最低限度", color: "#8b5cf6" },
+                    "🌟 Visual (视觉)": { value: 70, max: 100, desc: "B级 - 实力派，五官精致但常年面无表情，气质清冷", color: "#eab308" }
                 },
                 status: {
-                    "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 50, max: 100, color: "#ef4444" },
-                    "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 20, max: 100, color: "#f43f5e" },
-                    "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 40, max: 100, color: "#64748b" },
-                    "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 0, max: 100, color: "#a855f7" }
+                    "💢 Stress (压力值)": { value: 50, max: 100, color: "#ef4444" },
+                    "❤️ Affection (羁绊)": { value: 20, max: 100, color: "#f43f5e" },
+                    "⛓️ Obedience (服从度)": { value: 40, max: 100, color: "#64748b" },
+                    "💰 Lust (堕落度)": { value: 0, max: 100, color: "#a855f7" }
                 }
             },
     {
@@ -317,39 +319,39 @@ const idolDatabase = [
         ]
     },
     "basic": {
-        "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "无业",
-        "<i class=\"bi bi-gift-fill\"></i> 年龄": "21岁",
-        "<i class=\"bi bi-rulers\"></i> 身高/体型": "168cm / 丰满肉感",
-        "<i class=\"bi bi-heart-half\"></i> 罩杯": "巨乳 (G罩杯)",
-        "<i class=\"bi bi-palette-fill\"></i> 外观特征": "白皙肤色，墨紫色及腰长直发（发尾微卷），温和深紫色瞳孔",
-        "<i class=\"bi bi-stars\"></i> 特殊特征": "永远挂着温和从容的微笑，眼角轻微下垂，极度缺乏方向感",
-        "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "地方城市普通中产家庭，父母关系和睦。短大毕业后靠打工积蓄生活，坚信会在演艺圈遇到命运之人。面试迷路时被制作人捡到"
+        "🎓 职业": "无业",
+        "🎂 年龄": "21岁",
+        "📏 身高/体型": "168cm / 丰满肉感",
+        "👙 罩杯": "巨乳 (G罩杯)",
+        "🎨 外观特征": "白皙肤色，墨紫色及腰长直发（发尾微卷），温和深紫色瞳孔",
+        "✨ 特殊特征": "永远挂着温和从容的微笑，眼角轻微下垂，极度缺乏方向感",
+        "🏠 家庭与背景": "地方城市普通中产家庭，父母关系和睦。短大毕业后靠打工积蓄生活，坚信会在演艺圈遇到命运之人。面试迷路时被制作人捡到"
     },
     "psychology": {
-        "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "ISFJ (温和守卫者)",
-        "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "极致的温和与包容，几乎不会生气。随遇而安的天然，将一切视为命运的安排",
-        "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "迷路时不会惊慌求助，而是找个地方坐下喝茶，等制作人来找她"
+        "🧠 MBTI": "ISFJ (温和守卫者)",
+        "🎭 性格底色": "极致的温和与包容，几乎不会生气。随遇而安的天然，将一切视为命运的安排",
+        "💦 衍生行为": "迷路时不会惊慌求助，而是找个地方坐下喝茶，等制作人来找她"
     },
     "privacy": {
-        "<i class=\"bi bi-flower2\"></i> 阴毛状态": "茂盛型 (修剪整齐，呈现倒三角形)",
-        "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "熟女型 (颜色偏深粉，乳晕面积较大，乳头挺拔)",
-        "<i class=\"bi bi-flower1\"></i> 小穴外观": "丰满型 (阴阜脂肪丰厚，大阴唇饱满将内部完全包裹)",
-        "<i class=\"bi bi-bullseye\"></i> 菊花外观": "柔软型 (周围肤色略深，肉感十足)"
+        "🌱 阴毛状态": "茂盛型 (修剪整齐，呈现倒三角形)",
+        "🍒 乳头细节": "熟女型 (颜色偏深粉，乳晕面积较大，乳头挺拔)",
+        "🌸 小穴外观": "丰满型 (阴阜脂肪丰厚，大阴唇饱满将内部完全包裹)",
+        "🍑 菊花外观": "柔软型 (周围肤色略深，肉感十足)"
     },
     "traits": {
-        "<i class=\"bi bi-stars\"></i> 特质A【方向剥夺】": "Dance成长速度降低50%；但Visual通告中Fame获取倍率增加30%。",
-        "<i class=\"bi bi-flower2\"></i> 特质B【母性包容】": "初始Obedience极高。安排高压力或黑通告时，Stress增加量固定减半。"
+        "✨ 特质A【方向剥夺】": "Dance成长速度降低50%；但Visual通告中Fame获取倍率增加30%。",
+        "🌱 特质B【母性包容】": "初始Obedience极高。安排高压力或黑通告时，Stress增加量固定减半。"
     },
     "stats": {
-        "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 65, max: 100, desc: "B级 - 实力派，声音温柔治愈，气息平稳", color: "#ec4899" },
-        "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 20, max: 100, desc: "E级 - 纯路人，毫无空间感，经常撞到队友", color: "#8b5cf6" },
-        "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 85, max: 100, desc: "A级 - 业界顶流，成熟女性的极致肉体魅力与温婉气质", color: "#eab308" }
+        "🎤 Vocal (唱功)": { value: 65, max: 100, desc: "B级 - 实力派，声音温柔治愈，气息平稳", color: "#ec4899" },
+        "💃 Dance (舞蹈)": { value: 20, max: 100, desc: "E级 - 纯路人，毫无空间感，经常撞到队友", color: "#8b5cf6" },
+        "🌟 Visual (视觉)": { value: 85, max: 100, desc: "A级 - 业界顶流，成熟女性的极致肉体魅力与温婉气质", color: "#eab308" }
     },
     "status": {
-        "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 0, max: 100, color: "#ef4444" },
-        "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 60, max: 100, color: "#f43f5e" },
-        "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 80, max: 100, color: "#64748b" },
-        "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 15, max: 100, color: "#a855f7" }
+        "💢 Stress (压力值)": { value: 0, max: 100, color: "#ef4444" },
+        "❤️ Affection (羁绊)": { value: 60, max: 100, color: "#f43f5e" },
+        "⛓️ Obedience (服从度)": { value: 80, max: 100, color: "#64748b" },
+        "💰 Lust (堕落度)": { value: 15, max: 100, color: "#a855f7" }
     }
 },
     {
@@ -373,39 +375,39 @@ const idolDatabase = [
         ]
     },
     "basic": {
-        "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "来历不明的少女",
-        "<i class=\"bi bi-gift-fill\"></i> 年龄": "18岁",
-        "<i class=\"bi bi-rulers\"></i> 身高/体型": "169cm / 高挑丰满",
-        "<i class=\"bi bi-heart-half\"></i> 罩杯": "巨乳 (F罩杯)",
-        "<i class=\"bi bi-palette-fill\"></i> 外观特征": "苍白肤色，银白及腰长直发(常戴深色天鹅绒发箍)，幽深紫瞳",
-        "<i class=\"bi bi-stars\"></i> 特殊特征": "说话使用古典敬语，举止端庄严谨，经常长时间注视夜空",
-        "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "背景完全空白。不携带现金，缺乏现代常识。自称背负着“寻找某种事物”的使命。"
+        "🎓 职业": "来历不明的少女",
+        "🎂 年龄": "18岁",
+        "📏 身高/体型": "169cm / 高挑丰满",
+        "👙 罩杯": "巨乳 (F罩杯)",
+        "🎨 外观特征": "苍白肤色，银白及腰长直发(常戴深色天鹅绒发箍)，幽深紫瞳",
+        "✨ 特殊特征": "说话使用古典敬语，举止端庄严谨，经常长时间注视夜空",
+        "🏠 家庭与背景": "背景完全空白。不携带现金，缺乏现代常识。自称背负着“寻找某种事物”的使命。"
     },
     "psychology": {
-        "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "INFJ (提倡者/静谧的神秘)",
-        "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "严谨的古典教养与不可侵犯的高贵，主色调是认真且浑然天成的电波逻辑",
-        "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "被问及身世、来历或某些常识盲区时，会用食指抵住嘴唇，说出“这是最高秘密”"
+        "🧠 MBTI": "INFJ (提倡者/静谧的神秘)",
+        "🎭 性格底色": "严谨的古典教养与不可侵犯的高贵，主色调是认真且浑然天成的电波逻辑",
+        "💦 衍生行为": "被问及身世、来历或某些常识盲区时，会用食指抵住嘴唇，说出“这是最高秘密”"
     },
     "privacy": {
-        "<i class=\"bi bi-flower2\"></i> 阴毛状态": "稀疏型 (呈现淡淡的银色，范围极小)",
-        "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "小乳头型 (颜色极浅，形状小巧)",
-        "<i class=\"bi bi-flower1\"></i> 小穴外观": "紧闭型 (阴唇严丝合缝，呈现浅粉色)",
-        "<i class=\"bi bi-bullseye\"></i> 菊花外观": "紧致型 (周围皮肤光滑无褶皱)"
+        "🌱 阴毛状态": "稀疏型 (呈现淡淡的银色，范围极小)",
+        "🍒 乳头细节": "小乳头型 (颜色极浅，形状小巧)",
+        "🌸 小穴外观": "紧闭型 (阴唇严丝合缝，呈现浅粉色)",
+        "🍑 菊花外观": "紧致型 (周围皮肤光滑无褶皱)"
     },
     "traits": {
-        "<i class=\"bi bi-stars\"></i> 特质A【银色王女】": "具备强烈神秘感。Visual白通告Fame获取翻倍；拒绝黑通告，强制安排时直接失败且Affection大幅下降。",
-        "<i class=\"bi bi-cup-hot-fill\"></i> 特质B【无底胃袋】": "每次结算固定扣除Funds用于餐饮；带她去拉面店进食能瞬间清空Stress。"
+        "✨ 特质A【银色王女】": "具备强烈神秘感。Visual白通告Fame获取翻倍；拒绝黑通告，强制安排时直接失败且Affection大幅下降。",
+        "🍜 特质B【无底胃袋】": "每次结算固定扣除Funds用于餐饮；带她去拉面店进食能瞬间清空Stress。"
     },
     "stats": {
-        "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { "value": 70, "max": 100, "desc": "B级 - 实力派，音色空灵清冷，具备极高的辨识度", "color": "#ec4899" },
-        "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { "value": 50, "max": 100, "desc": "C级 - 职业及格线，动作优雅端庄，但缺乏流行舞爆发力", "color": "#8b5cf6" },
-        "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { "value": 92, "max": 100, "desc": "A级 - 业界顶流，无可挑剔的神秘气质与完美容貌", "color": "#eab308" }
+        "🎤 Vocal (唱功)": { "value": 70, "max": 100, "desc": "B级 - 实力派，音色空灵清冷，具备极高的辨识度", "color": "#ec4899" },
+        "💃 Dance (舞蹈)": { "value": 50, "max": 100, "desc": "C级 - 职业及格线，动作优雅端庄，但缺乏流行舞爆发力", "color": "#8b5cf6" },
+        "🌟 Visual (视觉)": { "value": 92, "max": 100, "desc": "A级 - 业界顶流，无可挑剔的神秘气质与完美容貌", "color": "#eab308" }
     },
     "status": {
-        "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { "value": 0, "max": 100, "color": "#ef4444" },
-        "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { "value": 40, "max": 100, "color": "#f43f5e" },
-        "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { "value": 40, "max": 100, "color": "#64748b" },
-        "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { "value": 0, "max": 100, "color": "#a855f7" }
+        "💢 Stress (压力值)": { "value": 0, "max": 100, "color": "#ef4444" },
+        "❤️ Affection (羁绊)": { "value": 40, "max": 100, "color": "#f43f5e" },
+        "⛓️ Obedience (服从度)": { "value": 40, "max": 100, "color": "#64748b" },
+        "💰 Lust (堕落度)": { "value": 0, "max": 100, "color": "#a855f7" }
     }
 },
     {
@@ -435,39 +437,39 @@ const idolDatabase = [
         ]
     },
     "basic": {
-        "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "初中一年级学生",
-        "<i class=\"bi bi-gift-fill\"></i> 年龄": "13岁",
-        "<i class=\"bi bi-rulers\"></i> 身高/体型": "152cm / 娇小纤细",
-        "<i class=\"bi bi-heart-half\"></i> 罩杯": "平胸 (发育中)",
-        "<i class=\"bi bi-palette-fill\"></i> 外观特征": "铂金色波浪卷长发，双马尾绳编辫，灰色大眼睛，脸颊上一颗痣",
-        "<i class=\"bi bi-stars\"></i> 特殊特征": "看人时歪着头、大眼睛直直盯着，让人招架不住",
-        "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "普通家庭，有父母但很少提起。从小习惯独处，喜欢自己琢磨事情"
+        "🎓 职业": "初中一年级学生",
+        "🎂 年龄": "13岁",
+        "📏 身高/体型": "152cm / 娇小纤细",
+        "👙 罩杯": "平胸 (发育中)",
+        "🎨 外观特征": "铂金色波浪卷长发，双马尾绳编辫，灰色大眼睛，脸颊上一颗痣",
+        "✨ 特殊特征": "看人时歪着头、大眼睛直直盯着，让人招架不住",
+        "🏠 家庭与背景": "普通家庭，有父母但很少提起。从小习惯独处，喜欢自己琢磨事情"
     },
     "psychology": {
-        "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "ISTP (理性观察者/早熟的好奇心)",
-        "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "表面乖巧安静，内在早熟通透。习惯用那双灰眼睛观察世界，不主动但也不怯场",
-        "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "对同龄人不感兴趣，觉得幼稚。会用学术的口吻讨论成年人话题，但真遇到时会脸红"
+        "🧠 MBTI": "ISTP (理性观察者/早熟的好奇心)",
+        "🎭 性格底色": "表面乖巧安静，内在早熟通透。习惯用那双灰眼睛观察世界，不主动但也不怯场",
+        "💦 衍生行为": "对同龄人不感兴趣，觉得幼稚。会用学术的口吻讨论成年人话题，但真遇到时会脸红"
     },
     "privacy": {
-        "<i class=\"bi bi-flower2\"></i> 阴毛状态": "白虎型 (无毛，光滑洁净)",
-        "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "幼嫩型 (小且敏感，发育中)",
-        "<i class=\"bi bi-flower1\"></i> 小穴外观": "紧闭型 (处女，颜色浅粉)",
-        "<i class=\"bi bi-bullseye\"></i> 菊花外观": "小巧型 (开口极小)"
+        "🌱 阴毛状态": "白虎型 (无毛，光滑洁净)",
+        "🍒 乳头细节": "幼嫩型 (小且敏感，发育中)",
+        "🌸 小穴外观": "紧闭型 (处女，颜色浅粉)",
+        "🍑 菊花外观": "小巧型 (开口极小)"
     },
     "traits": {
-        "<i class=\"bi bi-stars\"></i> 特质A【想长大】": "渴望被当大人对待。被认真征求意见时Affection上升+50%；被敷衍或当小孩时Stress增加+20。",
-        "<i class=\"bi bi-search\"></i> 特质B【好奇心驱动】": "对未知事物有探索欲。首次接触新类型通告时，学习速度+30%；但重复练习时耐心-15%。"
+        "✨ 特质A【想长大】": "渴望被当大人对待。被认真征求意见时Affection上升+50%；被敷衍或当小孩时Stress增加+20。",
+        "🔍️ 特质B【好奇心驱动】": "对未知事物有探索欲。首次接触新类型通告时，学习速度+30%；但重复练习时耐心-15%。"
     },
     "stats": {
-        "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 50, max: 100, desc: "D级 - 初学阶段，声音干净有潜力，零技巧", color: "#ec4899" },
-        "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 35, max: 100, desc: "E级 - 纯素人，肢体不协调但态度认真", color: "#8b5cf6" },
-        "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 75, max: 100, desc: "B级 - 实力派，铂金发灰瞳辨识度极高，盯着人看时有魔力", color: "#eab308" }
+        "🎤 Vocal (唱功)": { value: 50, max: 100, desc: "D级 - 初学阶段，声音干净有潜力，零技巧", color: "#ec4899" },
+        "💃 Dance (舞蹈)": { value: 35, max: 100, desc: "E级 - 纯素人，肢体不协调但态度认真", color: "#8b5cf6" },
+        "🌟 Visual (视觉)": { value: 75, max: 100, desc: "B级 - 实力派，铂金发灰瞳辨识度极高，盯着人看时有魔力", color: "#eab308" }
     },
     "status": {
-        "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 10, max: 100, color: "#ef4444" },
-        "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 10, max: 100, color: "#f43f5e" },
-        "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 40, max: 100, color: "#64748b" },
-        "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
+        "💢 Stress (压力值)": { value: 10, max: 100, color: "#ef4444" },
+        "❤️ Affection (羁绊)": { value: 10, max: 100, color: "#f43f5e" },
+        "⛓️ Obedience (服从度)": { value: 40, max: 100, color: "#64748b" },
+        "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
     }
 },
         {
@@ -484,39 +486,39 @@ const idolDatabase = [
             ]
         },
         basic: {
-            "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "专业偶像 / 网络小说家",
-            "<i class=\"bi bi-gift-fill\"></i> 年龄": "23岁 (生日: 2月5日)",
-            "<i class=\"bi bi-rulers\"></i> 身高/体型": "172cm / 高挑修长，大长腿，腰细臀翘",
-            "<i class=\"bi bi-heart-half\"></i> 罩杯": "标准 (C罩杯)",
-            "<i class=\"bi bi-palette-fill\"></i> 外观特征": "白皙透光肤色，雪白及腰蓬松长直发，酒红深瞳",
-            "<i class=\"bi bi-stars\"></i> 特殊特征": "舞台上温柔完美，私下神秘冷清，从不在人前卸下心防",
-            "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "金融世家独生女，父亲为富豪榜私募基金创始人。母亲因难产去世，家境优渥却选择低调独居"
+            "🎓 职业": "专业偶像 / 网络小说家",
+            "🎂 年龄": "23岁 (生日: 2月5日)",
+            "📏 身高/体型": "172cm / 高挑修长，大长腿，腰细臀翘",
+            "👙 罩杯": "标准 (C罩杯)",
+            "🎨 外观特征": "白皙透光肤色，雪白及腰蓬松长直发，酒红深瞳",
+            "✨ 特殊特征": "舞台上温柔完美，私下神秘冷清，从不在人前卸下心防",
+            "🏠 家庭与背景": "金融世家独生女，父亲为富豪榜私募基金创始人。母亲因难产去世，家境优渥却选择低调独居"
         },
         psychology: {
-            "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "INTJ (建筑师型)",
-            "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "表面温柔友善，实则冷清自持，主色调是戴着面具的完美偶像",
-            "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "公众场合微笑体贴，私下独处时沉默发呆，将脆弱藏在深夜的创作中"
+            "🧠 MBTI": "INTJ (建筑师型)",
+            "🎭 性格底色": "表面温柔友善，实则冷清自持，主色调是戴着面具的完美偶像",
+            "💦 衍生行为": "公众场合微笑体贴，私下独处时沉默发呆，将脆弱藏在深夜的创作中"
         },
         privacy: {
-            "<i class=\"bi bi-flower2\"></i> 阴毛状态": "茂盛型 (浓密黑色倒三角形，自然未修剪)",
-            "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "粉嫩色型 (乳晕中等大小，颜色粉嫩)",
-            "<i class=\"bi bi-flower1\"></i> 小穴外观": "湿润型 (粉色嫩穴，阴唇略显，私密处湿润快)",
-            "<i class=\"bi bi-bullseye\"></i> 菊花外观": "紧致粉嫩型 (未曾开发的紧致粉嫩)"
+            "🌱 阴毛状态": "茂盛型 (浓密黑色倒三角形，自然未修剪)",
+            "🍒 乳头细节": "粉嫩色型 (乳晕中等大小，颜色粉嫩)",
+            "🌸 小穴外观": "湿润型 (粉色嫩穴，阴唇略显，私密处湿润快)",
+            "🍑 菊花外观": "紧致粉嫩型 (未曾开发的紧致粉嫩)"
         },
         traits: {
-            "<i class=\"bi bi-stars\"></i> 特质A【双面面具】": "社交能力极强，与所有人保持恰到好处的关系。白通告中与人协作类任务成功率+15%；但私下独处时Stress自然恢复速度+50%。",
-            "<i class=\"bi bi-heartbreak-fill\"></i> 特质B【生母之殇】": "背负着母亲难产离世的自责。生日前后3天Stress增加50点，且无法通过任何方式降低；若在此期间被温柔对待，Affection增幅翻倍。"
+            "✨ 特质A【双面面具】": "社交能力极强，与所有人保持恰到好处的关系。白通告中与人协作类任务成功率+15%；但私下独处时Stress自然恢复速度+50%。",
+            "💔 特质B【生母之殇】": "背负着母亲难产离世的自责。生日前后3天Stress增加50点，且无法通过任何方式降低；若在此期间被温柔对待，Affection增幅翻倍。"
         },
         stats: {
-            "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 82, max: 100, desc: "A级 - 业界顶流，声音温柔且有力量，情感把控精准", color: "#ec4899" },
-            "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 78, max: 100, desc: "B级 - 实力派，高挑身材让舞蹈动作舒展优美，功底扎实", color: "#8b5cf6" },
-            "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 88, max: 100, desc: "A级 - 业界顶流，雪白长发与酒红瞳的组合极具辨识度，温柔御姐气场", color: "#eab308" }
+            "🎤 Vocal (唱功)": { value: 82, max: 100, desc: "A级 - 业界顶流，声音温柔且有力量，情感把控精准", color: "#ec4899" },
+            "💃 Dance (舞蹈)": { value: 78, max: 100, desc: "B级 - 实力派，高挑身材让舞蹈动作舒展优美，功底扎实", color: "#8b5cf6" },
+            "🌟 Visual (视觉)": { value: 88, max: 100, desc: "A级 - 业界顶流，雪白长发与酒红瞳的组合极具辨识度，温柔御姐气场", color: "#eab308" }
         },
         status: {
-            "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 25, max: 100, color: "#ef4444" },
-            "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 25, max: 100, color: "#f43f5e" },
-            "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 45, max: 100, color: "#64748b" },
-            "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
+            "💢 Stress (压力值)": { value: 25, max: 100, color: "#ef4444" },
+            "❤️ Affection (羁绊)": { value: 25, max: 100, color: "#f43f5e" },
+            "⛓️ Obedience (服从度)": { value: 45, max: 100, color: "#64748b" },
+            "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
         }
     },
         {
@@ -537,39 +539,39 @@ const idolDatabase = [
             ]
         },
         basic: {
-            "<i class=\"bi bi-mortarboard-fill\"></i> 职业": "前宠物医院护士",
-            "<i class=\"bi bi-gift-fill\"></i> 年龄": "22岁 (生日: 9月2日)",
-            "<i class=\"bi bi-rulers\"></i> 身高/体型": "165cm / 肉感丰满",
-            "<i class=\"bi bi-heart-half\"></i> 罩杯": "巨乳 (G罩杯)",
-            "<i class=\"bi bi-palette-fill\"></i> 外观特征": "白皙肤色，浅棕色蓬松及肩波浪卷短发，温暖草绿瞳",
-            "<i class=\"bi bi-stars\"></i> 特殊特征": "右眼角有一颗泪痣。习惯性含胸驼背以隐藏丰满胸部。重度猫奴。",
-            "<i class=\"bi bi-house-door-fill\"></i> 家庭与背景": "地方城市普通家庭，父母经营小超市。为养三只流浪猫在东京租房，靠微薄积蓄生活"
+            "🎓 职业": "前宠物医院护士",
+            "🎂 年龄": "22岁 (生日: 9月2日)",
+            "📏 身高/体型": "165cm / 肉感丰满",
+            "👙 罩杯": "巨乳 (G罩杯)",
+            "🎨 外观特征": "白皙肤色，浅棕色蓬松及肩波浪卷短发，温暖草绿瞳",
+            "✨ 特殊特征": "右眼角有一颗泪痣。习惯性含胸驼背以隐藏丰满胸部。重度猫奴。",
+            "🏠 家庭与背景": "地方城市普通家庭，父母经营小超市。为养三只流浪猫在东京租房，靠微薄积蓄生活"
         },
         psychology: {
-            "<i class=\"bi bi-lightning-charge-fill\"></i> MBTI": "ISFJ (守卫者)",
-            "<i class=\"bi bi-person-vcard-fill\"></i> 性格底色": "极致温柔与讨好型人格，主色调是违背本意的顺从",
-            "<i class=\"bi bi-droplet-fill\"></i> 衍生行为": "被要求穿暴露服装拍摄时，会一边红着脸流泪抱怨“这和说好的不一样啊”，一边乖乖摆出极其色情的姿势"
+            "🧠 MBTI": "ISFJ (守卫者)",
+            "🎭 性格底色": "极致温柔与讨好型人格，主色调是违背本意的顺从",
+            "💦 衍生行为": "被要求穿暴露服装拍摄时，会一边红着脸流泪抱怨“这和说好的不一样啊”，一边乖乖摆出极其色情的姿势"
         },
         privacy: {
-            "<i class=\"bi bi-flower2\"></i> 阴毛状态": "茂盛型 (未过度修剪，呈现自然的浅棕色)",
-            "<i class=\"bi bi-record-circle-fill\"></i> 乳头细节": "熟女型 (深粉色，乳晕面积较大，乳房具重量感导致轻微下垂)",
-            "<i class=\"bi bi-flower1\"></i> 小穴外观": "丰满型 (大阴唇肉感十足，完全包裹住内部)",
-            "<i class=\"bi bi-bullseye\"></i> 菊花外观": "柔软型 (周围肤色略深)"
+            "🌱 阴毛状态": "茂盛型 (未过度修剪，呈现自然的浅棕色)",
+            "🍒 乳头细节": "熟女型 (深粉色，乳晕面积较大，乳房具重量感导致轻微下垂)",
+            "🌸 小穴外观": "丰满型 (大阴唇肉感十足，完全包裹住内部)",
+            "🍑 菊花外观": "柔软型 (周围肤色略深)"
         },
 traits: {
-    "<i class=\"bi bi-stars\"></i> 特质A【违背本意的性感】": "安排常规Visual白通告时，有50%概率被变更为擦边/性感拍摄。触发时Stress+30，但该次通告获取Fame与Funds翻倍。",
-    "<i class=\"bi bi-gitlab\"></i> 特质B【猫咪治愈法】": "消耗Funds购买高级猫粮或带去猫咖，可极大幅度降低Stress；若连续3次结算未进行与猫相关互动，Stress自然下降失效。"
+    "✨ 特质A【违背本意的性感】": "安排常规Visual白通告时，有50%概率被变更为擦边/性感拍摄。触发时Stress+30，但该次通告获取Fame与Funds翻倍。",
+    "🐱 特质B【猫咪治愈法】": "消耗Funds购买高级猫粮或带去猫咖，可极大幅度降低Stress；若连续3次结算未进行与猫相关互动，Stress自然下降失效。"
 },
         stats: {
-            "<i class=\"bi bi-mic-fill\"></i> Vocal (唱功)": { value: 55, max: 100, desc: "C级 - 职业及格线，声音温柔软糯但气息偏弱", color: "#ec4899" },
-            "<i class=\"bi bi-person-walking\"></i> Dance (舞蹈)": { value: 40, max: 100, desc: "D级 - 勉强能看，胸部重量严重影响平衡，跳快歌极度吃力", color: "#8b5cf6" },
-            "<i class=\"bi bi-star-fill\"></i> Visual (视觉)": { value: 88, max: 100, desc: "A级 - 业界顶流，肉体魅力极度诱人，吸引大量男性肉体粉", color: "#eab308" }
+            "🎤 Vocal (唱功)": { value: 55, max: 100, desc: "C级 - 职业及格线，声音温柔软糯但气息偏弱", color: "#ec4899" },
+            "💃 Dance (舞蹈)": { value: 40, max: 100, desc: "D级 - 勉强能看，胸部重量严重影响平衡，跳快歌极度吃力", color: "#8b5cf6" },
+            "🌟 Visual (视觉)": { value: 88, max: 100, desc: "A级 - 业界顶流，肉体魅力极度诱人，吸引大量男性肉体粉", color: "#eab308" }
         },
         status: {
-            "<i class=\"bi bi-exclamation-triangle-fill\"></i> Stress (压力值)": { value: 15, max: 100, color: "#ef4444" },
-            "<i class=\"bi bi-heart-fill\"></i> Affection (羁绊)": { value: 20, max: 100, color: "#f43f5e" },
-            "<i class=\"bi bi-link-45deg\"></i> Obedience (服从度)": { value: 85, max: 100, color: "#64748b" },
-            "<i class=\"bi bi-cash-coin\"></i> Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
+            "💢 Stress (压力值)": { value: 15, max: 100, color: "#ef4444" },
+            "❤️ Affection (羁绊)": { value: 20, max: 100, color: "#f43f5e" },
+            "⛓️ Obedience (服从度)": { value: 85, max: 100, color: "#64748b" },
+            "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
         }
     }
         ];
