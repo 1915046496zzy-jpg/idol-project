@@ -59,5 +59,9 @@ var AssetsMap = {
     "事务所_野猫演艺": "https://i.postimg.cc/MTMDssZg/ye-mao-yan-yi.png",
     "事务所_铃兰制作": "https://i.postimg.cc/50Y3PP9s/ling-lan-zhi-zuo.png",
     "事务所_飞鸟旧社": "https://i.postimg.cc/Ss2rZZQT/fei-niao-jiu-she.png",
-    "事务所_温泉旅馆": "https://i.postimg.cc/dtT7F04P/bei-hai-dao-zha-huang-shi-wen-quan-lu-guan.png"
+    "事务所_温泉旅馆": "https://i.postimg.cc/dtT7F04P/bei-hai-dao-zha-huang-shi-wen-quan-lu-guan.png",
+    "事务所_地下livehouse": "https://i.postimg.cc/3rm8Sthm/dong-jing-dou-feng-dao-qu-de-xialivehouse.png",
+    "事务所_偶像服陈列室": "https://i.postimg.cc/7P0HsK4M/dong-jing-dou-gang-qu-ou-xiang-da-ge-fu-chen-lie-shi.png",
+    "事务所_购物中心": "https://i.postimg.cc/ryxVnfT5/dong-jing-dou-gang-qu-gou-wu-zhong-xin.png",
+    "事务所_私人海滩": "https://i.postimg.cc/QCQjFdS8/chong-sheng-xian-na-ba-shi-si-ren-sha-tan.png"
 };
