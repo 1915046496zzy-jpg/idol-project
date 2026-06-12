@@ -1,7 +1,7 @@
-// ui_cultivate.js - 培养模块独立渲染逻辑 (终极容错抓取 & 悬浮弹窗UI升级版)
+// ui_cultivate.js - 培养模块独立渲染逻辑 (修复数值抓取Bug & UI弹窗升级版)
 
 // ==========================================
-// 1. 自动注入专属 CSS (包含面板的弹窗动画与新排版)
+// 1. 自动注入专属 CSS (包含面板的弹窗动画与新按钮)
 // ==========================================
 (function() {
     if (document.getElementById('cultivate-monitor-style')) return;
@@ -86,21 +86,9 @@
         .monitor-section { display: flex; flex-direction: column; gap: 10px; }
         .monitor-subtitle { font-size: 12px; color: #94a3b8; font-weight: bold; margin-bottom: -2px; }
 
-        .stat-row, .status-row { display: flex; flex-direction: column; gap: 4px; }
-        .stat-label, .status-label {
-            font-size: 12px;
-            font-weight: bold;
-            color: #475569;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .stat-label span:last-child, .status-label span:last-child {
-            font-size: 14px;
-            font-weight: 900;
-            color: #1e293b;
-            line-height: 1;
-        }
+        .stat-row, .status-row { display: flex; flex-direction: column; gap: 5px; }
+        .stat-label, .status-label { font-size: 12px; font-weight: bold; color: #475569; display: flex; justify-content: space-between;}
+        .stat-val, .status-val { font-size: 12px; font-weight: 900; color: #64748b; text-align: right; margin-top: -18px;}
 
         .stat-bar-bg, .status-bar-bg {
             width: 100%;
@@ -118,7 +106,6 @@
         /* 压力值过高时的闪烁警告 */
         @keyframes stressFlash { 0% { opacity: 1; } 50% { opacity: 0.5; filter: drop-shadow(0 0 5px #ef4444); } 100% { opacity: 1; } }
         .stress-warning .status-label { color: #ef4444; animation: stressFlash 1s infinite; }
-        .stress-warning .status-label span:last-child { color: #ef4444; }
     `;
     document.head.appendChild(style);
 })();
@@ -154,7 +141,7 @@ function findItemInfo(itemName) {
 }
 
 // ==========================================
-// 3. 终极版：高容错提取偶像状态数据
+// 3. 高精度提取偶像状态数据 (修复同行数值干扰Bug)
 // ==========================================
 function getCurrentIdolData(idolName, parsedSysData) {
     let dbData = typeof idolDatabase !== 'undefined' ? idolDatabase.find(i => i.name === idolName) : null;
@@ -187,54 +174,29 @@ function getCurrentIdolData(idolName, parsedSysData) {
         }
     }
 
-    // 获取当前最新回合的完整文本（从底层抓取，避免 parseSysUI 漏掉）
-    let fullText = "";
-    if (typeof getMessageData === 'function') {
-        fullText = getMessageData() || "";
-    }
-    if (!fullText && parsedSysData) {
-        fullText = JSON.stringify(parsedSysData) + (parsedSysData.text || "") + (parsedSysData.changes || "");
-    }
+    // 从 AI 最新回复中提取动态数据并精准覆盖
+    if (parsedSysData && parsedSysData.status) {
+        // 将状态对象拍平成一个长字符串，方便正则全局搜索
+        let sysStr = Object.keys(parsedSysData.status).map(k => k + ":" + parsedSysData.status[k]).join(' | ');
 
-    // 强力提取函数：不仅搜索偶像状态区，还兼容数值变化区
-    function extractCurrentValue(text, keywords) {
-        let lines = text.split('\n');
-        // 从下往上找，确保拿到的是最新结算后的最终值
-        for (let i = lines.length - 1; i >= 0; i--) {
-            let line = lines[i];
-            if (keywords.some(kw => line.toLowerCase().includes(kw.toLowerCase()))) {
-                // 优先匹配：当前为XX、变成了XX、=XX、：XX
-                let curMatch = line.match(/(?:当前|变成|为|=|：|:|>|->)\s*(\d+)/);
-                if (curMatch) return parseInt(curMatch[1]);
-
-                // 备用方案：如果一行里有多个数字（如 Stress +5 -> 15%），提取最后一个出现的数字
-                let nums = line.match(/\d+/g);
-                if (nums && nums.length > 0) {
-                    return parseInt(nums[nums.length - 1]);
-                }
-            }
+        // 强力提取函数：查找关键词，并向后抓取遇到的第一个数字
+        function extractNum(str, keyword) {
+            let regex = new RegExp(keyword + "[^\\d]*(\\d+)", "i");
+            let m = str.match(regex);
+            return m ? parseInt(m[1]) : null;
         }
-        return null;
+
+        // 业务能力
+        let vVal = extractNum(sysStr, '(?:Vocal|唱功)'); if(vVal !== null) stats.vocal.val = vVal;
+        let dVal = extractNum(sysStr, '(?:Dance|舞蹈)'); if(dVal !== null) stats.dance.val = dVal;
+        let visVal = extractNum(sysStr, '(?:Visual|视觉)'); if(visVal !== null) stats.visual.val = visVal;
+
+        // 心理状态
+        let strVal = extractNum(sysStr, '(?:Stress|压力)'); if(strVal !== null) status.stress.val = strVal;
+        let affVal = extractNum(sysStr, '(?:Affection|羁绊)'); if(affVal !== null) status.affection.val = affVal;
+        let obeVal = extractNum(sysStr, '(?:Obedience|服从)'); if(obeVal !== null) status.obedience.val = obeVal;
+        let lusVal = extractNum(sysStr, '(?:Lust|堕落)'); if(lusVal !== null) status.lust.val = lusVal;
     }
-
-    // 开始全局深层提取
-    let vVal = extractCurrentValue(fullText, ['Vocal', '唱功']); if(vVal !== null) stats.vocal.val = vVal;
-    let dVal = extractCurrentValue(fullText, ['Dance', '舞蹈']); if(dVal !== null) stats.dance.val = dVal;
-    let visVal = extractCurrentValue(fullText, ['Visual', '视觉']); if(visVal !== null) stats.visual.val = visVal;
-
-    let strVal = extractCurrentValue(fullText, ['Stress', '压力']); if(strVal !== null) status.stress.val = strVal;
-    let affVal = extractCurrentValue(fullText, ['Affection', '羁绊']); if(affVal !== null) status.affection.val = affVal;
-    let obeVal = extractCurrentValue(fullText, ['Obedience', '服从']); if(obeVal !== null) status.obedience.val = obeVal;
-    let lusVal = extractCurrentValue(fullText, ['Lust', '堕落']); if(lusVal !== null) status.lust.val = lusVal;
-
-    // 业务能力评级动态重算防呆机制（防止 AI 没写评级）
-    const calcRank = (val) => {
-        if(val >= 96) return "S级"; if(val >= 81) return "A级"; if(val >= 61) return "B级";
-        if(val >= 41) return "C级"; if(val >= 21) return "D级"; return "E级";
-    };
-    stats.vocal.desc = calcRank(stats.vocal.val);
-    stats.dance.desc = calcRank(stats.dance.val);
-    stats.visual.desc = calcRank(stats.visual.val);
 
     return { stats, status };
 }
@@ -271,7 +233,7 @@ function renderCultivatePage(parsedSysData) {
     html += '<div class="cultivate-layout">';
 
     // 【新增】左上角呼出监视面板的悬浮按钮
-    html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看实时状态"><i class="bi bi-radar"></i></div>`;
+    html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看状态面板"><i class="bi bi-radar"></i></div>`;
 
     // 【新增】隐藏式的弹出状态监视面板
     let currentData = getCurrentIdolData(window.currentIdolNameForCultivate, parsedSysData);
@@ -287,13 +249,11 @@ function renderCultivatePage(parsedSysData) {
                     <div class="monitor-subtitle">业务评级 (Stats)</div>`;
     Object.values(currentData.stats).forEach(stat => {
         html += `   <div class="stat-row">
-                        <div class="stat-label">
-                            <span><i class="bi ${stat.icon}" style="color:${stat.color}"></i> ${stat.desc}</span>
-                            <span style="color:${stat.color}">${stat.val}</span>
-                        </div>
+                        <div class="stat-label"><i class="bi ${stat.icon}" style="color:${stat.color}"></i> ${stat.desc}</div>
                         <div class="stat-bar-bg">
                             <div class="stat-bar-fill" style="width: ${stat.val}%; background: ${stat.color};"></div>
                         </div>
+                        <div class="stat-val">${stat.val}</div>
                     </div>`;
     });
     html += `   </div>
@@ -304,13 +264,11 @@ function renderCultivatePage(parsedSysData) {
     Object.values(currentData.status).forEach(st => {
         let warningAnim = (st.name === 'Stress' && st.val >= 80) ? 'stress-warning' : '';
         html += `   <div class="status-row ${warningAnim}">
-                        <div class="status-label">
-                            <span><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</span>
-                            <span>${st.val}%</span>
-                        </div>
+                        <div class="status-label"><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</div>
                         <div class="status-bar-bg">
                             <div class="status-bar-fill" style="width: ${st.val}%; background: ${st.color};"></div>
                         </div>
+                        <div class="status-val">${st.val}%</div>
                     </div>`;
     });
     html += `   </div>
