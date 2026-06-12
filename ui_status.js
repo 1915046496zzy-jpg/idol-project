@@ -148,8 +148,19 @@ function renderStatusPage(parsedSysData) {
                         <div class="sub-panel-title"><i class="bi bi-journal-text"></i> 性爱经验档案</div>
                     </div>
                     <div class="sub-panel-content">
+                        
+                        <!-- 新增：综合性经验总计 -->
+                        <div style="text-align: center; margin-bottom: 20px; padding: 20px; background: white; border-radius: 16px; border: 1px solid var(--s-glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                            <div style="font-size: 14px; color: var(--s-text-light); font-weight: bold; margin-bottom: 5px;">综合性经验 (Total)</div>
+                            <div style="font-size: 36px; font-weight: 900; color: var(--s-accent); display: flex; justify-content: center; align-items: center;">
+                                <i class="bi bi-infinity" style="margin-right: 10px; color: var(--s-primary);"></i>
+                                ${isCurrentStatus ? (sData['性爱次数']||'0') : '0'} <span style="font-size: 16px; margin-left: 5px; color: var(--s-text-light);">次</span>
+                            </div>
+                        </div>
+
                         <div class="exp-grid">
                             <div class="exp-item"><div class="exp-icon"><i class="bi bi-emoji-kiss-fill"></i></div><div class="exp-label">口交次数</div><div class="exp-val">${isCurrentStatus ? (sData['口交次数']||'0') : '0'}</div></div>
+
                             <div class="exp-item"><div class="exp-icon"><i class="bi bi-suit-heart-fill"></i></div><div class="exp-label">乳交次数</div><div class="exp-val">${isCurrentStatus ? (sData['乳交次数']||'0') : '0'}</div></div>
                             <div class="exp-item"><div class="exp-icon"><i class="bi bi-hand-index-fill"></i></div><div class="exp-label">手交次数</div><div class="exp-val">${isCurrentStatus ? (sData['手交次数']||'0') : '0'}</div></div>
                             <div class="exp-item"><div class="exp-icon"><i class="bi bi-flower1"></i></div><div class="exp-label">阴道交次数</div><div class="exp-val">${isCurrentStatus ? (sData['阴道交次数']||'0') : '0'}</div></div>
