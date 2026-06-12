@@ -7,7 +7,9 @@ var AssetsMap = {
     "益田春子_立绘": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png",
     "本东姬乃_立绘": "https://i.postimg.cc/zf67gjtC/ben-dong-ji-nai-yao-wang-ye-kong.png",
     "社奈虹花_立绘": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png",
-
+    "镜宫凛_立绘": "https://i.postimg.cc/Y00kTYJ9/jing-gong-lin-ou-xiang-fu.jpg",
+    "伞瑠华_立绘": "https://i.postimg.cc/cJ5rC104/san-liu-hua-ou-xiang-fu.png",
+    
     // ================= 【表情包区】 =================
     "本东姬奈_表情_吃饭啦": "https://i.postimg.cc/6q3ScV46/ben-dong-ji-nai-biao-qing-chi-fan-la.png",
     "本东姬奈_表情_我爱拉面": "https://i.postimg.cc/7h6c91JH/ben-dong-ji-nai-biao-qing-wo-ai-la-mian.png",
