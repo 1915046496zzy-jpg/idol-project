@@ -479,7 +479,7 @@ const idolDatabase = [
         image: "https://i.postimg.cc/Y00kTYJ9/jing-gong-lin-ou-xiang-fu.jpg",
         memories: {
             sfw: [
-                { url: "https://i.postimg.cc/Y00kTYJ9/jing-gong-lin-ou-xiang-fu.jpg", title: "聚光灯下的完美微笑" }
+                { url: "https://i.postimg.cc/Y00kTYJ9/jing-gong-lin-ou-xiang-fu.jpg", title: "偶像歌手" }
             ],
             nsfw: [
                 { url: "https://i.postimg.cc/Y00kTYJ9/jing-gong-lin-ou-xiang-fu.jpg", title: "面具坠落的夜晚" }
@@ -518,6 +518,59 @@ const idolDatabase = [
             "💢 Stress (压力值)": { value: 25, max: 100, color: "#ef4444" },
             "❤️ Affection (羁绊)": { value: 25, max: 100, color: "#f43f5e" },
             "⛓️ Obedience (服从度)": { value: 45, max: 100, color: "#64748b" },
+            "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
+        }
+    },
+        {
+        id: 8,
+        name: "伞瑠华",
+        tag: "泪痣的丰满治愈系",
+        image: "https://i.postimg.cc/cJ5rC104/san-liu-hua-ou-xiang-fu.png",
+        memories: {
+            sfw: [
+                { url: "https://i.postimg.cc/cJ5rC104/san-liu-hua-ou-xiang-fu.png", title: "和想象中不一样的偶像服" },
+                { url: "https://i.postimg.cc/632Tvsp2/san-liu-hua-ou-xiang-fu2.png", title: "今日的拍摄任务" },
+                { url: "https://i.postimg.cc/MGrvHZqk/san-liu-hua-ou-xiang-fu-yu-mao.png", title: "小猫，要等我回来哦" }
+            ],
+            nsfw: [
+                { url: "https://i.postimg.cc/Vstdschp/san-liu-hua-ru-jiao.png", title: "没、没想到会被这样使用……" },
+                { url: "https://i.postimg.cc/cJJvdtqm/san-liu-hua-hou-ru.png", title: "请不要看那个地方……" },
+                { url: "https://i.postimg.cc/GmL2jTmN/san-liu-hua-wu-tai-tiao-dan.png", title: "在台上的话……不行……会坏掉的……" }
+            ]
+        },
+        basic: {
+            "🎓 职业": "前宠物医院护士",
+            "🎂 年龄": "22岁 (生日: 9月2日)",
+            "📏 身高/体型": "165cm / 肉感丰满",
+            "👙 罩杯": "巨乳 (G罩杯)",
+            "🎨 外观特征": "白皙肤色，浅棕色蓬松及肩波浪卷短发，温暖草绿瞳",
+            "✨ 特殊特征": "右眼角有一颗泪痣。习惯性含胸驼背以隐藏丰满胸部。重度猫奴。",
+            "🏠 家庭与背景": "地方城市普通家庭，父母经营小超市。为养三只流浪猫在东京租房，靠微薄积蓄生活"
+        },
+        psychology: {
+            "🧠 MBTI": "ISFJ (守卫者)",
+            "🎭 性格底色": "极致温柔与讨好型人格，主色调是违背本意的顺从",
+            "💦 衍生行为": "被要求穿暴露服装拍摄时，会一边红着脸流泪抱怨“这和说好的不一样啊”，一边乖乖摆出极其色情的姿势"
+        },
+        privacy: {
+            "🌱 阴毛状态": "茂盛型 (未过度修剪，呈现自然的浅棕色)",
+            "🍒 乳头细节": "熟女型 (深粉色，乳晕面积较大，乳房具重量感导致轻微下垂)",
+            "🌸 小穴外观": "丰满型 (大阴唇肉感十足，完全包裹住内部)",
+            "🍑 菊花外观": "柔软型 (周围肤色略深)"
+        },
+        traits: {
+            "✨ 特质A【违背本意的性感】": "安排常规Visual白通告时，有50%概率被变更为擦边/性感拍摄。触发时Stress+30，但该次通告获取Fame与Funds翻倍。",
+            "🐱 特质B【猫咪治愈法】": "消耗Funds购买高级猫粮或带去猫咖，可极大幅度降低Stress；若连续3次结算未进行与猫相关互动，Stress自然下降失效。"
+        },
+        stats: {
+            "🎤 Vocal (唱功)": { value: 55, max: 100, desc: "C级 - 职业及格线，声音温柔软糯但气息偏弱", color: "#ec4899" },
+            "💃 Dance (舞蹈)": { value: 40, max: 100, desc: "D级 - 勉强能看，胸部重量严重影响平衡，跳快歌极度吃力", color: "#8b5cf6" },
+            "🌟 Visual (视觉)": { value: 88, max: 100, desc: "A级 - 业界顶流，肉体魅力极度诱人，吸引大量男性肉体粉", color: "#eab308" }
+        },
+        status: {
+            "💢 Stress (压力值)": { value: 15, max: 100, color: "#ef4444" },
+            "❤️ Affection (羁绊)": { value: 20, max: 100, color: "#f43f5e" },
+            "⛓️ Obedience (服从度)": { value: 85, max: 100, color: "#64748b" },
             "💰 Lust (堕落度)": { value: 5, max: 100, color: "#a855f7" }
         }
     }
