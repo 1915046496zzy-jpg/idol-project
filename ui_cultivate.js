@@ -17,7 +17,8 @@ function findItemInfo(itemName) {
                     name: key,
                     type: item.type || 'unknown',
                     isEmoji: item.icon ? true : (item.isEmoji || false),
-                    img: item.icon || item.img || '📦',
+                    // 【图标修改 1】将默认的 📦 替换为了矢量包裹图标
+                    img: item.icon || item.img || '<i class="bi bi-box-seam"></i>',
                     desc: item.desc || '暂无详细描述'
                 };
             }
@@ -67,7 +68,8 @@ function renderCultivatePage(parsedSysData) {
 
     // 3. 互动按钮组
     html += `<div class="interact-btns" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}>`;
-    html += `<div class="interact-btn" onclick="toggleSubmenu(event, this)">👋<span>日常</span>
+    // 【图标修改 2】日常互动的 👋 替换为矢量挥手图标
+    html += `<div class="interact-btn" onclick="toggleSubmenu(event, this)"><i class="bi bi-hand-wave-fill" style="font-size: 26px;"></i><span>日常</span>
                 <div class="interact-submenu">
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('挠痒')">挠痒</div>
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('送礼')">送礼</div>
@@ -76,7 +78,8 @@ function renderCultivatePage(parsedSysData) {
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('戳戳')">戳戳</div>
                 </div>
              </div>`;
-    html += `<div class="interact-btn r18" onclick="toggleSubmenu(event, this)">🔞<span>R18</span>
+    // 【图标修改 3】R18互动的 🔞 替换为代表热度与成人的矢量火焰图标 (bi-fire)
+    html += `<div class="interact-btn r18" onclick="toggleSubmenu(event, this)"><i class="bi bi-fire" style="font-size: 26px;"></i><span>R18</span>
                 <div class="interact-submenu">
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('自慰')">自慰</div>
                     <div class="sub-btn" onclick="event.stopPropagation(); showBubble('揉胸')">揉胸</div>
@@ -88,7 +91,8 @@ function renderCultivatePage(parsedSysData) {
     html += '</div>';
 
     // 4. 背包展开按钮
-    html += `<div class="btn-open-inv" onclick="toggleCultivateInv()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}>🎒</div>`;
+    // 【图标修改 4】展开按钮的 🎒 替换为了矢量背包图标
+    html += `<div class="btn-open-inv" onclick="toggleCultivateInv()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}><i class="bi bi-bag-fill"></i></div>`;
 
     // 提取背包数据
     let stardustCount = "0";
@@ -103,7 +107,8 @@ function renderCultivatePage(parsedSysData) {
     // 5. 弹出式背包面板
     html += `<div class="inventory-popup" id="cultivate-inv-popup">
                 <div class="inv-header">
-                    <span style="font-size: 16px; font-weight: bold; color: #475569;">🎒 培养背包</span>
+                    <!-- 【图标修改 5】标题处的 🎒 替换为了矢量背包图标 -->
+                    <span style="font-size: 16px; font-weight: bold; color: #475569;"><i class="bi bi-bag-fill"></i> 培养背包</span>
                     <div class="stardust-display"><img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png">${stardustCount}</div>
                 </div>
                 <div class="inv-tabs">
@@ -129,7 +134,8 @@ function renderCultivatePage(parsedSysData) {
                     let safeDesc = matchedItem.desc.replace(/'/g, "\\'");
                     html += `<div class="inv-item" data-type="${matchedItem.type}" onclick="openItemModal('${matchedItem.name}', '${matchedItem.img}', ${matchedItem.isEmoji}, '${safeDesc}')">${imgHtml}<div class="inv-count">${count}</div></div>`;
                 } else {
-                    html += `<div class="inv-item" data-type="unknown" onclick="openItemModal('${cleanName}', '📦', true, '暂无详细描述')"><div class="inv-item-emoji">📦</div><div class="inv-count">${count}</div></div>`;
+                    // 【图标修改 6】当物品没匹配到详细数据时的默认 📦 替换为矢量图标
+                    html += `<div class="inv-item" data-type="unknown" onclick="openItemModal('${cleanName}', '<i class=\\\'bi bi-box-seam\\\'></i>', true, '暂无详细描述')"><div class="inv-item-emoji"><i class="bi bi-box-seam"></i></div><div class="inv-count">${count}</div></div>`;
                 }
             }
         });
