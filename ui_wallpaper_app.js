@@ -17,7 +17,7 @@
         { id: 'wp1', name: "星空", url: "https://i.postimg.cc/L880mFSr/xing-kong.png", mode: "dark" },
         { id: 'wp2', name: "踏切时光", url: "https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg", mode: "light" },
         { id: 'wp3', name: "碧蓝档案", url: "https://i.postimg.cc/N0z1mZWj/wallhaven-o5lwdp-1920x1080.png", mode: "light" },
-        { id: 'wp4', name: "极简白昼", url: "这里填入你的图床链接3", mode: "light" },
+        { id: 'wp4', name: "天王寺", url: "https://i.postimg.cc/9MmvwwHj/wallhaven-wyxw57-1920x1080.png", mode: "light" },
         { id: 'wp5', name: "赛博霓虹", url: "这里填入你的图床链接4", mode: "dark" }
     ];
 
@@ -64,11 +64,22 @@
             .pad-status-bar { color: #334155; text-shadow: 0 0 5px rgba(255,255,255,0.8); }
             .pad-app-icon span { color: #1e293b; text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 5px rgba(255,255,255,0.5); }
 
-            /* 深色壁纸模式 */
-            #qingzi-pad-wrapper.wp-mode-dark .pad-status-bar { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-            #qingzi-pad-wrapper.wp-mode-dark .pad-app-icon span { color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.6); }
-           /* 👇 新增这一行：让深色模式下的图标外围有一圈柔和的白光，防止融进背景 */
+                        /* 深色壁纸模式 */
+            #qingzi-pad-wrapper.wp-mode-dark .pad-status-bar { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.5); }
+
+            /* 👇 修改这里：让文字彻底变白，并加上半透明的黑色小背板和超强阴影 */
+            #qingzi-pad-wrapper.wp-mode-dark .pad-app-icon span {
+                color: #ffffff !important;
+                text-shadow: 0 1px 2px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,1) !important;
+                background: rgba(0,0,0,0.3); /* 半透明黑色底托 */
+                padding: 2px 6px;
+                border-radius: 8px;
+                backdrop-filter: blur(2px); /* 微微的毛玻璃效果 */
+            }
+
+            /* 之前加的深色图标防融背景发光 */
             #qingzi-pad-wrapper.wp-mode-dark .pad-app-icon-img { box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); }
+
 
             /* 壁纸App内部样式 */
             .wp-app-container { padding: 20px; display: flex; flex-direction: column; gap: 30px; height: 100%; overflow-y: auto; background: transparent; }
