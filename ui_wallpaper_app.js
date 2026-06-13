@@ -16,7 +16,7 @@
     const WALLPAPERS = [
         { id: 'wp1', name: "星空", url: "https://i.postimg.cc/L880mFSr/xing-kong.png", mode: "dark" },
         { id: 'wp2', name: "踏切时光", url: "https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg", mode: "light" },
-        { id: 'wp3', name: "深邃黑夜", url: "这里填入你的图床链接2", mode: "dark" },
+        { id: 'wp3', name: "碧蓝档案", url: "https://i.postimg.cc/N0z1mZWj/wallhaven-o5lwdp-1920x1080.png", mode: "light" },
         { id: 'wp4', name: "极简白昼", url: "这里填入你的图床链接3", mode: "light" },
         { id: 'wp5', name: "赛博霓虹", url: "这里填入你的图床链接4", mode: "dark" }
     ];
