@@ -67,6 +67,8 @@
             /* 深色壁纸模式 */
             #qingzi-pad-wrapper.wp-mode-dark .pad-status-bar { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
             #qingzi-pad-wrapper.wp-mode-dark .pad-app-icon span { color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.6); }
+           /* 👇 新增这一行：让深色模式下的图标外围有一圈柔和的白光，防止融进背景 */
+            #qingzi-pad-wrapper.wp-mode-dark .pad-app-icon-img { box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); }
 
             /* 壁纸App内部样式 */
             .wp-app-container { padding: 20px; display: flex; flex-direction: column; gap: 30px; height: 100%; overflow-y: auto; background: transparent; }
