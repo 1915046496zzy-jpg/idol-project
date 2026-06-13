@@ -1,5 +1,5 @@
 // ==========================================
-// 秋青子专属终端：主题壁纸 App (ui_wallpaper_app.js)
+// 秋青子专属终端：主题壁纸 App (ui_wallpaper_app.js) - 修复版
 // ==========================================
 (function() {
     let topDoc;
@@ -12,13 +12,13 @@
         topWin = window;
     }
 
-    // 预设数据配置
+    // 预设数据配置 (哥哥在这里填图床链接，并标注mode是'light'还是'dark')
     const WALLPAPERS = [
-        { id: 'wp1', name: "默认星空", url: "https://i.postimg.cc/L880mFSr/xing-kong.png" },
-        { id: 'wp2', name: "纯净粉樱", url: "这里填入你的图床链接1" },
-        { id: 'wp3', name: "深邃海洋", url: "这里填入你的图床链接2" },
-        { id: 'wp4', name: "极简白昼", url: "这里填入你的图床链接3" },
-        { id: 'wp5', name: "赛博霓虹", url: "这里填入你的图床链接4" }
+        { id: 'wp1', name: "星空", url: "https://i.postimg.cc/L880mFSr/xing-kong.png", mode: "dark" },
+        { id: 'wp2', name: "踏切时光", url: "https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg", mode: "light" },
+        { id: 'wp3', name: "深邃黑夜", url: "这里填入你的图床链接2", mode: "dark" },
+        { id: 'wp4', name: "极简白昼", url: "这里填入你的图床链接3", mode: "light" },
+        { id: 'wp5', name: "赛博霓虹", url: "这里填入你的图床链接4", mode: "dark" }
     ];
 
     const THEMES = [
@@ -34,12 +34,31 @@
         { id: 'ft_round', name: "可爱圆体", value: "'TsukuBRdGothic-Regular', 'Yuanti SC', sans-serif" }
     ];
 
-    // 注入应用内样式
+    // 注入应用内样式与自适应修复样式
     const styleId = 'qingzi-wallpaper-style';
     if (!topDoc.getElementById(styleId)) {
         const style = topDoc.createElement('style');
         style.id = styleId;
         style.innerHTML = `
+            /* 修复壁纸泛白问题：覆盖原本的透明度和模糊 */
+            #qingzi-pad-wrapper .pad-wallpaper { opacity: 1 !important; filter: none !important; }
+
+            /* App内部需要有个半透明或纯色底板，防止壁纸干扰阅读 */
+            .pad-app-window { background: var(--pad-bg, #ffffff) !important; color: var(--pad-text, #1e293b); }
+            .pad-app-header { background: rgba(var(--pad-header-bg-rgb, 248, 250, 252), 0.85) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.1); }
+            .pad-app-title { color: var(--pad-text, #1e293b) !important; }
+            .pad-app-content-area { background: transparent !important; }
+
+            /* ===== UI 深色/浅色自适应模式 ===== */
+            /* 浅色壁纸模式（默认） */
+            .pad-status-bar { color: #334155; text-shadow: 0 0 5px rgba(255,255,255,0.8); }
+            .pad-app-icon span { color: #1e293b; text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 5px rgba(255,255,255,0.5); }
+
+            /* 深色壁纸模式 */
+            #qingzi-pad-wrapper.wp-mode-dark .pad-status-bar { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+            #qingzi-pad-wrapper.wp-mode-dark .pad-app-icon span { color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.6); }
+
+            /* 壁纸App内部样式 */
             .wp-app-container { padding: 20px; display: flex; flex-direction: column; gap: 30px; height: 100%; overflow-y: auto; background: transparent; }
             .wp-section-title { font-size: 16px; font-weight: bold; color: var(--pad-text, #1e293b); margin-bottom: 15px; border-left: 4px solid var(--pad-primary, #db2777); padding-left: 10px; }
 
@@ -59,7 +78,7 @@
 
             /* 字体列表 */
             .ft-list { display: flex; flex-direction: column; gap: 10px; }
-            .ft-item { padding: 15px; background: rgba(0,0,0,0.03); border-radius: 12px; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
+            .ft-item { padding: 15px; background: rgba(0,0,0,0.03); border-radius: 12px; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); transition: 0.2s; display: flex; justify-content: space-between; align-items: center; color: var(--pad-text, #1e293b);}
             .ft-item:hover { background: rgba(0,0,0,0.05); transform: translateX(5px); }
             .ft-item.active { background: rgba(var(--pad-primary-rgb, 219,39,119), 0.1); border-color: var(--pad-primary, #db2777); color: var(--pad-primary, #db2777); font-weight: bold; }
         `;
@@ -69,13 +88,12 @@
     topWin.renderWallpaperApp = function(container) {
         if (!container) return;
 
-        // 生成HTML结构
         let html = `<div class="wp-app-container">`;
 
         // 1. 壁纸区
         html += `<div class="wp-section"><div class="wp-section-title">桌面壁纸</div><div class="wp-grid">`;
         WALLPAPERS.forEach(wp => {
-            html += `<div class="wp-item" data-type="wallpaper" data-url="${wp.url}">
+            html += `<div class="wp-item" data-type="wallpaper" data-url="${wp.url}" data-mode="${wp.mode}">
                         <img class="wp-img" src="${wp.url}" alt="${wp.name}">
                         <div class="wp-name">${wp.name}</div>
                      </div>`;
@@ -102,7 +120,6 @@
         html += `</div>`;
         container.innerHTML = html;
 
-        // 绑定事件
         const appContainer = container.querySelector('.wp-app-container');
         appContainer.addEventListener('click', function(e) {
             // 点击壁纸
@@ -111,8 +128,21 @@
                 appContainer.querySelectorAll('.wp-item').forEach(el => el.classList.remove('active'));
                 wpItem.classList.add('active');
                 const url = wpItem.getAttribute('data-url');
+                const mode = wpItem.getAttribute('data-mode'); // 读取深浅色模式
+
                 const padBg = topDoc.querySelector('.pad-wallpaper');
+                const padWrapper = topDoc.getElementById('qingzi-pad-wrapper');
+
                 if (padBg) padBg.style.backgroundImage = `url('${url}')`;
+
+                // 根据深浅色模式切换桌面文字样式
+                if (padWrapper) {
+                    if (mode === 'dark') {
+                        padWrapper.classList.add('wp-mode-dark');
+                    } else {
+                        padWrapper.classList.remove('wp-mode-dark');
+                    }
+                }
                 return;
             }
 
@@ -126,14 +156,25 @@
                 if (theme) {
                     const padWrapper = topDoc.getElementById('qingzi-pad-wrapper');
                     if (padWrapper) {
-                        // 利用 CSS 变量改变全局颜色
                         padWrapper.style.setProperty('--pad-primary', theme.primary);
                         padWrapper.style.setProperty('--pad-text', theme.text);
-                        padWrapper.style.background = theme.bg;
+                        padWrapper.style.setProperty('--pad-bg', theme.id === 'th_dark' ? '#0f172a' : '#ffffff');
 
-                        // 为了兼容你之前写的固定颜色按钮，强制覆盖一些关键元素的颜色
+                        // 转换RGB格式用于半透明效果
+                        const hexToRgb = (hex) => {
+                            let r = parseInt(hex.slice(1, 3), 16);
+                            let g = parseInt(hex.slice(3, 5), 16);
+                            let b = parseInt(hex.slice(5, 7), 16);
+                            return `${r}, ${g}, ${b}`;
+                        };
+                        padWrapper.style.setProperty('--pad-primary-rgb', hexToRgb(theme.primary));
+                        padWrapper.style.setProperty('--pad-header-bg-rgb', theme.id === 'th_dark' ? '30, 41, 59' : '248, 250, 252');
+
                         const backBtns = topDoc.querySelectorAll('.btn-pad-back');
-                        backBtns.forEach(btn => btn.style.color = theme.primary);
+                        backBtns.forEach(btn => {
+                            btn.style.color = theme.primary;
+                            btn.style.background = theme.id === 'th_dark' ? '#334155' : '#f1f5f9';
+                        });
 
                         const dragBall = topDoc.getElementById('qingzi-drag-ball');
                         if (dragBall) {
