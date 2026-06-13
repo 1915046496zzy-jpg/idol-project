@@ -14,7 +14,7 @@
 
     // 预设数据配置
     const WALLPAPERS = [
-        { id: 'wp1', name: "默认星空", url: "https://i.postimg.cc/02gmvkZy/da-de-tu.png" },
+        { id: 'wp1', name: "默认星空", url: "https://i.postimg.cc/L880mFSr/xing-kong.png" },
         { id: 'wp2', name: "纯净粉樱", url: "这里填入你的图床链接1" },
         { id: 'wp3', name: "深邃海洋", url: "这里填入你的图床链接2" },
         { id: 'wp4', name: "极简白昼", url: "这里填入你的图床链接3" },
