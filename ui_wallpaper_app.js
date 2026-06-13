@@ -1,5 +1,5 @@
 // ==========================================
-// 秋青子专属终端：主题壁纸 App (ui_wallpaper_app.js) - 修复版
+// 秋青子专属终端：主题壁纸 App (ui_wallpaper_app.js) - 终极清晰修复版
 // ==========================================
 (function() {
     let topDoc;
@@ -34,15 +34,25 @@
         { id: 'ft_round', name: "可爱圆体", value: "'TsukuBRdGothic-Regular', 'Yuanti SC', sans-serif" }
     ];
 
+    // ==========================================
+    // 强制撕除模糊白膜的魔法！
+    // ==========================================
+    const fixBgInterval = setInterval(() => {
+        let padBg = topDoc.querySelector('.pad-wallpaper');
+        if (padBg) {
+            // 直接用行内样式强行覆盖原版的模糊和低透明度！
+            padBg.style.opacity = '1';
+            padBg.style.filter = 'none';
+            clearInterval(fixBgInterval);
+        }
+    }, 100);
+
     // 注入应用内样式与自适应修复样式
     const styleId = 'qingzi-wallpaper-style';
     if (!topDoc.getElementById(styleId)) {
         const style = topDoc.createElement('style');
         style.id = styleId;
         style.innerHTML = `
-            /* 修复壁纸泛白问题：覆盖原本的透明度和模糊 */
-            #qingzi-pad-wrapper .pad-wallpaper { opacity: 1 !important; filter: none !important; }
-
             /* App内部需要有个半透明或纯色底板，防止壁纸干扰阅读 */
             .pad-app-window { background: var(--pad-bg, #ffffff) !important; color: var(--pad-text, #1e293b); }
             .pad-app-header { background: rgba(var(--pad-header-bg-rgb, 248, 250, 252), 0.85) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.1); }
@@ -128,14 +138,18 @@
                 appContainer.querySelectorAll('.wp-item').forEach(el => el.classList.remove('active'));
                 wpItem.classList.add('active');
                 const url = wpItem.getAttribute('data-url');
-                const mode = wpItem.getAttribute('data-mode'); // 读取深浅色模式
+                const mode = wpItem.getAttribute('data-mode');
 
                 const padBg = topDoc.querySelector('.pad-wallpaper');
                 const padWrapper = topDoc.getElementById('qingzi-pad-wrapper');
 
-                if (padBg) padBg.style.backgroundImage = `url('${url}')`;
+                if (padBg) {
+                    padBg.style.backgroundImage = `url('${url}')`;
+                    // 再次确保切换时样式是干净的！
+                    padBg.style.opacity = '1';
+                    padBg.style.filter = 'none';
+                }
 
-                // 根据深浅色模式切换桌面文字样式
                 if (padWrapper) {
                     if (mode === 'dark') {
                         padWrapper.classList.add('wp-mode-dark');
@@ -160,7 +174,6 @@
                         padWrapper.style.setProperty('--pad-text', theme.text);
                         padWrapper.style.setProperty('--pad-bg', theme.id === 'th_dark' ? '#0f172a' : '#ffffff');
 
-                        // 转换RGB格式用于半透明效果
                         const hexToRgb = (hex) => {
                             let r = parseInt(hex.slice(1, 3), 16);
                             let g = parseInt(hex.slice(3, 5), 16);
