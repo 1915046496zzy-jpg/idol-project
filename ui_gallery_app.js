@@ -26,7 +26,7 @@
                 tag: idol.tag || '',
                 avatar: idol.image || DEFAULT_AVATAR,
                 sfw: sfwList.map((p, i) => ({ id: idol.id + '_s' + i, url: p.url, title: p.title || '', isUnlocked: true })),
-                nsfw: nsfwList.map((p, i) => ({ id: idol.id + '_n' + i, url: p.url, title: p.title || '', isUnlocked: false }))
+                nsfw: nsfwList.map((p, i) => ({ id: idol.id + '_n' + i, url: p.url, title: p.title || '', isUnlocked: true }))
             };
         });
     }
