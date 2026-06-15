@@ -18,7 +18,9 @@
         { id: 'wp2', name: "踏切时光", url: "https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg", mode: "light" },
         { id: 'wp3', name: "碧蓝档案", url: "https://i.postimg.cc/N0z1mZWj/wallhaven-o5lwdp-1920x1080.png", mode: "light" },
         { id: 'wp4', name: "天王寺", url: "https://i.postimg.cc/9MmvwwHj/wallhaven-wyxw57-1920x1080.png", mode: "light" },
-        { id: 'wp5', name: "赛博霓虹", url: "这里填入你的图床链接4", mode: "dark" }
+        { id: 'wp5', name: "miku", url: "https://i.postimg.cc/43MgPFH2/miku.png", mode: "light" },
+        { id: 'wp6', name: "果坂青/omao", url: "https://i.postimg.cc/dVkndHv7/101079851-p0.jpg", mode: "dark" },
+        { id: 'wp6', name: "いちご飴　", url: "https://i.postimg.cc/mkP1qnmY/92786671-p0.jpg", mode: "light" }
     ];
 
     const THEMES = [
