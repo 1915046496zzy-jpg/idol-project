@@ -7,37 +7,37 @@
             id: "1993154308",
             title: "マリーゴールド",
             artist: "クルミ",
-            cover: "https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg"
+            cover: "https://i.postimg.cc/bvPCh0cH/109951168006412374.jpg"
         },
         {
-            id: "6586114305",
+            id: "542042",
             title: "心が旅立つ時",
             artist: "永田茂",
-            cover: "https://i.postimg.cc/QtxVydk8/cover1.jpg"
+            cover: "https://i.postimg.cc/wTs0R49R/109951164728008085.jpg"
         },
         {
             id: "435166265",
             title: "YUBIKIRI-GENMAN",
             artist: "Mili",
-            cover: "https://i.postimg.cc/L6Z4X6jQ/cover2.jpg"
+            cover: "https://i.postimg.cc/tg95fXWS/18801648835570109.jpg"
         },
         {
             id: "744932",
             title: "アサガオ",
             artist: "舞花",
-            cover: "https://i.postimg.cc/zXkPQ1Wj/cover3.jpg"
+            cover: "https://i.postimg.cc/13Q2m1Dp/698189883649629.png"
         },
         {
             id: "27580521",
             title: "Libertus",
             artist: "Chen-U",
-            cover: "https://i.postimg.cc/qR8vKkVy/cover4.jpg"
+            cover: "https://i.postimg.cc/xjN4L1RH/5695470231949594.jpg"
         },
         {
             id: "766287",
             title: "fairy stage",
             artist: "K2 SOUND",
-            cover: "https://i.postimg.cc/KYS5n5M4/cover5.jpg"
+            cover: "https://i.postimg.cc/jqnFySXz/875211255709998.png"
         }
     ];
 
