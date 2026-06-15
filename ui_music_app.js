@@ -337,6 +337,11 @@
                 covers.forEach(el => { if(el) el.src = song.cover; });
                 fullBg.style.backgroundImage = 'url(' + song.cover + ')';
 
+                // 同步更新全局胶囊封面
+               var topDoc = window.parent.document || document;
+               var capCover = topDoc.querySelector('#cap-cover');
+               if (capCover) capCover.src = song.cover;
+
                 miniPlayer.classList.remove('hidden');
                 renderList();
             }
