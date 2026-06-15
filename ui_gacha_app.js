@@ -1,6 +1,5 @@
 // ==========================================
-// 星探寻访 (Gacha) APP 独立模块 (华丽重制版)
-// 包含：常驻/限定卡池切换、详细内容公示、抽卡过场动画
+// 星探寻访 (Gacha) APP 独立模块 - 华丽重制版
 // ==========================================
 
 (function() {
@@ -18,201 +17,271 @@
         topWin.playerCurrency = { stardust: 50000 };
     }
 
-    if (!topDoc.getElementById('qingzi-gacha-style-v2')) {
+    // --- 注入专属高阶 CSS ---
+    if (!topDoc.getElementById('qingzi-gacha-style')) {
         const style = topDoc.createElement('style');
-        style.id = 'qingzi-gacha-style-v2';
+        style.id = 'qingzi-gacha-style';
         style.innerHTML = `
             /* 基础容器 */
-            .gacha-app-container { display: flex; flex-direction: column; height: 100%; background: #0f172a; color: #fff; font-family: 'Microsoft YaHei', sans-serif; position: relative; overflow: hidden; }
+            .gc-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #f4f4f5; font-family: -apple-system, "Microsoft YaHei", sans-serif; position: relative; overflow: hidden; }
 
-            /* 顶部 Tab */
-            .gacha-tabs { display: flex; padding: 15px 20px 0; gap: 10px; background: #1e293b; border-bottom: 1px solid #334155; z-index: 10; }
-            .gacha-tab { padding: 10px 20px; font-size: 14px; font-weight: bold; color: #94a3b8; cursor: pointer; border-radius: 12px 12px 0 0; transition: 0.3s; position: relative; }
-            .gacha-tab.active { color: #fff; background: #334155; }
-            .gacha-tab.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60%; height: 3px; background: #ec4899; border-radius: 3px 3px 0 0; }
+            /* 顶部资产栏 */
+            .gc-top-bar { height: 60px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 10; flex-shrink: 0; }
+            .gc-title-wrap { display: flex; align-items: baseline; gap: 10px; }
+            .gc-main-title { font-size: 22px; font-weight: 900; color: #1e293b; letter-spacing: 2px; }
+            .gc-sub-title { font-size: 12px; color: #94a3b8; letter-spacing: 3px; text-transform: uppercase; font-weight: bold; }
+            .gc-currency { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 6px 15px; border-radius: 20px; border: 1px solid #e2e8f0; }
+            .gc-currency i { color: #f59e0b; font-size: 18px; }
+            .gc-currency-val { font-size: 18px; font-weight: 900; font-family: monospace; color: #334155; }
 
-            /* 主展示区 (Banner) */
-            .gacha-main-view { flex: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
-            .gacha-banner-wrap { padding: 20px; }
-            .gacha-banner { position: relative; height: 220px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: center; padding: 30px; border: 2px solid rgba(255,255,255,0.1); transition: 0.5s; }
-            .gacha-banner::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.2) 100%); z-index: 1; }
-            .gacha-banner-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: 0; opacity: 0.6; }
+            /* 主界面结构 (左侧标签 + 右侧横幅) */
+            .gc-main-area { flex: 1; display: flex; overflow: hidden; }
 
-            .banner-standard .gacha-banner-bg { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
-            .banner-limited .gacha-banner-bg { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+            /* 左侧卡池切换 Tab */
+            .gc-sidebar { width: 220px; background: #fff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 0; z-index: 5; }
+            .gc-tab { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-left: 4px solid transparent; transition: 0.3s; color: #64748b; font-weight: bold; font-size: 15px; }
+            .gc-tab:hover { background: #f8fafc; color: #334155; }
+            .gc-tab.active { background: #eff6ff; color: #2563eb; border-left-color: #3b82f6; }
+            .gc-tab i { font-size: 20px; }
+            .gc-tab-badge { margin-left: auto; font-size: 10px; background: #ef4444; color: #fff; padding: 2px 6px; border-radius: 10px; }
 
-            .gacha-banner-content { position: relative; z-index: 2; }
-            .gacha-banner-tag { display: inline-block; padding: 4px 12px; background: rgba(236,72,153,0.8); border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; backdrop-filter: blur(5px); }
-            .gacha-banner-title { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); margin-bottom: 5px; }
-            .gacha-banner-sub { font-size: 13px; color: #cbd5e1; }
+            /* 右侧卡池展示区 */
+            .gc-content { flex: 1; position: relative; display: flex; flex-direction: column; background: #e2e8f0; }
 
-            /* 详情入口 */
-            .gacha-detail-btn-wrap { display: flex; justify-content: center; margin-top: 10px; }
-            .btn-show-detail { background: rgba(51,65,85,0.8); border: 1px solid #475569; color: #cbd5e1; padding: 8px 20px; border-radius: 20px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; backdrop-filter: blur(5px); }
-            .btn-show-detail:hover { background: #475569; color: #fff; }
+            /* Banner 区域 */
+            .gc-banner-wrap { flex: 1; position: relative; overflow: hidden; background: linear-gradient(135deg, #1e293b, #0f172a); }
+            .gc-banner-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.4; filter: blur(2px); transition: 0.5s; }
+            .gc-banner-char { position: absolute; right: 5%; bottom: -5%; height: 110%; object-fit: contain; filter: drop-shadow(-10px 0 20px rgba(0,0,0,0.5)); transition: 0.5s; pointer-events: none; }
 
-            /* 底部操作栏 */
-            .gacha-footer { background: #1e293b; padding: 20px; border-top: 1px solid #334155; display: flex; flex-direction: column; gap: 15px; z-index: 10; }
-            .gacha-currency-info { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 15px; border-radius: 12px; border: 1px solid #334155; }
-            .gacha-currency-label { font-size: 13px; color: #94a3b8; display: flex; align-items: center; gap: 6px; }
-            .gacha-currency-val { font-size: 18px; font-family: monospace; font-weight: bold; color: #fbbf24; }
+            .gc-banner-info { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); color: #fff; z-index: 2; max-width: 50%; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+            .gc-banner-type { display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); border-radius: 4px; font-size: 13px; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.3); }
+            .gc-banner-name { font-size: 48px; font-weight: 900; margin-bottom: 10px; line-height: 1.1; font-family: 'Noto Serif SC', serif; }
+            .gc-banner-desc { font-size: 16px; opacity: 0.8; line-height: 1.6; }
 
-            .gacha-actions { display: flex; gap: 15px; }
-            .btn-do-gacha { flex: 1; padding: 15px; border-radius: 16px; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; position: relative; overflow: hidden; }
-            .btn-do-gacha::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent); transform: rotate(45deg); transition: 0.5s; opacity: 0; }
-            .btn-do-gacha:hover::after { opacity: 1; left: 100%; }
+            /* 底部操作区 */
+            .gc-action-bar { height: 120px; background: rgba(255,255,255,0.98); border-top: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 10; }
 
-            .btn-single { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 15px rgba(59,130,246,0.3); color: #fff; }
-            .btn-ten { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 15px rgba(245,158,11,0.3); color: #fff; }
-            .btn-do-gacha span { font-size: 16px; font-weight: 900; letter-spacing: 2px; }
-            .btn-cost { font-size: 12px; opacity: 0.9; display: flex; align-items: center; gap: 4px; font-weight: bold; }
-            .btn-cost img { width: 14px; height: 14px; }
+            .gc-btn-detail { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px; }
+            .gc-btn-detail:hover { background: #e2e8f0; color: #1e293b; }
 
-            /* 卡池详情弹窗 */
-            .gacha-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); z-index: 100; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-            .gacha-modal.show { transform: translateY(0); }
-            .gacha-modal-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; background: #1e293b; }
-            .gacha-modal-title { font-size: 18px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; }
-            .btn-close-modal { background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer; }
-            .gacha-modal-content { flex: 1; overflow-y: auto; padding: 20px; }
+            .gc-pull-group { display: flex; gap: 20px; }
+            .gc-btn-pull { position: relative; width: 180px; height: 65px; border-radius: 12px; border: none; cursor: pointer; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: 0.2s; }
+            .gc-btn-pull:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); filter: brightness(1.1); }
+            .gc-btn-pull:active { transform: translateY(1px); }
+            .gc-btn-pull.disabled { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
 
-            .pool-section { margin-bottom: 30px; }
-            .pool-section-title { font-size: 15px; font-weight: bold; color: #ec4899; margin-bottom: 15px; border-bottom: 1px dashed #334155; padding-bottom: 8px; display: flex; justify-content: space-between; }
-            .pool-grid-idol { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px; }
-            .pool-item-idol { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px; text-align: center; }
-            .pool-item-idol img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-bottom: 5px; background: #0f172a; }
-            .pool-item-idol span { display: block; font-size: 12px; font-weight: bold; color: #cbd5e1; }
+            .gc-btn-single { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; }
+            .gc-btn-ten { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
 
-            .pool-list-item { display: flex; align-items: center; gap: 15px; background: #1e293b; padding: 12px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 10px; }
-            .pool-list-icon { width: 40px; height: 40px; border-radius: 8px; background: #0f172a; object-fit: contain; padding: 5px; }
-            .pool-list-info { flex: 1; }
-            .pool-list-name { font-size: 14px; font-weight: bold; color: #f8fafc; margin-bottom: 4px; }
-            .pool-list-desc { font-size: 12px; color: #94a3b8; line-height: 1.4; }
-            .pool-list-rate { font-size: 13px; font-family: monospace; color: #fbbf24; font-weight: bold; background: rgba(245,158,11,0.1); padding: 4px 8px; border-radius: 6px; }
+            .gc-pull-text { font-size: 18px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); z-index: 2; }
+            .gc-pull-cost { font-size: 13px; display: flex; align-items: center; gap: 5px; opacity: 0.9; font-weight: bold; z-index: 2; margin-top: 2px; }
+            .gc-pull-cost i { font-size: 14px; }
 
-            /* 抽卡过场动画 */
-            .gacha-animation-layer { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 200; display: none; flex-direction: column; align-items: center; justify-content: center; }
-            .gacha-animation-layer.active { display: flex; }
-            .star-burst { width: 100px; height: 100px; position: relative; animation: pulseGlow 1.5s infinite; }
-            .star-burst i { font-size: 80px; color: #fbbf24; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-shadow: 0 0 30px #fbbf24; }
-            .anim-text { margin-top: 30px; font-size: 18px; font-weight: bold; color: #fff; letter-spacing: 4px; animation: fadeInOut 1.5s infinite; }
+            .gc-btn-pull::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); transform: rotate(45deg) translateY(-100%); transition: 0.5s; }
+            .gc-btn-pull:hover::before { transform: rotate(45deg) translateY(100%); }
 
-            @keyframes pulseGlow { 0% { transform: scale(0.8); opacity: 0.5; filter: drop-shadow(0 0 10px #fbbf24); } 50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 50px #f59e0b); } 100% { transform: scale(0.8); opacity: 0.5; filter: drop-shadow(0 0 10px #fbbf24); } }
-            @keyframes fadeInOut { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+            /* ================= 卡池详情侧边抽屉 ================= */
+            .gc-detail-drawer { position: absolute; top: 0; right: -100%; width: 60%; max-width: 600px; height: 100%; background: #fff; box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 50; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; }
+            .gc-detail-drawer.open { right: 0; }
+            .gc-detail-header { padding: 20px 30px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+            .gc-detail-title { font-size: 20px; font-weight: 900; color: #1e293b; display: flex; align-items: center; gap: 10px; }
+            .gc-btn-close-drawer { background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.2s; }
+            .gc-btn-close-drawer:hover { color: #ef4444; transform: rotate(90deg); }
 
-            /* 抽卡结果界面 */
-            .gacha-result-view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg') center/cover; z-index: 300; display: none; flex-direction: column; }
-            .gacha-result-view::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.85); backdrop-filter: blur(10px); z-index: 0; }
-            .gacha-result-view.active { display: flex; }
+            .gc-detail-content { flex: 1; overflow-y: auto; padding: 30px; }
+            .gc-detail-content::-webkit-scrollbar { width: 6px; }
+            .gc-detail-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-            .result-header { position: relative; z-index: 1; text-align: center; padding: 40px 20px 20px; }
-            .result-title { font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 4px; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+            .gc-info-section { margin-bottom: 30px; }
+            .gc-section-title { font-size: 16px; font-weight: bold; color: #3b82f6; border-bottom: 2px solid #eff6ff; padding-bottom: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-            .result-grid { position: relative; z-index: 1; flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 15px; padding: 20px; overflow-y: auto; align-content: center; justify-items: center; }
+            .gc-rate-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+            .gc-rate-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #cbd5e1; font-size: 14px; }
+            .gc-rate-row:last-child { border-bottom: none; }
+            .gc-rate-label { color: #475569; font-weight: bold; }
+            .gc-rate-val { color: #1e293b; font-family: monospace; font-weight: 900; font-size: 15px; }
+            .gc-val-high { color: #db2777; }
 
-            .result-card { background: linear-gradient(180deg, #1e293b, #0f172a); border-radius: 16px; padding: 15px; text-align: center; width: 100%; max-width: 140px; border: 1px solid #334155; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transform: translateY(50px) scale(0.8); opacity: 0; animation: cardPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; }
-            @keyframes cardPop { to { transform: translateY(0) scale(1); opacity: 1; } }
+            .gc-idol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; }
+            .gc-idol-item { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+            .gc-idol-img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 2px solid #f1f5f9; margin-bottom: 8px; }
+            .gc-idol-name { font-size: 12px; font-weight: bold; color: #334155; }
 
-            .result-card.card-idol { border: 2px solid #fbbf24; background: linear-gradient(180deg, rgba(245,158,11,0.2), #0f172a); box-shadow: 0 0 30px rgba(245,158,11,0.2); }
-            .result-card.card-idol::before { content: 'SSR'; position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #fff; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 5; }
+            .gc-item-list { display: flex; flex-direction: column; gap: 10px; }
+            .gc-item-row { display: flex; align-items: center; gap: 15px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 15px; }
+            .gc-item-icon-wrap { width: 40px; height: 40px; background: #f1f5f9; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #64748b; flex-shrink: 0; }
+            .gc-item-info { flex: 1; }
+            .gc-item-name { font-size: 14px; font-weight: bold; color: #1e293b; margin-bottom: 2px; }
+            .gc-item-desc { font-size: 12px; color: #64748b; }
 
-            .result-card.card-dup { border: 2px solid #3b82f6; background: linear-gradient(180deg, rgba(59,130,246,0.2), #0f172a); }
-            .result-card.card-dup::before { content: '印记'; position: absolute; top: -10px; right: -10px; background: #3b82f6; color: #fff; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 8px; z-index: 5; }
+            /* ================= 抽卡动画层 ================= */
+            .gc-anim-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
+            .gc-anim-overlay.active { display: flex; }
+            .gc-anim-video { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; opacity: 0.5; }
+            .gc-anim-text { position: relative; z-index: 2; color: #fff; font-size: 24px; font-weight: 900; letter-spacing: 10px; text-shadow: 0 0 20px rgba(255,255,255,0.5); animation: pulseText 1.5s infinite; }
+            @keyframes pulseText { 0% { opacity: 0.5; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } 100% { opacity: 0.5; transform: scale(0.98); } }
 
-            .result-img-wrap { width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #1e293b; border: 1px solid #334155; display: flex; justify-content: center; align-items: center; }
-            .result-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-            .result-img-wrap i { font-size: 40px; color: #94a3b8; }
+            /* ================= 结果展示层 ================= */
+            .gc-result-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: opacity 0.5s; }
+            .gc-result-overlay.active { display: flex; opacity: 1; }
+            .gc-res-header { text-align: center; padding: 40px 0 20px; }
+            .gc-res-title { color: #fff; font-size: 28px; font-weight: 900; letter-spacing: 4px; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
 
-            .result-name { font-size: 13px; font-weight: bold; color: #f8fafc; }
-            .result-type-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #334155; color: #cbd5e1; }
-            .card-idol .result-type-tag { background: rgba(245,158,11,0.2); color: #fbbf24; }
-            .card-dup .result-type-tag { background: rgba(59,130,246,0.2); color: #60a5fa; }
+            .gc-res-grid { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 20px; padding: 20px 40px; overflow-y: auto; perspective: 1000px; }
 
-            .result-footer { position: relative; z-index: 1; padding: 20px; display: flex; gap: 15px; justify-content: center; background: linear-gradient(0deg, #0f172a, transparent); }
-            .btn-result-action { padding: 15px 30px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; border: none; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
-            .btn-result-back { background: #334155; color: #fff; }
-            .btn-result-back:hover { background: #475569; }
-            .btn-result-again { background: #f59e0b; color: #fff; box-shadow: 0 4px 15px rgba(245,158,11,0.3); }
-            .btn-result-again:hover { background: #d97706; }
+            .gc-res-card { width: 140px; height: 190px; background: linear-gradient(180deg, #334155, #1e293b); border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; align-items: center; padding: 15px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; transform-style: preserve-3d; transform: rotateY(90deg); opacity: 0; }
+            .gc-res-card.flip-in { animation: cardFlipIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+            @keyframes cardFlipIn { to { transform: rotateY(0deg); opacity: 1; } }
+
+            /* 卡片品质分类 */
+            .gc-res-card.type-idol { background: linear-gradient(180deg, #fef3c7, #f59e0b); border: 2px solid #fbbf24; box-shadow: 0 0 30px rgba(245, 158, 11, 0.3); }
+            .gc-res-card.type-dup { background: linear-gradient(180deg, #e0f2fe, #3b82f6); border: 2px solid #60a5fa; box-shadow: 0 0 30px rgba(59, 130, 246, 0.3); }
+            .gc-res-card.type-item { background: linear-gradient(180deg, #f8fafc, #cbd5e1); border: 1px solid #94a3b8; }
+            .gc-res-card.type-currency { background: linear-gradient(180deg, #1e293b, #0f172a); border: 1px solid #334155; }
+
+            .gc-res-tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: bold; color: #fff; padding: 2px 10px; border-radius: 10px; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.2); white-space: nowrap; }
+            .type-idol .gc-res-tag { background: #db2777; }
+            .type-dup .gc-res-tag { background: #2563eb; }
+            .type-item .gc-res-tag { background: #64748b; }
+            .type-currency .gc-res-tag { background: #10b981; }
+
+            .gc-res-img-wrap { width: 80px; height: 80px; margin-top: 10px; margin-bottom: 15px; position: relative; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+            .gc-res-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+            .gc-res-img-wrap i { font-size: 40px; color: #64748b; }
+
+            .gc-res-name { font-size: 13px; font-weight: 900; text-align: center; line-height: 1.2; width: 100%; }
+            .type-idol .gc-res-name { color: #78350f; }
+            .type-dup .gc-res-name { color: #1e3a8a; }
+            .type-item .gc-res-name { color: #334155; }
+            .type-currency .gc-res-name { color: #f8fafc; }
+
+            /* 重复印记翻转特效 */
+            .gc-res-card.type-dup .gc-res-img-wrap img.mark-front, .gc-res-card.type-dup .gc-res-img-wrap i.mark-back { position: absolute; top:0; left:0; width:100%; height:100%; backface-visibility: hidden; transition: transform 0.6s; }
+            .gc-res-card.type-dup .gc-res-img-wrap img.mark-front { transform: rotateY(0deg); }
+            .gc-res-card.type-dup .gc-res-img-wrap i.mark-back { transform: rotateY(180deg); background: #fdf2f8; color: #db2777; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+            .gc-res-card.do-transform .mark-front { transform: rotateY(-180deg) !important; }
+            .gc-res-card.do-transform .mark-back { transform: rotateY(0deg) !important; }
+
+            .gc-res-footer { padding: 30px; display: flex; justify-content: center; gap: 20px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+            .gc-btn-res { padding: 15px 40px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+            .gc-btn-res-close { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+            .gc-btn-res-close:hover { background: rgba(255,255,255,0.2); }
+            .gc-btn-res-again { background: #f59e0b; color: #fff; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+            .gc-btn-res-again:hover { background: #fbbf24; transform: translateY(-2px); box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
+
         `;
         topDoc.head.appendChild(style);
     }
 
     topWin.renderGachaApp = function(container) {
-        const idolRate = 0.04;
-        const stardustIcon = 'https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png';
-        const markIcon = 'https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png';
-        let currentPool = 'standard'; // standard | limited
+        // --- 模拟卡池配置 ---
+        const pools = {
+            'standard': {
+                id: 'standard',
+                name: '常驻星探发掘',
+                desc: '发掘隐藏在街头巷尾的原石，扩充事务所战力。',
+                bg: 'https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg', // 随便找个背景，如果哥哥有好看的可以换
+                charImg: '', // 常驻不特定展示某人
+                idolRate: 0.04,
+                typeLabel: '常驻发掘'
+            },
+            'limited': {
+                id: 'limited',
+                name: '【限定】星光坠落之夜',
+                desc: '本期特选偶像发掘概率大幅提升！不容错过的相遇。',
+                bg: 'https://i.postimg.cc/90qC8w8G/ta-qie-shi-guang.jpg',
+                charImg: (topWin.idolDatabase && topWin.idolDatabase.length > 0) ? topWin.idolDatabase[0].image : '', // 拿第一个偶像当看板娘
+                idolRate: 0.08, // 限定池出率翻倍
+                typeLabel: '限定发掘'
+            }
+        };
+
+        let currentPoolId = 'standard';
 
         const html = `
-            <div class="gacha-app-container">
-                <!-- 顶部 Tabs -->
-                <div class="gacha-tabs">
-                    <div class="gacha-tab active" data-pool="standard">常驻星探发掘</div>
-                    <div class="gacha-tab" data-pool="limited"><i class="bi bi-stars"></i> 限定企划 (UP)</div>
+            <div class="gc-container">
+                <!-- 顶部 -->
+                <div class="gc-top-bar">
+                    <div class="gc-title-wrap">
+                        <span class="gc-main-title">星探寻访</span>
+                        <span class="gc-sub-title">Scouting</span>
+                    </div>
+                    <div class="gc-currency">
+                        <i class="bi bi-stars"></i>
+                        <span class="gc-currency-val" id="gc-stardust-val">${topWin.playerCurrency.stardust}</span>
+                    </div>
                 </div>
 
-                <!-- 主展示区 -->
-                <div class="gacha-main-view">
-                    <div class="gacha-banner-wrap">
-                        <div class="gacha-banner banner-standard" id="banner-display">
-                            <div class="gacha-banner-bg"></div>
-                            <div class="gacha-banner-content">
-                                <span class="gacha-banner-tag" id="banner-tag">STANDARD SCOUTING</span>
-                                <div class="gacha-banner-title" id="banner-title">星光原石发掘</div>
-                                <div class="gacha-banner-sub" id="banner-sub">寻找散落在城市角落的闪耀光芒</div>
+                <!-- 主体 -->
+                <div class="gc-main-area">
+                    <!-- 左侧 Tab -->
+                    <div class="gc-sidebar">
+                        <div class="gc-tab active" data-target="standard">
+                            <i class="bi bi-person-lines-fill"></i> 常驻发掘
+                        </div>
+                        <div class="gc-tab" data-target="limited">
+                            <i class="bi bi-stars"></i> 限定发掘
+                            <span class="gc-tab-badge">UP!</span>
+                        </div>
+                    </div>
+
+                    <!-- 右侧内容 -->
+                    <div class="gc-content">
+                        <div class="gc-banner-wrap">
+                            <img src="${pools[currentPoolId].bg}" class="gc-banner-bg" id="gc-banner-bg">
+                            <img src="${pools[currentPoolId].charImg}" class="gc-banner-char" id="gc-banner-char" style="display:${pools[currentPoolId].charImg?'block':'none'};">
+
+                            <div class="gc-banner-info">
+                                <div class="gc-banner-type" id="gc-banner-type">${pools[currentPoolId].typeLabel}</div>
+                                <div class="gc-banner-name" id="gc-banner-name">${pools[currentPoolId].name}</div>
+                                <div class="gc-banner-desc" id="gc-banner-desc">${pools[currentPoolId].desc}</div>
                             </div>
                         </div>
-                        <div class="gacha-detail-btn-wrap">
-                            <button class="btn-show-detail" id="btn-show-pool-detail"><i class="bi bi-search"></i> 查看卡池详情与概率</button>
+
+                        <div class="gc-action-bar">
+                            <button class="gc-btn-detail" id="btn-gc-detail">
+                                <i class="bi bi-search"></i> 卡池详情
+                            </button>
+
+                            <div class="gc-pull-group">
+                                <button class="gc-btn-pull gc-btn-single" id="btn-gc-single">
+                                    <span class="gc-pull-text">发掘 1 次</span>
+                                    <div class="gc-pull-cost"><i class="bi bi-stars"></i> 1000</div>
+                                </button>
+                                <button class="gc-btn-pull gc-btn-ten" id="btn-gc-ten">
+                                    <span class="gc-pull-text">发掘 10 次</span>
+                                    <div class="gc-pull-cost"><i class="bi bi-stars"></i> 10000</div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 底部操作区 -->
-                <div class="gacha-footer">
-                    <div class="gacha-currency-info">
-                        <div class="gacha-currency-label"><img src="${stardustIcon}" style="width:16px;"> 星尘余额</div>
-                        <div class="gacha-currency-val" id="gacha-stardust-display">${topWin.playerCurrency.stardust}</div>
+                <!-- 侧边详情抽屉 -->
+                <div class="gc-detail-drawer" id="gc-detail-drawer">
+                    <div class="gc-detail-header">
+                        <div class="gc-detail-title"><i class="bi bi-info-circle-fill" style="color:#3b82f6;"></i> 卡池情报公示</div>
+                        <button class="gc-btn-close-drawer" id="btn-gc-close-drawer"><i class="bi bi-x-lg"></i></button>
                     </div>
-                    <div class="gacha-actions">
-                        <button class="btn-do-gacha btn-single" id="btn-gacha-1">
-                            <span>单次发掘</span>
-                            <div class="btn-cost"><img src="${stardustIcon}"> 1000</div>
-                        </button>
-                        <button class="btn-do-gacha btn-ten" id="btn-gacha-10">
-                            <span>十连发掘</span>
-                            <div class="btn-cost"><img src="${stardustIcon}"> 10000</div>
-                        </button>
+                    <div class="gc-detail-content" id="gc-detail-content">
+                        <!-- 动态渲染 -->
                     </div>
                 </div>
 
-                <!-- 卡池详情弹窗 -->
-                <div class="gacha-modal" id="pool-detail-modal">
-                    <div class="gacha-modal-header">
-                        <div class="gacha-modal-title"><i class="bi bi-info-square-fill"></i> 卡池详细信息</div>
-                        <button class="btn-close-modal" id="btn-close-modal"><i class="bi bi-x-lg"></i></button>
-                    </div>
-                    <div class="gacha-modal-content" id="pool-detail-content">
-                        <!-- 动态渲染详情 -->
-                    </div>
+                <!-- 抽卡过程动画层 -->
+                <div class="gc-anim-overlay" id="gc-anim-overlay">
+                    <div class="gc-anim-text"><i class="bi bi-fingerprint"></i> 正在解密星探档案...</div>
                 </div>
 
-                <!-- 抽卡过场动画 -->
-                <div class="gacha-animation-layer" id="gacha-anim-layer">
-                    <div class="star-burst"><i class="bi bi-star-fill"></i></div>
-                    <div class="anim-text">正在搜寻星光...</div>
-                </div>
-
-                <!-- 抽卡结果界面 -->
-                <div class="gacha-result-view" id="gacha-result-view">
-                    <div class="result-header">
-                        <div class="result-title">发掘结果</div>
+                <!-- 抽卡结果层 -->
+                <div class="gc-result-overlay" id="gc-result-overlay">
+                    <div class="gc-res-header">
+                        <div class="gc-res-title">发掘结果报告</div>
                     </div>
-                    <div class="result-grid" id="result-grid"></div>
-                    <div class="result-footer">
-                        <button class="btn-result-action btn-result-back" id="btn-result-back"><i class="bi bi-arrow-left"></i> 返回卡池</button>
-                        <button class="btn-result-action btn-result-again" id="btn-result-again"><i class="bi bi-controller"></i> 再次十连</button>
+                    <div class="gc-res-grid" id="gc-res-grid"></div>
+                    <div class="gc-res-footer">
+                        <button class="gc-btn-res gc-btn-res-close" id="btn-res-close">确认并返回</button>
+                        <button class="gc-btn-res gc-btn-res-again" id="btn-res-again"><i class="bi bi-arrow-repeat"></i> 再次十连 (10000 <i class="bi bi-stars" style="font-size:14px;"></i>)</button>
                     </div>
                 </div>
             </div>
@@ -220,129 +289,139 @@
 
         container.innerHTML = html;
 
-        // --- 元素获取 ---
-        const tabs = container.querySelectorAll('.gacha-tab');
-        const banner = container.querySelector('#banner-display');
-        const bannerTag = container.querySelector('#banner-tag');
-        const bannerTitle = container.querySelector('#banner-title');
-        const bannerSub = container.querySelector('#banner-sub');
-        const displayStardust = container.querySelector('#gacha-stardust-display');
+        // --- 逻辑绑定 ---
+        const uiStardust = container.querySelector('#gc-stardust-val');
+        const uiBannerBg = container.querySelector('#gc-banner-bg');
+        const uiBannerChar = container.querySelector('#gc-banner-char');
+        const uiBannerType = container.querySelector('#gc-banner-type');
+        const uiBannerName = container.querySelector('#gc-banner-name');
+        const uiBannerDesc = container.querySelector('#gc-banner-desc');
+        const btnSingle = container.querySelector('#btn-gc-single');
+        const btnTen = container.querySelector('#btn-gc-ten');
 
-        const modal = container.querySelector('#pool-detail-modal');
-        const modalContent = container.querySelector('#pool-detail-content');
-        const btnShowDetail = container.querySelector('#btn-show-pool-detail');
-        const btnCloseModal = container.querySelector('#btn-close-modal');
+        const drawer = container.querySelector('#gc-detail-drawer');
+        const drawerContent = container.querySelector('#gc-detail-content');
 
-        const animLayer = container.querySelector('#gacha-anim-layer');
-        const resultView = container.querySelector('#gacha-result-view');
-        const resultGrid = container.querySelector('#result-grid');
+        const animOverlay = container.querySelector('#gc-anim-overlay');
+        const resultOverlay = container.querySelector('#gc-result-overlay');
+        const resGrid = container.querySelector('#gc-res-grid');
 
-        // --- UI 更新逻辑 ---
-        function updateCurrency() {
-            displayStardust.innerText = topWin.playerCurrency.stardust;
+        // 更新余额显示
+        function updateCurrencyUI() {
+            uiStardust.innerText = topWin.playerCurrency.stardust;
+            if (topWin.playerCurrency.stardust < 1000) btnSingle.classList.add('disabled'); else btnSingle.classList.remove('disabled');
+            if (topWin.playerCurrency.stardust < 10000) btnTen.classList.add('disabled'); else btnTen.classList.remove('disabled');
         }
 
-        function switchPool(poolType) {
-            currentPool = poolType;
-            tabs.forEach(t => t.classList.remove('active'));
-            container.querySelector(`.gacha-tab[data-pool="${poolType}"]`).classList.add('active');
+        // 切换卡池 Tab
+        container.querySelectorAll('.gc-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                container.querySelectorAll('.gc-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentPoolId = tab.getAttribute('data-target');
+                const p = pools[currentPoolId];
 
-            if (poolType === 'limited') {
-                banner.className = 'gacha-banner banner-limited';
-                bannerTag.innerText = 'LIMITED EVENT';
-                bannerTag.style.background = 'rgba(245,158,11,0.8)';
-                bannerTitle.innerText = '闪耀之夜限定';
-                bannerSub.innerText = '特定偶像获取概率大幅提升！';
-            } else {
-                banner.className = 'gacha-banner banner-standard';
-                bannerTag.innerText = 'STANDARD SCOUTING';
-                bannerTag.style.background = 'rgba(236,72,153,0.8)';
-                bannerTitle.innerText = '星光原石发掘';
-                bannerSub.innerText = '寻找散落在城市角落的闪耀光芒';
-            }
-        }
+                uiBannerBg.src = p.bg;
+                if(p.charImg) { uiBannerChar.src = p.charImg; uiBannerChar.style.display = 'block'; }
+                else { uiBannerChar.style.display = 'none'; }
 
-        tabs.forEach(t => t.addEventListener('click', () => switchPool(t.getAttribute('data-pool'))));
+                uiBannerType.innerText = p.typeLabel;
+                uiBannerName.innerText = p.name;
+                uiBannerDesc.innerText = p.desc;
+            });
+        });
 
-        // --- 渲染详情内容 ---
-        function renderPoolDetail() {
-            const stardustProb = 0.432;
-            const itemProb = 0.528;
-            const db = topWin.idolDatabase || [];
-            const items = topWin.itemPool || [];
+        // 渲染详情抽屉
+        function renderDetailDrawer() {
+            const p = pools[currentPoolId];
+            const iRate = p.idolRate * 100;
+            const resRate = 1 - p.idolRate;
+            const starRate = (resRate * 0.45) * 100;
+            const itemRate = (resRate * 0.55) * 100;
 
-            let h = `
-                <div style="background:#0f172a; padding:15px; border-radius:12px; border:1px solid #334155; margin-bottom:20px;">
-                    <div style="font-weight:bold; color:#cbd5e1; margin-bottom:10px;">大盘概率公示：</div>
-                    <div style="display:flex; gap:10px; font-size:13px;">
-                        <span style="color:#ec4899;">偶像：4%</span> |
-                        <span style="color:#fbbf24;">资源道具：52.8%</span> |
-                        <span style="color:#94a3b8;">星尘返还：43.2%</span>
+            let dHtml = `
+                <div class="gc-info-section">
+                    <div class="gc-section-title"><i class="bi bi-pie-chart-fill"></i> 综合获取概率</div>
+                    <div class="gc-rate-box">
+                        <div class="gc-rate-row"><span class="gc-rate-label">✦ 偶像发掘率</span><span class="gc-rate-val gc-val-high">${iRate.toFixed(1)}%</span></div>
+                        <div class="gc-rate-row"><span class="gc-rate-label">📦 资源道具发掘率</span><span class="gc-rate-val">${itemRate.toFixed(1)}%</span></div>
+                        <div class="gc-rate-row"><span class="gc-rate-label">✨ 星尘返还率</span><span class="gc-rate-val">${starRate.toFixed(1)}%</span></div>
                     </div>
-                    <div style="font-size:12px; color:#64748b; margin-top:8px;">* 重复获取偶像将自动转化为【偶像印记】。</div>
                 </div>
+
+                <div class="gc-info-section">
+                    <div class="gc-section-title"><i class="bi bi-people-fill"></i> 可发掘偶像预览</div>
+                    <div class="gc-idol-grid">
             `;
 
-            // 偶像列表
-            h += `<div class="pool-section"><div class="pool-section-title"><span><i class="bi bi-person-heart"></i> 可发掘偶像列表</span><span>概率: 4%</span></div><div class="pool-grid-idol">`;
-            db.forEach(idol => {
-                h += `<div class="pool-item-idol"><img src="${idol.image}"><span>${idol.name}</span></div>`;
-            });
-            h += `</div></div>`;
-
-            // 道具列表
-            h += `<div class="pool-section"><div class="pool-section-title"><span><i class="bi bi-box-seam-fill"></i> 资源道具及效果</span><span>概率: 52.8%</span></div>`;
-            items.forEach(item => {
-                h += `
-                    <div class="pool-list-item">
-                        <img src="${item.img}" class="pool-list-icon">
-                        <div class="pool-list-info">
-                            <div class="pool-list-name">${item.name}</div>
-                            <div class="pool-list-desc">${item.desc}</div>
+            if (topWin.idolDatabase && topWin.idolDatabase.length > 0) {
+                topWin.idolDatabase.forEach(idol => {
+                    dHtml += `
+                        <div class="gc-idol-item">
+                            <img src="${idol.image}" class="gc-idol-img">
+                            <div class="gc-idol-name">${idol.name}</div>
                         </div>
-                    </div>
-                `;
-            });
-            h += `</div>`;
+                    `;
+                });
+            } else {
+                dHtml += `<div style="grid-column:1/-1; color:#94a3b8; font-size:13px;">暂无偶像数据</div>`;
+            }
+            dHtml += `</div></div>`;
 
-            modalContent.innerHTML = h;
-            modal.classList.add('show');
+            dHtml += `
+                <div class="gc-info-section">
+                    <div class="gc-section-title"><i class="bi bi-box-seam-fill"></i> 包含道具预览</div>
+                    <div class="gc-item-list">
+            `;
+            if (topWin.itemPool && topWin.itemPool.length > 0) {
+                topWin.itemPool.forEach(item => {
+                    dHtml += `
+                        <div class="gc-item-row">
+                            <div class="gc-item-icon-wrap"><img src="${item.img}" style="width:24px; height:24px; object-fit:contain;"></div>
+                            <div class="gc-item-info">
+                                <div class="gc-item-name">${item.name}</div>
+                                <div class="gc-item-desc">${item.desc}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                dHtml += `<div style="color:#94a3b8; font-size:13px;">暂无道具数据</div>`;
+            }
+            dHtml += `</div></div>`;
+
+            drawerContent.innerHTML = dHtml;
         }
 
-        btnShowDetail.addEventListener('click', renderPoolDetail);
-        btnCloseModal.addEventListener('click', () => modal.classList.remove('show'));
+        container.querySelector('#btn-gc-detail').addEventListener('click', () => {
+            renderDetailDrawer();
+            drawer.classList.add('open');
+        });
+        container.querySelector('#btn-gc-close-drawer').addEventListener('click', () => {
+            drawer.classList.remove('open');
+        });
 
-        // --- 抽卡核心逻辑 ---
-        function executeGacha(times) {
+        // --- 抽卡执行核心 ---
+        function executePull(times) {
             const cost = times * 1000;
-            if (topWin.playerCurrency.stardust < cost) {
-                alert("星尘余额不足！请先获取更多星尘。");
-                return;
-            }
+            if (topWin.playerCurrency.stardust < cost) return;
 
-            // 1. 扣费
             topWin.playerCurrency.stardust -= cost;
-            updateCurrency();
+            updateCurrencyUI();
 
-            // 2. 播放过场动画
-            animLayer.classList.add('active');
-
-            // 3. 计算结果
+            const p = pools[currentPoolId];
             const results = [];
             let seenIdols = new Set();
-            const currentTotalItemWeight = (typeof topWin.itemPool !== 'undefined') ? topWin.itemPool.reduce((sum, item) => sum + item.weight, 0) : 1;
             const db = topWin.idolDatabase || [];
+            const currentTotalItemWeight = (typeof topWin.itemPool !== 'undefined') ? topWin.itemPool.reduce((sum, item) => sum + item.weight, 0) : 1;
 
             for(let i=0; i<times; i++) {
                 let roll = Math.random();
-                // 如果是限定池，可以稍微调高偶像概率（演示逻辑）
-                let currentRate = currentPool === 'limited' ? 0.06 : idolRate;
-
-                if (roll <= currentRate && db.length > 0) {
+                if (roll <= p.idolRate && db.length > 0) {
                     let rIdol = db[Math.floor(Math.random() * db.length)];
                     let isDup = Math.random() < 0.3 || seenIdols.has(rIdol.name);
                     if (isDup) {
-                        results.push({ type: 'duplicate', name: rIdol.name, idolImg: rIdol.image, markImg: markIcon });
+                        results.push({ type: 'duplicate', name: rIdol.name, img: rIdol.image });
                     } else {
                         seenIdols.add(rIdol.name);
                         results.push({ type: 'idol', name: rIdol.name, img: rIdol.image });
@@ -352,13 +431,9 @@
                     if (itemRoll <= 0.45 || typeof topWin.itemPool === 'undefined') {
                         let sRoll = Math.random() * 100;
                         let amt = 100;
-                        if (sRoll <= 1) amt = 5000;
-                        else if (sRoll <= 6) amt = 1000;
-                        else if (sRoll <= 20) amt = 500;
-                        else if (sRoll <= 50) amt = 300;
-                        else amt = 100;
-                        results.push({ type: 'stardust', amount: amt, img: stardustIcon });
-                        topWin.playerCurrency.stardust += amt; // 抽到星尘加回余额
+                        if(sRoll<=1) amt=5000; else if(sRoll<=6) amt=1000; else if(sRoll<=20) amt=500; else if(sRoll<=50) amt=300;
+                        results.push({ type: 'stardust', amount: amt });
+                        topWin.playerCurrency.stardust += amt; // 返还星尘
                     } else {
                         let weightRoll = Math.random() * currentTotalItemWeight;
                         let selectedItem = topWin.itemPool[0];
@@ -371,86 +446,92 @@
                 }
             }
 
-            // 4. 延迟显示结果
-            setTimeout(() => {
-                animLayer.classList.remove('active');
-                showResultView(results);
-            }, 2000);
+            showPullAnimation(results);
         }
 
-        // --- 结果展示逻辑 ---
-        function showResultView(results) {
-            resultGrid.innerHTML = '';
-            updateCurrency(); // 更新可能抽到的星尘
+        // 动画演出
+        function showPullAnimation(results) {
+            animOverlay.classList.add('active');
+            // 模拟加载动画 1.5秒
+            setTimeout(() => {
+                animOverlay.classList.remove('active');
+                renderResults(results);
+            }, 1500);
+        }
 
+        // 渲染结果
+        function renderResults(results) {
+            resGrid.innerHTML = '';
             results.forEach((res, idx) => {
-                let delay = idx * 0.15;
-                let rHtml = '';
+                let delay = idx * 0.1;
+                let cHtml = '';
 
                 if (res.type === 'idol') {
-                    rHtml = `
-                    <div class="result-card card-idol" style="animation-delay:${delay}s">
-                        <div class="result-img-wrap"><img src="${res.img}"></div>
-                        <div class="result-name">${res.name}</div>
-                        <div class="result-type-tag">IDOL</div>
-                    </div>`;
-                } else if (res.type === 'duplicate') {
-                    rHtml = `
-                    <div class="result-card card-dup" style="animation-delay:${delay}s">
-                        <div class="mark-transform-wrap">
-                            <img src="${res.idolImg}" class="mark-img-front">
-                            <img src="${res.markImg}" class="mark-img-back">
+                    cHtml = `
+                        <div class="gc-res-card type-idol flip-in" style="animation-delay:${delay}s">
+                            <div class="gc-res-tag">NEW IDOL</div>
+                            <div class="gc-res-img-wrap"><img src="${res.img}"></div>
+                            <div class="gc-res-name">${res.name}</div>
                         </div>
-                        <div class="result-name duplicate-name" data-name="${res.name}">${res.name}</div>
-                        <div class="result-type-tag">印记转化</div>
-                    </div>`;
+                    `;
+                } else if (res.type === 'duplicate') {
+                    cHtml = `
+                        <div class="gc-res-card type-dup flip-in" style="animation-delay:${delay}s">
+                            <div class="gc-res-tag">印记转化</div>
+                            <div class="gc-res-img-wrap">
+                                <img src="${res.img}" class="mark-front">
+                                <i class="bi bi-record-circle mark-back"></i>
+                            </div>
+                            <div class="gc-res-name dup-name" data-name="${res.name}">${res.name}</div>
+                        </div>
+                    `;
                 } else if (res.type === 'stardust') {
-                    rHtml = `
-                    <div class="result-card" style="animation-delay:${delay}s">
-                        <div class="result-img-wrap" style="background:transparent; border:none;"><img src="${res.img}" style="object-fit:contain;"></div>
-                        <div class="result-name" style="color:#fbbf24;">星尘 ×${res.amount}</div>
-                        <div class="result-type-tag">资源</div>
-                    </div>`;
+                    cHtml = `
+                        <div class="gc-res-card type-currency flip-in" style="animation-delay:${delay}s">
+                            <div class="gc-res-tag">资源返还</div>
+                            <div class="gc-res-img-wrap" style="background:transparent;"><i class="bi bi-stars" style="color:#f59e0b;"></i></div>
+                            <div class="gc-res-name">星尘 ×${res.amount}</div>
+                        </div>
+                    `;
                 } else {
-                    rHtml = `
-                    <div class="result-card" style="animation-delay:${delay}s">
-                        <div class="result-img-wrap" style="background:transparent; border:none;"><img src="${res.data.img}" style="object-fit:contain;"></div>
-                        <div class="result-name">${res.data.name}</div>
-                        <div class="result-type-tag">道具</div>
-                    </div>`;
+                    cHtml = `
+                        <div class="gc-res-card type-item flip-in" style="animation-delay:${delay}s">
+                            <div class="gc-res-tag">获得道具</div>
+                            <div class="gc-res-img-wrap" style="background:transparent;"><img src="${res.data.img}"></div>
+                            <div class="gc-res-name">${res.data.name}</div>
+                        </div>
+                    `;
                 }
-                resultGrid.insertAdjacentHTML('beforeend', rHtml);
+                resGrid.insertAdjacentHTML('beforeend', cHtml);
             });
 
-            resultView.classList.add('active');
+            updateCurrencyUI();
+            resultOverlay.classList.add('active');
 
-            // 处理印记翻转
+            // 触发重复卡翻转动画
             setTimeout(() => {
-                resultGrid.querySelectorAll('.card-dup').forEach(el => {
+                const dupCards = resGrid.querySelectorAll('.type-dup');
+                dupCards.forEach(el => {
                     el.classList.add('do-transform');
-                    setTimeout(() => {
-                        const nameEl = el.querySelector('.duplicate-name');
-                        nameEl.innerText = nameEl.getAttribute('data-name') + '·印记';
-                        nameEl.style.color = '#60a5fa';
-                    }, 400);
+                    const nameEl = el.querySelector('.dup-name');
+                    nameEl.innerText = nameEl.getAttribute('data-name') + '·印记';
                 });
-            }, 1000 + results.length * 150);
+            }, 1000 + (results.length * 100)); // 等所有卡片翻转入场后再变印记
         }
 
-        // 绑定按钮
-        container.querySelector('#btn-gacha-1').addEventListener('click', () => executeGacha(1));
-        container.querySelector('#btn-gacha-10').addEventListener('click', () => executeGacha(10));
+        // 按钮绑定
+        btnSingle.addEventListener('click', () => executePull(1));
+        btnTen.addEventListener('click', () => executePull(10));
 
-        container.querySelector('#btn-result-back').addEventListener('click', () => {
-            resultView.classList.remove('active');
+        container.querySelector('#btn-res-close').addEventListener('click', () => {
+            resultOverlay.classList.remove('active');
         });
-        container.querySelector('#btn-result-again').addEventListener('click', () => {
-            resultView.classList.remove('active');
-            setTimeout(() => executeGacha(10), 300);
+        container.querySelector('#btn-res-again').addEventListener('click', () => {
+            resultOverlay.classList.remove('active');
+            setTimeout(() => executePull(10), 300);
         });
 
         // 初始化
-        switchPool('standard');
-        updateCurrency();
+        updateCurrencyUI();
     };
 })();
