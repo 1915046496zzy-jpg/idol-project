@@ -1,6 +1,6 @@
 // 扩充道具池与抽卡权重设定
 // 分类：'business'(业务能力), 'psychology'(心理状态), 'easter_egg'(彩蛋)
-var itemPool = [
+window.itemPool = [
     // ================= 【心理状态干预】 =================
     // Stress类
     { type: 'psychology', name: "薄荷糖", img: "https://i.postimg.cc/d3kyKtLB/bao-he-tang-(1).png", weight: 100, desc: "微量缓解压力 (Stress -5%)" },
