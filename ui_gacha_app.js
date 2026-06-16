@@ -1,6 +1,6 @@
 // ==========================================
-// 星探寻访 (Gacha) APP 独立模块 - 偶像大师幻光重制版 v2.1
-// 修复：对照参考图重做结果页底部按钮 + 详情页补充星尘与印记说明
+// 星探寻访 (Gacha) APP 独立模块 - 顶级企划视觉重制版 v3.0
+// 优化：参考偶像大师风格的深邃配色、舞台光影布局与修长卡片设计
 // ==========================================
 
 (function() {
@@ -18,158 +18,147 @@
         topWin.playerCurrency = { stardust: 50000 };
     }
 
-    const fallbackItemPool = [
-        { type: 'psychology', name: "薄荷糖", img: "https://i.postimg.cc/d3kyKtLB/bao-he-tang-(1).png", weight: 100, desc: "微量缓解压力 (Stress -5%)" },
-        { type: 'psychology', name: "热牛奶", img: "https://i.postimg.cc/VvxbsQCM/re-niu-nai-(1).png", weight: 30, desc: "少量缓解压力 (Stress -15%)" },
-        { type: 'psychology', name: "安眠香薰", img: "https://i.postimg.cc/vTgVdHcv/an-mian-xiang-xun-(1).png", weight: 20, desc: "中度舒缓精神 (Stress -30%)" },
-        { type: 'psychology', name: "度假机票", img: "https://i.postimg.cc/fyG0Wn9m/du-jia-ji-piao-(1).png", weight: 2, desc: "彻底清空压力 (Stress -80%)" },
-
-        { type: 'psychology', name: "镇静药片", img: "https://i.postimg.cc/pL7chsD5/zhen-jing-yao-pian-(1).png", weight: 60, desc: "微量提升堕落度 (Lust +10)" },
-        { type: 'psychology', name: "VIP房卡", img: "https://i.postimg.cc/W1KYF5MJ/vip-fang-ka-(1).png", weight: 40, desc: "开启密会 (Lust +20)" },
-        { type: 'psychology', name: "高额合同", img: "https://i.postimg.cc/P5cVpSmZ/gao-e-he-tong-(1).png", weight: 20, desc: "中度提升堕落度 (Lust +40)" },
-        { type: 'psychology', name: "皮带项圈", img: "https://i.postimg.cc/zGM2bxng/pi-dai-xiang-quan-(1).png", weight: 5, desc: "大幅提升堕落度 (Lust +60)" },
-        { type: 'psychology', name: "行程表", img: "https://i.postimg.cc/J47JkgCK/xing-cheng-biao.png", weight: 30, desc: "规划时间 (Obedience +5)" },
-        { type: 'psychology', name: "制作人指令卡", img: "https://i.postimg.cc/c41YnjGh/zhi-zuo-ren-zhi-ling-ka.png", weight: 15, desc: "强制服从 (Obedience +10)" },
-        { type: 'psychology', name: "制作人徽章", img: "https://i.postimg.cc/025mw31C/zhi-zuo-ren-hui-zhang.png", weight: 8, desc: "权威象征 (Obedience +15)" },
-        { type: 'psychology', name: "金色企划书", img: "https://i.postimg.cc/ZKY3dgzx/jin-se-qi-hua-shu.png", weight: 2, desc: "绝对服从 (Obedience +20)" },
-
-        { type: 'psychology', name: "粉丝来信", img: "https://i.postimg.cc/y8VfWnLJ/fen-si-lai-xin.png", weight: 40, desc: "增加偶像羁绊 (Affection +2)" },
-        { type: 'psychology', name: "手写便签", img: "https://i.postimg.cc/cLsD6TF8/shou-xie-bian-qian.png", weight: 30, desc: "传递关怀 (Affection +4)" },
-        { type: 'psychology', name: "纪念相册", img: "https://i.postimg.cc/qvkmgQ16/ji-nian-xiang-ce.png", weight: 20, desc: "回忆杀 (Affection +7)" },
-        { type: 'psychology', name: "情书", img: "https://i.postimg.cc/BnqhtNmj/qing-shu.png", weight: 10, desc: "直球告白 (Affection +10)" },
-
-        { type: 'business', name: "练习话筒", img: "https://i.postimg.cc/gkvzGc7d/lian-xi-hua-tong.png", weight: 20, desc: "Vocal能力微量提升 (+2)" },
-        { type: 'business', name: "专业麦克风", img: "https://i.postimg.cc/TYrdT2sY/zhuan-ye-mai-ke-feng.png", weight: 12, desc: "Vocal能力少量提升 (+5)" },
-        { type: 'business', name: "水晶麦克风", img: "https://i.postimg.cc/MKy6zZLW/shui-jing-mai-ke-feng.png", weight: 6, desc: "Vocal能力中量提升 (+8)" },
-        { type: 'business', name: "金唱片", img: "https://i.postimg.cc/MKy6zZL6/jin-chang-pian.png", weight: 2, desc: "Vocal能力大幅提升 (+10)" },
-
-        { type: 'business', name: "练习舞鞋", img: "https://i.postimg.cc/cHcpPPzf/lian-xi-wu-xie-(1).png", weight: 20, desc: "Dance能力微量提升 (+2)" },
-        { type: 'business', name: "演出舞鞋", img: "https://i.postimg.cc/qRGPWWFL/yan-chu-wu-xie-1.png", weight: 12, desc: "Dance能力少量提升 (+5)" },
-        { type: 'business', name: "水晶舞鞋", img: "https://i.postimg.cc/PxMg007M/shui-jing-wu-xie-(1).png", weight: 6, desc: "Dance能力中量提升 (+8)" },
-        { type: 'business', name: "闪耀舞鞋", img: "https://i.postimg.cc/26xsggtG/shan-yao-wu-xie-(1).png", weight: 2, desc: "Dance能力大幅提升 (+10)" },
-
-        { type: 'business', name: "拍立得", img: "https://i.postimg.cc/5jckyV63/pai-li-de.png", weight: 20, desc: "Visual能力微量提升 (+2)" },
-        { type: 'business', name: "摄影胶卷", img: "https://i.postimg.cc/SQXSnfJZ/she-ying-jiao-juan.png", weight: 12, desc: "Visual能力少量提升 (+5)" },
-        { type: 'business', name: "时尚杂志", img: "https://i.postimg.cc/NGysKk5J/shi-shang-za-zhi.png", weight: 6, desc: "Visual能力中量提升 (+8)" },
-        { type: 'business', name: "封面海报", img: "https://i.postimg.cc/t70mJjYz/feng-mian-hai-bao.png", weight: 2, desc: "Visual能力大幅提升 (+10)" },
-
-        { type: 'easter_egg', name: "冰棒", img: "https://i.postimg.cc/85V97FNx/bing-bang.png", weight: 40, desc: "降温解暑 (Stress -10%, Affection +5)" },
-        { type: 'easter_egg', name: "珍珠奶茶", img: "https://i.postimg.cc/6qWPhD7H/zhen-zhu-nai-cha.png", weight: 25, desc: "甜品治愈 (Stress -20%, Affection +3)" },
-        { type: 'easter_egg', name: "麦片粥", img: "https://i.postimg.cc/26fM1qCq/mai-pian-zhou.png", weight: 15, desc: "温暖肠胃 (Stress -25%, Affection +1)" },
-        { type: 'easter_egg', name: "巧克力蛋糕", img: "https://i.postimg.cc/d1mXrq01/qiao-ke-li-dan-gao.png", weight: 8, desc: "高热量治愈 (Stress -50%, Affection +3)" },
-
-        { type: 'easter_egg', name: "小黄鸭", img: "https://i.postimg.cc/vmZWwN3D/xiao-huang-ya.png", weight: 5, desc: "触发共浴剧情。Stress -20, Affection +5" },
-        { type: 'easter_egg', name: "草莓饭团", img: "https://i.postimg.cc/vBdk41bJ/cao-mei-fan-tuan.png", weight: 5, desc: "触发投喂剧情。Stress -10, Affection +1" },
-        { type: 'easter_egg', name: "制作人玩偶", img: "https://i.postimg.cc/YSC1BsbG/zhi-zuo-ren-wan-ou.png", weight: 4, desc: "触发制作人玩偶剧情。Stress -40, Affection +20" },
-        { type: 'easter_egg', name: "创可贴", img: "https://i.postimg.cc/NMwSKyBW/chuang-ke-tie.png", weight: 5, desc: "触发包扎剧情。Stress -15, Affection +5" },
-        { type: 'easter_egg', name: "星星布丁", img: "https://i.postimg.cc/NFsnxWy8/xing-xing-bu-ding.png", weight: 5, desc: "触发甜点时间。Stress -30, Affection +5" },
-        { type: 'easter_egg', name: "身体乳", img: "https://i.postimg.cc/fLjFmwbK/shen-ti-ru.png", weight: 4, desc: "触发涂抹剧情。Stress -10, Affection +3" },
-        { type: 'easter_egg', name: "婚纱", img: "https://i.postimg.cc/ydztDJ7B/hun-sha.png", weight: 1, desc: "触发试穿婚纱绝密剧情。Affection +30" },
-        { type: 'easter_egg', name: "对戒戒指盒", img: "https://i.postimg.cc/Y9wZv4tK/dui-jie-jie-zhi-he.png", weight: 2, desc: "触发赠礼剧情。Affection +20" },
-
-        { type: 'easter_egg', name: "Cupless Bra", img: "https://i.postimg.cc/hGmN48RR/cupless-bra.png", weight: 3, desc: "触发更衣剧情。Stress+10, Aff+3, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "兔女郎装", img: "https://i.postimg.cc/fyzPv63m/tu-nu-lang-zhuang.png", weight: 3, desc: "触发Cosplay剧情。Stress+10, Aff+8, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "奶牛比基尼", img: "https://i.postimg.cc/76Mc0xLx/nai-niu-bi-ji-ni.png", weight: 3, desc: "触发牧场摄影。Stress+10, Aff+8, Ob+15, Lust+5" },
-        { type: 'easter_egg', name: "情趣内衣", img: "https://i.postimg.cc/Yq1txyrh/qing-qu-nei-yi.png", weight: 3, desc: "触发夜间招待。Stress-10, Aff+6, Ob+10" },
-        { type: 'easter_egg', name: "幸运胖次", img: "https://i.postimg.cc/W41McHXh/xing-yun-pang-ci.png", weight: 3, desc: "触发搜查剧情。Stress-10, Aff+15, Ob+10" },
-        { type: 'easter_egg', name: "猫耳发箍", img: "https://i.postimg.cc/KY8nhHJ8/mao-er-fa-gu.png", weight: 4, desc: "触发猫娘撒娇。Stress-10, Aff+3" },
-
-        { type: 'easter_egg', name: "跳蛋", img: "https://i.postimg.cc/yN8FCbvd/tiao-dan.png", weight: 4, desc: "触发隐藏刺激事件。Stress-20, Aff+5, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "震动棒", img: "https://i.postimg.cc/N0j1vzpH/zhen-dong-bang.png", weight: 4, desc: "触发休息室调教。Stress-20, Aff+5, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "G点按摩器", img: "https://i.postimg.cc/wvdZ1tg4/G-dian-an-mo-qi-(G-spot-massager).png", weight: 3, desc: "触发深层开发。Stress-20, Aff+3, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "前列腺按摩器", img: "https://i.postimg.cc/26FJhz55/qian-lie-xian-an-mo-qi-aneros.png", weight: 2, desc: "触发特殊体质开发。Stress-20, Aff+3, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "双头龙", img: "https://i.postimg.cc/JncgZ1hK/shuang-tou-long-double-dildo.png", weight: 2, desc: "触发双人互动。Stress-20, Aff+1, Ob+20, Lust+15" },
-
-        { type: 'easter_egg', name: "乳夹", img: "https://i.postimg.cc/Y9fVYpSg/ru-jia.png", weight: 3, desc: "触发敏感度训练。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "乳环", img: "https://i.postimg.cc/rmCbx8pz/ru-huan.png", weight: 3, desc: "触发穿孔改造。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "乳钉", img: "https://i.postimg.cc/hjbwTSGv/ru-ding.png", weight: 3, desc: "触发穿孔改造。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "乳链", img: "https://i.postimg.cc/RFQ8KM0d/ru-lian.png", weight: 3, desc: "触发牵引调教。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "榨乳器", img: "https://i.postimg.cc/Y0rPxJ48/zha-ru-qi.png", weight: 2, desc: "触发催乳剧情。Stress+15, Aff+3, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "金色乳头夹", img: "https://i.postimg.cc/63Ng87BW/jin-se-ru-tou-jia.png", weight: 2, desc: "触发高级调教。Stress-15, Aff+5, Ob+10" },
-
-        { type: 'easter_egg', name: "宝石肛塞", img: "https://i.postimg.cc/Gh0cG1CY/bao-shi-gang-sai.png", weight: 3, desc: "触发常驻佩戴指令。Stress+10, Aff+3, Ob+5, Lust+5" },
-        { type: 'easter_egg', name: "尾巴肛塞", img: "https://i.postimg.cc/Dyq7cYvP/wei-ba-gang-sai.png", weight: 3, desc: "触发宠物扮演。Stress+10, Aff+6, Ob+5, Lust+5" },
-        { type: 'easter_egg', name: "拉珠", img: "https://i.postimg.cc/XJ0mrZnJ/la-zhu-anal-beads.png", weight: 3, desc: "触发登台挑战。Stress+15, Aff+1, Ob+20, Lust+15" },
-
-        { type: 'easter_egg', name: "口球", img: "https://i.postimg.cc/pTt4m9PV/kou-qiu.png", weight: 3, desc: "触发禁言惩罚。Stress+10, Aff+1, Ob+20, Lust+5" },
-        { type: 'easter_egg', name: "环形口塞", img: "https://i.postimg.cc/C1VXRZwV/huan-xing-kou-sai.png", weight: 3, desc: "触发深喉拓展。Stress+10, Aff+1, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "金属项圈", img: "https://i.postimg.cc/TY8RgX6n/jin-shu-xiang-quan.png", weight: 3, desc: "触发主奴契约。Stress+10, Aff+3, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "狗链", img: "https://i.postimg.cc/TwXFKyT8/gou-lian.png", weight: 2, desc: "触发遛狗剧情。Stress+15, Aff+1, Ob+50, Lust+10" },
-        { type: 'easter_egg', name: "手铐", img: "https://i.postimg.cc/c4Qdc5xw/shou-kao.png", weight: 3, desc: "触发拘禁审问。Stress+5, Aff+3, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "束缚带", img: "https://i.postimg.cc/ZKrJLDbd/shu-fu-dai.png", weight: 3, desc: "触发强制压制。Stress+10, Aff+3, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "龟甲缚", img: "https://i.postimg.cc/TwXFKyTv/gui-jia-fu.png", weight: 2, desc: "触发绳艺展示。Stress+10, Aff+1, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "鞭子", img: "https://i.postimg.cc/ZRh2W942/bian-zi.png", weight: 2, desc: "触发肉体惩戒。Stress+20, Aff+1, Ob+30, Lust+10" },
-        { type: 'easter_egg', name: "蜡烛", img: "https://i.postimg.cc/hjq6XJKv/la-zhu.png", weight: 2, desc: "触发滴蜡体验。Stress-10, Aff+3" },
-        { type: 'easter_egg', name: "鼻勾", img: "https://i.postimg.cc/Kzyw1KxV/bi-gou.png", weight: 2, desc: "触发屈辱姿态。Stress+10, Aff+1, Ob+5, Lust+1" },
-        { type: 'easter_egg', name: "尿道棒", img: "https://i.postimg.cc/fLjFmwbT/niao-dao-bang.png", weight: 2, desc: "触发极限忍耐。Stress+20, Aff+1, Ob+20, Lust+20" },
-        { type: 'easter_egg', name: "贞操带", img: "https://i.postimg.cc/tJqczL1k/zhen-cao-dai.png", weight: 2, desc: "触发欲望管理。Stress+15, Aff+1, Ob+20, Lust+10" },
-        { type: 'easter_egg', name: "录像带", img: "https://i.postimg.cc/PrmdMFXC/lu-xiang-dai.png", weight: 2, desc: "触发绝密要挟剧情。Stress+5, Aff+3, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "眼罩", img: "https://i.postimg.cc/WbMs7fN6/yan-zhao.png", weight: 4, desc: "触发视觉剥夺体验。Stress+10, Aff+1" }
-    ];
-
+    // 强化获取外部数据的逻辑
     const getGlobalItemPool = () => {
         if (topWin.itemPool && topWin.itemPool.length > 0) return topWin.itemPool;
         if (typeof itemPool !== 'undefined' && itemPool.length > 0) return itemPool;
         if (topWin.parent && topWin.parent.itemPool && topWin.parent.itemPool.length > 0) return topWin.parent.itemPool;
-        return fallbackItemPool;
+        return [];
     };
 
     if (!topDoc.getElementById('qingzi-gacha-master-style')) {
         const style = topDoc.createElement('style');
         style.id = 'qingzi-gacha-master-style';
         style.innerHTML = `
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,900;1,900&family=Noto+Sans+SC:wght@400;700;900&display=swap');
 
-            .imas-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #0f172a; font-family: 'Noto Sans SC', sans-serif; position: relative; overflow: hidden; color: #fff; }
+            /* 基础色彩变量与通用设定 */
+            :root {
+                --gacha-bg-dark: #0a0f1d;
+                --gacha-bg-card: #151b2b;
+                --gacha-border-light: rgba(255,255,255,0.15);
+                --gacha-accent-blue: #38bdf8;
+                --gacha-accent-pink: #f472b6;
+                --gacha-accent-gold: #fbbf24;
+                --gacha-btn-purple: linear-gradient(135deg, #a855f7, #7e22ce);
+            }
 
-            .imas-topbar { height: 50px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0)); display: flex; justify-content: flex-end; align-items: center; padding: 0 30px; z-index: 20; position: absolute; top:0; right:0; width: 100%; pointer-events: none;}
-            .imas-currency { display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); padding: 6px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
-            .imas-currency i { color: #38bdf8; font-size: 18px; filter: drop-shadow(0 0 5px #38bdf8); }
-            .imas-currency span { font-size: 16px; font-weight: 900; font-family: monospace; color: #fff; letter-spacing: 1px;}
+            .imas-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: var(--gacha-bg-dark); font-family: 'Noto Sans SC', sans-serif; position: relative; overflow: hidden; color: #fff; }
 
+            /* ================= 主界面顶部 ================= */
+            .imas-topbar { height: 60px; background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%); display: flex; justify-content: flex-end; align-items: center; padding: 0 30px; z-index: 20; position: absolute; top:0; right:0; width: 100%; pointer-events: none;}
+            .imas-currency { display: flex; align-items: center; gap: 8px; background: rgba(20, 25, 40, 0.8); backdrop-filter: blur(10px); padding: 8px 24px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.5);}
+            .imas-currency i { color: #c084fc; font-size: 18px; filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.5)); }
+            .imas-currency span { font-size: 18px; font-weight: 900; font-family: 'Montserrat', sans-serif; color: #fff; letter-spacing: 1px;}
+
+            /* ================= 主界面布局 ================= */
             .imas-main { flex: 1; display: flex; position: relative; padding-top: 20px;}
 
-            .imas-pool-list { width: 260px; padding: 40px 0 20px 20px; display: flex; flex-direction: column; gap: 12px; z-index: 10; }
-            .imas-pool-tab { position: relative; padding: 15px 20px; background: rgba(255,255,255,0.05); border-radius: 12px 0 0 12px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); border-right: none; overflow: hidden; }
-            .imas-pool-tab:hover { background: rgba(255,255,255,0.1); }
-            .imas-pool-tab.active { background: linear-gradient(90deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.05)); border-color: rgba(56, 189, 248, 0.5); }
-            .imas-pool-tab.active::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8; }
-            .imas-pool-name { font-size: 14px; font-weight: bold; color: #e2e8f0; position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
-            .imas-pool-tab.active .imas-pool-name { color: #fff; text-shadow: 0 0 8px rgba(56,189,248,0.8); }
+            /* 左侧卡池列表 */
+            .imas-pool-list { width: 280px; padding: 60px 0 20px 20px; display: flex; flex-direction: column; gap: 15px; z-index: 10; }
+            .imas-pool-tab { position: relative; padding: 18px 20px; background: rgba(255,255,255,0.03); border-radius: 12px 0 0 12px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; border-right: none; overflow: hidden; }
+            .imas-pool-tab:hover { background: rgba(255,255,255,0.08); }
+            .imas-pool-tab.active { background: linear-gradient(90deg, rgba(56, 189, 248, 0.15), transparent); border-color: rgba(56, 189, 248, 0.3); }
+            .imas-pool-tab.active::before { content: ''; position: absolute; left: 0; top: 0; width: 5px; height: 100%; background: #38bdf8; box-shadow: 0 0 15px #38bdf8; }
+            .imas-pool-name { font-size: 15px; font-weight: bold; color: #94a3b8; position: relative; z-index: 2; transition: 0.3s;}
+            .imas-pool-tab.active .imas-pool-name { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-            .imas-content { flex: 1; position: relative; margin: 0 20px 20px 0; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+            /* 右侧展示区 */
+            .imas-content { flex: 1; position: relative; margin: 0 20px 20px 0; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--gacha-border-light); display: flex; flex-direction: column; background: #000; }
 
-            .imas-banner-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.6; transition: opacity 0.5s; }
-            .imas-banner-char { position: absolute; right: -5%; bottom: -5%; height: 115%; object-fit: contain; filter: drop-shadow(-20px 0 30px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
-            .imas-gradient-mask { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.4) 50%, transparent 100%); pointer-events: none;}
+            .imas-banner-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.5; transition: opacity 0.5s; }
+            .imas-banner-char { position: absolute; right: -5%; bottom: -5%; height: 120%; object-fit: contain; filter: drop-shadow(-20px 0 30px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
+            .imas-gradient-mask { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, rgba(10,15,29,0.9) 0%, rgba(10,15,29,0.2) 60%, transparent 100%); pointer-events: none;}
 
-            .imas-banner-info { position: absolute; left: 40px; top: 40px; z-index: 5; max-width: 50%; }
-            .imas-banner-type { display: inline-block; padding: 4px 15px; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.5); color: #38bdf8; border-radius: 20px; font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
-            .imas-banner-title { font-size: 42px; font-weight: 900; line-height: 1.2; margin-bottom: 15px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
-            .imas-banner-desc { font-size: 14px; color: #cbd5e1; line-height: 1.6; text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; backdrop-filter: blur(5px); border-left: 3px solid #38bdf8;}
+            .imas-banner-info { position: absolute; left: 50px; top: 50px; z-index: 5; max-width: 55%; }
+            .imas-banner-type { display: inline-block; padding: 6px 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 30px; font-size: 13px; font-weight: 900; letter-spacing: 3px; margin-bottom: 20px; font-family: 'Montserrat', sans-serif; font-style: italic;}
+            .imas-banner-title { font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); letter-spacing: 2px;}
+            .imas-banner-desc { font-size: 15px; color: #cbd5e1; line-height: 1.6; text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0.3); padding: 15px 20px; border-radius: 12px; backdrop-filter: blur(5px); border-left: 4px solid var(--gacha-accent-blue);}
 
-            .imas-action-area { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px 30px; z-index: 10; }
+            /* 底部操作区 */
+            .imas-action-area { position: absolute; bottom: 0; left: 0; width: 100%; height: 130px; background: linear-gradient(to top, rgba(10,15,29,0.95) 0%, rgba(10,15,29,0.5) 70%, transparent 100%); display: flex; justify-content: space-between; align-items: flex-end; padding: 0 50px 30px; z-index: 10; }
 
-            .imas-btn-detail { padding: 10px 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-            .imas-btn-detail:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
+            .imas-btn-detail { padding: 12px 25px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+            .imas-btn-detail:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
 
             .imas-pull-group { display: flex; gap: 20px; }
-            .imas-btn-pull { position: relative; width: 180px; height: 60px; border-radius: 30px; border: none; cursor: pointer; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.2s; }
-            .imas-btn-pull:hover { transform: translateY(-3px) scale(1.02); }
-            .imas-btn-pull:active { transform: translateY(1px) scale(0.98); }
-            .imas-btn-pull.disabled { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
+            .imas-btn-pull { position: relative; width: 190px; height: 65px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: 0.2s; }
+            .imas-btn-pull:hover { transform: translateY(-3px); filter: brightness(1.15); }
+            .imas-btn-pull:active { transform: translateY(1px); }
+            .imas-btn-pull.disabled { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
 
-            .imas-btn-pull::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); transition: 0s; }
-            .imas-btn-pull:hover::before { animation: shine 0.8s; }
-            @keyframes shine { 100% { left: 200%; } }
+            .imas-btn-single { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-top-color: #93c5fd;}
+            .imas-btn-ten { background: var(--gacha-btn-purple); border-top-color: #d8b4fe; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), 0 10px 25px rgba(0,0,0,0.5); }
 
-            .imas-btn-single { background: linear-gradient(135deg, #0ea5e9, #2563eb); border: 2px solid #7dd3fc; }
-            .imas-btn-ten { background: linear-gradient(135deg, #d946ef, #9333ea); border: 2px solid #f9a8d4; box-shadow: 0 0 20px rgba(217, 70, 239, 0.4), 0 10px 20px rgba(0,0,0,0.5); }
+            .imas-pull-text { font-size: 16px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 2; letter-spacing: 1px;}
+            .imas-pull-cost { font-size: 14px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.9); font-weight: bold; font-family: 'Montserrat', sans-serif; z-index: 2; margin-top: 2px; }
 
-            .imas-pull-text { font-size: 16px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 2; }
-            .imas-pull-cost { font-size: 12px; display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.9); font-weight: bold; z-index: 2; margin-top: 2px; }
-            .imas-pull-cost i { color: #38bdf8; }
+            /* ================= 抽卡全屏动画层 ================= */
+            .imas-anim-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 100; display: none; align-items: center; justify-content: center; overflow: hidden; }
+            .imas-anim-overlay.active { display: flex; }
+            .imas-star-center { width: 2px; height: 2px; background: #fff; border-radius: 50%; box-shadow: 0 0 50px 20px #c084fc; position: relative; }
+            .imas-star-center::before, .imas-star-center::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; }
+            .imas-star-center::before { width: 200vw; height: 2px; box-shadow: 0 0 20px #c084fc; animation: beamExpandX 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+            .imas-star-center::after { width: 2px; height: 200vh; box-shadow: 0 0 20px #c084fc; animation: beamExpandY 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+            @keyframes beamExpandX { 0% { width: 0; opacity: 1; } 100% { width: 200vw; opacity: 0; } }
+            @keyframes beamExpandY { 0% { height: 0; opacity: 1; } 100% { height: 200vh; opacity: 0; } }
 
+            /* ================= 结果展示层 (完全参照截图美化) ================= */
+            .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 50% 30%, #1a2235 0%, #0a0f1d 100%); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; overflow: hidden;}
+            .imas-res-overlay.active { display: flex; opacity: 1; }
+
+            /* 舞台背景光效 */
+            .stage-light-left { position: absolute; top: -20%; left: 10%; width: 200px; height: 150%; background: linear-gradient(to bottom, rgba(56,189,248,0.1) 0%, transparent 100%); transform: rotate(15deg); pointer-events: none;}
+            .stage-light-right { position: absolute; top: -20%; right: 10%; width: 200px; height: 150%; background: linear-gradient(to bottom, rgba(244,114,182,0.1) 0%, transparent 100%); transform: rotate(-15deg); pointer-events: none;}
+
+            .imas-res-header { text-align: center; padding: 40px 0 20px; flex-shrink: 0; position: relative; z-index: 2;}
+            .imas-res-title { font-size: 28px; font-weight: 900; letter-spacing: 10px; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.5); font-family: 'Montserrat', sans-serif;}
+
+            /* 修复10连顶部遮挡：增加内边距，居中偏上排列 */
+            .imas-res-grid { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 20px 25px; padding: 30px 40px 100px; perspective: 1200px; overflow-y: auto; z-index: 2; position: relative;}
+            .imas-res-grid::-webkit-scrollbar { display: none; } /* 隐藏滚动条让视觉更干净 */
+
+            /* 卡片尺寸调整：更加修长 */
+            .imas-res-card { width: 140px; height: 210px; background: var(--gacha-bg-card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; padding: 25px 10px 15px; position: relative; transform-style: preserve-3d; transform: rotateY(90deg); opacity: 0; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+            .imas-res-card.flip-in { animation: cardFlipIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+            @keyframes cardFlipIn { to { transform: rotateY(0deg); opacity: 1; } }
+
+            /* 不同类型卡片的高级质感背景 */
+            .imas-res-card.is-idol { background: linear-gradient(180deg, #2a2015 0%, #1a150b 100%); border-color: rgba(251,191,36,0.3); box-shadow: 0 0 30px rgba(251,191,36,0.15), inset 0 0 20px rgba(251,191,36,0.05); }
+            .imas-res-card.is-dup { background: linear-gradient(180deg, #152033 0%, #0b1322 100%); border-color: rgba(56,189,248,0.3); box-shadow: 0 0 30px rgba(56,189,248,0.15); }
+            .imas-res-card.type-item { background: linear-gradient(180deg, #1c2230 0%, #0d121c 100%); }
+            .imas-res-card.type-currency { background: linear-gradient(180deg, #1e1b2e 0%, #110f1c 100%); }
+
+            /* 顶部标签：嵌入卡片边缘 */
+            .imas-res-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: bold; padding: 4px 14px; border-radius: 12px; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.4); white-space: nowrap; z-index: 10;}
+            .is-idol .imas-res-tag { background: linear-gradient(90deg, #f59e0b, #d97706); }
+            .is-dup .imas-res-tag { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+            .type-item .imas-res-tag { background: linear-gradient(90deg, #475569, #334155); }
+            .type-currency .imas-res-tag { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+
+            /* 物品图标容器 */
+            .imas-res-img-wrap { width: 85px; height: 85px; margin-top: auto; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; position: relative; }
+            .imas-res-img-wrap img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); transition: transform 0.3s;}
+            .imas-res-card:hover .imas-res-img-wrap img { transform: translateY(-5px) scale(1.05); }
+
+            .imas-res-name { font-size: 13px; font-weight: bold; text-align: center; color: #e2e8f0; width: 100%; margin-top: auto;}
+
+            /* 翻转动画所需 */
+            .imas-res-card.is-dup .mark-front, .imas-res-card.is-dup .mark-back { position: absolute; top:0; left:0; width:100%; height:100%; backface-visibility: hidden; transition: transform 0.6s; }
+            .imas-res-card.is-dup .mark-front { transform: rotateY(0deg); }
+            .imas-res-card.is-dup .mark-back { transform: rotateY(180deg); padding: 10px; }
+            .imas-res-card.do-transform .mark-front { transform: rotateY(-180deg) !important; }
+            .imas-res-card.do-transform .mark-back { transform: rotateY(0deg) !important; }
+
+            /* 底部操作区 (完美还原截图) */
+            .imas-res-footer { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; background: linear-gradient(to top, rgba(10,15,29,1) 0%, rgba(10,15,29,0.8) 50%, transparent 100%); z-index: 10;}
+            .imas-btn-close-res { padding: 14px 40px; background: #1e293b; border: 1px solid #475569; border-radius: 30px; color: #e2e8f0; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; min-width: 140px; }
+            .imas-btn-close-res:hover { background: #334155; color: #fff;}
+            .imas-btn-again { padding: 14px 40px; background: var(--gacha-btn-purple); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4); min-width: 220px; justify-content: center;}
+            .imas-btn-again:hover { filter: brightness(1.15); box-shadow: 0 10px 25px rgba(168, 85, 247, 0.6); transform: translateY(-2px);}
+            .imas-btn-again i { font-size: 16px; }
+
+            /* ================= 详情侧边栏 ================= */
             .imas-drawer { position: absolute; top: 0; right: -100%; width: 55%; max-width: 500px; height: 100%; background: rgba(15,23,42,0.95); backdrop-filter: blur(20px); box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 50; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.1); }
             .imas-drawer.open { right: 0; }
             .imas-drawer-header { padding: 25px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
@@ -182,68 +171,19 @@
             .imas-drawer-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
 
             .imas-sec-title { font-size: 15px; font-weight: bold; color: #38bdf8; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px dashed rgba(56,189,248,0.3); }
+            .imas-cate-title { font-size: 13px; font-weight: bold; color: #cbd5e1; margin: 15px 0 10px; padding: 5px 10px; background: rgba(255,255,255,0.05); border-radius: 6px; border-left: 3px solid #38bdf8;}
 
-            .imas-item-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-            .imas-item-row { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
-            .imas-item-icon { width: 40px; height: 40px; border-radius: 6px; background: rgba(0,0,0,0.5); object-fit: contain; }
+            .imas-item-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+            .imas-item-row { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+            .imas-item-icon { width: 40px; height: 40px; border-radius: 6px; background: rgba(0,0,0,0.3); object-fit: contain; padding: 2px;}
             .imas-item-info { flex: 1; }
             .imas-item-name { font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 4px; }
             .imas-item-desc { font-size: 11px; color: #94a3b8; line-height: 1.4; }
 
             .imas-idol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px; margin-bottom: 30px; }
-            .imas-idol-card { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+            .imas-idol-card { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
             .imas-idol-img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin-bottom: 8px; border: 2px solid #38bdf8; }
             .imas-idol-name { font-size: 11px; font-weight: bold; color: #e2e8f0; }
-
-            .imas-anim-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 100; display: none; align-items: center; justify-content: center; overflow: hidden; }
-            .imas-anim-overlay.active { display: flex; }
-
-            .imas-star-center { width: 2px; height: 2px; background: #fff; border-radius: 50%; box-shadow: 0 0 50px 20px #38bdf8; position: relative; }
-            .imas-star-center::before, .imas-star-center::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; }
-            .imas-star-center::before { width: 200vw; height: 2px; box-shadow: 0 0 20px #38bdf8; animation: beamExpandX 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-            .imas-star-center::after { width: 2px; height: 200vh; box-shadow: 0 0 20px #38bdf8; animation: beamExpandY 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-            @keyframes beamExpandX { 0% { width: 0; opacity: 1; } 100% { width: 200vw; opacity: 0; } }
-            @keyframes beamExpandY { 0% { height: 0; opacity: 1; } 100% { height: 200vh; opacity: 0; } }
-
-            .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(10px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; }
-            .imas-res-overlay.active { display: flex; opacity: 1; }
-
-            .imas-res-header { text-align: center; padding: 40px 0 20px; }
-            .imas-res-title { font-size: 24px; font-weight: 900; letter-spacing: 8px; color: #fff; text-shadow: 0 0 20px rgba(56,189,248,0.5); }
-
-            .imas-res-grid { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 25px; padding: 20px 50px; perspective: 1000px; overflow-y: auto;}
-
-            .imas-res-card { width: 130px; height: 180px; background: linear-gradient(180deg, rgba(51,65,85,0.8), rgba(15,23,42,0.8)); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding: 15px 10px; position: relative; transform-style: preserve-3d; transform: rotateY(90deg); opacity: 0; }
-            .imas-res-card.flip-in { animation: cardFlipIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-            @keyframes cardFlipIn { to { transform: rotateY(0deg); opacity: 1; } }
-
-            .imas-res-card.is-idol { background: linear-gradient(180deg, rgba(251,191,36,0.2), rgba(180,83,9,0.8)); border-color: #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.3); }
-            .imas-res-card.is-dup { background: linear-gradient(180deg, rgba(56,189,248,0.2), rgba(30,58,138,0.8)); border-color: #38bdf8; box-shadow: 0 0 20px rgba(56,189,248,0.3); }
-
-            .imas-res-tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: bold; padding: 2px 10px; border-radius: 10px; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); white-space: nowrap; }
-            .is-idol .imas-res-tag { background: linear-gradient(90deg, #f59e0b, #d97706); }
-            .is-dup .imas-res-tag { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
-            .imas-res-card:not(.is-idol):not(.is-dup) .imas-res-tag { background: #475569; }
-
-            .imas-res-img-wrap { width: 70px; height: 70px; margin-top: 10px; margin-bottom: 15px; border-radius: 8px; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; position: relative; }
-            .imas-res-img-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
-            .imas-res-img-wrap i { font-size: 30px; color: #38bdf8; }
-
-            .imas-res-name { font-size: 12px; font-weight: bold; text-align: center; color: #fff; text-shadow: 0 1px 3px #000; width: 100%; }
-
-            .imas-res-card.is-dup .mark-front, .imas-res-card.is-dup .mark-back { position: absolute; top:0; left:0; width:100%; height:100%; backface-visibility: hidden; transition: transform 0.6s; border-radius: 8px; }
-            .imas-res-card.is-dup .mark-front { transform: rotateY(0deg); }
-            .imas-res-card.is-dup .mark-back { transform: rotateY(180deg); background: rgba(255,255,255,0.9); padding: 5px; }
-            .imas-res-card.do-transform .mark-front { transform: rotateY(-180deg) !important; }
-            .imas-res-card.do-transform .mark-back { transform: rotateY(0deg) !important; }
-
-            /* 对照截图完全重构的结果页底部按钮样式 */
-            .imas-res-footer { padding: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; }
-            .imas-btn-close-res { padding: 12px 30px; background: #334155; border: 1px solid #475569; border-radius: 30px; color: #f8fafc; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; min-width: 120px; }
-            .imas-btn-close-res:hover { background: #475569; }
-            .imas-btn-again { padding: 12px 30px; background: linear-gradient(90deg, #a855f7, #9333ea); border: none; border-radius: 30px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); min-width: 180px; justify-content: center;}
-            .imas-btn-again:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6); }
 
         `;
         topDoc.head.appendChild(style);
@@ -333,12 +273,13 @@
                 </div>
 
                 <div class="imas-res-overlay" id="imas-res-overlay">
+                    <div class="stage-light-left"></div>
+                    <div class="stage-light-right"></div>
                     <div class="imas-res-header"><div class="imas-res-title">SCOUT RESULT</div></div>
                     <div class="imas-res-grid" id="imas-res-grid"></div>
                     <div class="imas-res-footer">
-                        <!-- 完全对照截图重排的底部按钮 -->
                         <button class="imas-btn-close-res" id="btn-res-close">确认返回</button>
-                        <button class="imas-btn-again" id="btn-res-again"><i class="bi bi-arrow-repeat"></i> 再次发掘 (10000 <i class="bi bi-stars" style="font-size:12px;"></i>)</button>
+                        <button class="imas-btn-again" id="btn-res-again"><i class="bi bi-arrow-repeat"></i> 再次发掘 (10000)</button>
                     </div>
                 </div>
             </div>
@@ -386,7 +327,7 @@
                     uiBannerTitle.innerText = p.name;
                     uiBannerDesc.innerText = p.desc;
 
-                    uiBannerBg.style.opacity = 0.6;
+                    uiBannerBg.style.opacity = 0.5;
                     uiBannerChar.style.opacity = 1;
                 }, 200);
             });
@@ -419,41 +360,58 @@
             } else { dHtml += `<div style="grid-column:1/-1; color:#64748b;">暂无数据</div>`; }
             dHtml += `</div>`;
 
-            dHtml += `<div class="imas-sec-title">包含资源道具预览</div><div class="imas-item-list">`;
+            dHtml += `<div class="imas-sec-title">包含资源与道具详情</div>`;
 
-            // 手动将星尘和偶像印记添加到道具展示列表的最前面
             dHtml += `
-                <div class="imas-item-row" style="border-color: rgba(56, 189, 248, 0.3);">
-                    <img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png" class="imas-item-icon">
-                    <div class="imas-item-info">
-                        <div class="imas-item-name" style="color: #38bdf8;">星尘返还</div>
-                        <div class="imas-item-desc">随机获得 100~5000 不等的星尘，可用于再次发掘。</div>
+                <div class="imas-cate-title">💎 核心货币与信物</div>
+                <div class="imas-item-list">
+                    <div class="imas-item-row" style="border-color: rgba(56, 189, 248, 0.3);">
+                        <img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png" class="imas-item-icon">
+                        <div class="imas-item-info">
+                            <div class="imas-item-name" style="color: #38bdf8;">星尘返还</div>
+                            <div class="imas-item-desc">随机获得 100~5000 不等的星尘，可用于再次发掘。</div>
+                        </div>
                     </div>
-                </div>
-                <div class="imas-item-row" style="border-color: rgba(219, 39, 119, 0.3);">
-                    <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png" class="imas-item-icon">
-                    <div class="imas-item-info">
-                        <div class="imas-item-name" style="color: #f472b6;">偶像印记</div>
-                        <div class="imas-item-desc">发掘到已拥有的偶像时自动转化。用于突破潜力上限。</div>
+                    <div class="imas-item-row" style="border-color: rgba(219, 39, 119, 0.3);">
+                        <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png" class="imas-item-icon">
+                        <div class="imas-item-info">
+                            <div class="imas-item-name" style="color: #f472b6;">偶像印记</div>
+                            <div class="imas-item-desc">发掘到已拥有的偶像时自动转化。用于突破潜力上限。</div>
+                        </div>
                     </div>
                 </div>
             `;
 
             if (actualItemPool && actualItemPool.length > 0) {
-                actualItemPool.forEach(item => {
-                    dHtml += `
-                        <div class="imas-item-row">
-                            <img src="${item.img}" class="imas-item-icon">
-                            <div class="imas-item-info">
-                                <div class="imas-item-name">${item.name}</div>
-                                <div class="imas-item-desc">${item.desc}</div>
-                            </div>
-                        </div>`;
-                });
+                const businessItems = actualItemPool.filter(i => i.type === 'business');
+                if(businessItems.length > 0) {
+                    dHtml += `<div class="imas-cate-title">📊 业务能力提升</div><div class="imas-item-list">`;
+                    businessItems.forEach(item => {
+                        dHtml += `<div class="imas-item-row"><img src="${item.img}" class="imas-item-icon"><div class="imas-item-info"><div class="imas-item-name">${item.name}</div><div class="imas-item-desc">${item.desc}</div></div></div>`;
+                    });
+                    dHtml += `</div>`;
+                }
+
+                const psychItems = actualItemPool.filter(i => i.type === 'psychology');
+                if(psychItems.length > 0) {
+                    dHtml += `<div class="imas-cate-title">❤️ 心理与状态干预</div><div class="imas-item-list">`;
+                    psychItems.forEach(item => {
+                        dHtml += `<div class="imas-item-row"><img src="${item.img}" class="imas-item-icon"><div class="imas-item-info"><div class="imas-item-name">${item.name}</div><div class="imas-item-desc">${item.desc}</div></div></div>`;
+                    });
+                    dHtml += `</div>`;
+                }
+
+                const eggItems = actualItemPool.filter(i => i.type === 'easter_egg');
+                if(eggItems.length > 0) {
+                    dHtml += `<div class="imas-cate-title">🎁 特殊彩蛋与剧情</div><div class="imas-item-list">`;
+                    eggItems.forEach(item => {
+                        dHtml += `<div class="imas-item-row"><img src="${item.img}" class="imas-item-icon"><div class="imas-item-info"><div class="imas-item-name">${item.name}</div><div class="imas-item-desc">${item.desc}</div></div></div>`;
+                    });
+                    dHtml += `</div>`;
+                }
             } else {
-                dHtml += `<div style="color:#ef4444; font-size:12px;">未读取到道具数据 (请检查 item_data.js 是否加载)</div>`;
+                dHtml += `<div style="color:#ef4444; font-size:12px;">未读取到道具数据</div>`;
             }
-            dHtml += `</div>`;
 
             drawerContent.innerHTML = dHtml;
         }
@@ -532,7 +490,7 @@
                     cHtml = `
                         <div class="imas-res-card is-idol flip-in" style="animation-delay:${delay}s">
                             <div class="imas-res-tag">NEW IDOL</div>
-                            <div class="imas-res-img-wrap" style="background:transparent;"><img src="${res.img}"></div>
+                            <div class="imas-res-img-wrap"><img src="${res.img}"></div>
                             <div class="imas-res-name">${res.name}</div>
                         </div>
                     `;
@@ -551,7 +509,7 @@
                     cHtml = `
                         <div class="imas-res-card type-currency flip-in" style="animation-delay:${delay}s">
                             <div class="imas-res-tag">资源返还</div>
-                            <div class="imas-res-img-wrap" style="background:transparent;"><img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png"></div>
+                            <div class="imas-res-img-wrap"><img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png"></div>
                             <div class="imas-res-name">星尘 ×${res.amount}</div>
                         </div>
                     `;
@@ -559,7 +517,7 @@
                     cHtml = `
                         <div class="imas-res-card type-item flip-in" style="animation-delay:${delay}s">
                             <div class="imas-res-tag">获得道具</div>
-                            <div class="imas-res-img-wrap" style="background:transparent;"><img src="${res.data.img}"></div>
+                            <div class="imas-res-img-wrap"><img src="${res.data.img}"></div>
                             <div class="imas-res-name">${res.data.name}</div>
                         </div>
                     `;
@@ -567,7 +525,6 @@
                 resGrid.insertAdjacentHTML('beforeend', cHtml);
             });
 
-            // 动态更新“再次发掘”按钮的文字，完全匹配用户截图
             const btnAgain = container.querySelector('#btn-res-again');
             btnAgain.innerHTML = `<i class="bi bi-arrow-repeat"></i> 再次发掘 (${currentPullCount * 1000} <i class="bi bi-stars" style="font-size:12px;"></i>)`;
 
