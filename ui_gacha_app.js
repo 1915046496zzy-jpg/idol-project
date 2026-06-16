@@ -1,6 +1,6 @@
 // ==========================================
-// 星探寻访 (Gacha) APP 独立模块 - 偶像大师幻光重制版 v2.0
-// 修复：道具池数据强绑定 + 结果页返回逻辑重置
+// 星探寻访 (Gacha) APP 独立模块 - 偶像大师幻光重制版 v2.2
+// 修复：彻底移除硬编码，完美调用外部 item_data.js
 // ==========================================
 
 (function() {
@@ -18,107 +18,15 @@
         topWin.playerCurrency = { stardust: 50000 };
     }
 
-    // 哥哥辛苦写好的道具池数据，直接内置作为核心后备，确保100%能读取到！
-    const fallbackItemPool = [
-        // ================= 【心理状态干预】 =================
-        { type: 'psychology', name: "薄荷糖", img: "https://i.postimg.cc/d3kyKtLB/bao-he-tang-(1).png", weight: 100, desc: "微量缓解压力 (Stress -5%)" },
-        { type: 'psychology', name: "热牛奶", img: "https://i.postimg.cc/VvxbsQCM/re-niu-nai-(1).png", weight: 30, desc: "少量缓解压力 (Stress -15%)" },
-        { type: 'psychology', name: "安眠香薰", img: "https://i.postimg.cc/vTgVdHcv/an-mian-xiang-xun-(1).png", weight: 20, desc: "中度舒缓精神 (Stress -30%)" },
-        { type: 'psychology', name: "度假机票", img: "https://i.postimg.cc/fyG0Wn9m/du-jia-ji-piao-(1).png", weight: 2, desc: "彻底清空压力 (Stress -80%)" },
-
-        { type: 'psychology', name: "镇静药片", img: "https://i.postimg.cc/pL7chsD5/zhen-jing-yao-pian-(1).png", weight: 60, desc: "微量提升堕落度 (Lust +10)" },
-        { type: 'psychology', name: "VIP房卡", img: "https://i.postimg.cc/W1KYF5MJ/vip-fang-ka-(1).png", weight: 40, desc: "开启密会 (Lust +20)" },
-        { type: 'psychology', name: "高额合同", img: "https://i.postimg.cc/P5cVpSmZ/gao-e-he-tong-(1).png", weight: 20, desc: "中度提升堕落度 (Lust +40)" },
-        { type: 'psychology', name: "皮带项圈", img: "https://i.postimg.cc/zGM2bxng/pi-dai-xiang-quan-(1).png", weight: 5, desc: "大幅提升堕落度 (Lust +60)" },
-        { type: 'psychology', name: "行程表", img: "https://i.postimg.cc/J47JkgCK/xing-cheng-biao.png", weight: 30, desc: "规划时间 (Obedience +5)" },
-        { type: 'psychology', name: "制作人指令卡", img: "https://i.postimg.cc/c41YnjGh/zhi-zuo-ren-zhi-ling-ka.png", weight: 15, desc: "强制服从 (Obedience +10)" },
-        { type: 'psychology', name: "制作人徽章", img: "https://i.postimg.cc/025mw31C/zhi-zuo-ren-hui-zhang.png", weight: 8, desc: "权威象征 (Obedience +15)" },
-        { type: 'psychology', name: "金色企划书", img: "https://i.postimg.cc/ZKY3dgzx/jin-se-qi-hua-shu.png", weight: 2, desc: "绝对服从 (Obedience +20)" },
-
-        { type: 'psychology', name: "粉丝来信", img: "https://i.postimg.cc/y8VfWnLJ/fen-si-lai-xin.png", weight: 40, desc: "增加偶像羁绊 (Affection +2)" },
-        { type: 'psychology', name: "手写便签", img: "https://i.postimg.cc/cLsD6TF8/shou-xie-bian-qian.png", weight: 30, desc: "传递关怀 (Affection +4)" },
-        { type: 'psychology', name: "纪念相册", img: "https://i.postimg.cc/qvkmgQ16/ji-nian-xiang-ce.png", weight: 20, desc: "回忆杀 (Affection +7)" },
-        { type: 'psychology', name: "情书", img: "https://i.postimg.cc/BnqhtNmj/qing-shu.png", weight: 10, desc: "直球告白 (Affection +10)" },
-
-        // ================= 【业务能力提升】 =================
-        { type: 'business', name: "练习话筒", img: "https://i.postimg.cc/gkvzGc7d/lian-xi-hua-tong.png", weight: 20, desc: "Vocal能力微量提升 (+2)" },
-        { type: 'business', name: "专业麦克风", img: "https://i.postimg.cc/TYrdT2sY/zhuan-ye-mai-ke-feng.png", weight: 12, desc: "Vocal能力少量提升 (+5)" },
-        { type: 'business', name: "水晶麦克风", img: "https://i.postimg.cc/MKy6zZLW/shui-jing-mai-ke-feng.png", weight: 6, desc: "Vocal能力中量提升 (+8)" },
-        { type: 'business', name: "金唱片", img: "https://i.postimg.cc/MKy6zZL6/jin-chang-pian.png", weight: 2, desc: "Vocal能力大幅提升 (+10)" },
-
-        { type: 'business', name: "练习舞鞋", img: "https://i.postimg.cc/cHcpPPzf/lian-xi-wu-xie-(1).png", weight: 20, desc: "Dance能力微量提升 (+2)" },
-        { type: 'business', name: "演出舞鞋", img: "https://i.postimg.cc/qRGPWWFL/yan-chu-wu-xie-1.png", weight: 12, desc: "Dance能力少量提升 (+5)" },
-        { type: 'business', name: "水晶舞鞋", img: "https://i.postimg.cc/PxMg007M/shui-jing-wu-xie-(1).png", weight: 6, desc: "Dance能力中量提升 (+8)" },
-        { type: 'business', name: "闪耀舞鞋", img: "https://i.postimg.cc/26xsggtG/shan-yao-wu-xie-(1).png", weight: 2, desc: "Dance能力大幅提升 (+10)" },
-
-        { type: 'business', name: "拍立得", img: "https://i.postimg.cc/5jckyV63/pai-li-de.png", weight: 20, desc: "Visual能力微量提升 (+2)" },
-        { type: 'business', name: "摄影胶卷", img: "https://i.postimg.cc/SQXSnfJZ/she-ying-jiao-juan.png", weight: 12, desc: "Visual能力少量提升 (+5)" },
-        { type: 'business', name: "时尚杂志", img: "https://i.postimg.cc/NGysKk5J/shi-shang-za-zhi.png", weight: 6, desc: "Visual能力中量提升 (+8)" },
-        { type: 'business', name: "封面海报", img: "https://i.postimg.cc/t70mJjYz/feng-mian-hai-bao.png", weight: 2, desc: "Visual能力大幅提升 (+10)" },
-
-        // ================= 【特殊彩蛋与剧情】 =================
-        { type: 'easter_egg', name: "冰棒", img: "https://i.postimg.cc/85V97FNx/bing-bang.png", weight: 40, desc: "降温解暑 (Stress -10%, Affection +5)" },
-        { type: 'easter_egg', name: "珍珠奶茶", img: "https://i.postimg.cc/6qWPhD7H/zhen-zhu-nai-cha.png", weight: 25, desc: "甜品治愈 (Stress -20%, Affection +3)" },
-        { type: 'easter_egg', name: "麦片粥", img: "https://i.postimg.cc/26fM1qCq/mai-pian-zhou.png", weight: 15, desc: "温暖肠胃 (Stress -25%, Affection +1)" },
-        { type: 'easter_egg', name: "巧克力蛋糕", img: "https://i.postimg.cc/d1mXrq01/qiao-ke-li-dan-gao.png", weight: 8, desc: "高热量治愈 (Stress -50%, Affection +3)" },
-
-        { type: 'easter_egg', name: "小黄鸭", img: "https://i.postimg.cc/vmZWwN3D/xiao-huang-ya.png", weight: 5, desc: "触发共浴剧情。Stress -20, Affection +5" },
-        { type: 'easter_egg', name: "草莓饭团", img: "https://i.postimg.cc/vBdk41bJ/cao-mei-fan-tuan.png", weight: 5, desc: "触发投喂剧情。Stress -10, Affection +1" },
-        { type: 'easter_egg', name: "制作人玩偶", img: "https://i.postimg.cc/YSC1BsbG/zhi-zuo-ren-wan-ou.png", weight: 4, desc: "触发制作人玩偶剧情。Stress -40, Affection +20" },
-        { type: 'easter_egg', name: "创可贴", img: "https://i.postimg.cc/NMwSKyBW/chuang-ke-tie.png", weight: 5, desc: "触发包扎剧情。Stress -15, Affection +5" },
-        { type: 'easter_egg', name: "星星布丁", img: "https://i.postimg.cc/NFsnxWy8/xing-xing-bu-ding.png", weight: 5, desc: "触发甜点时间。Stress -30, Affection +5" },
-        { type: 'easter_egg', name: "身体乳", img: "https://i.postimg.cc/fLjFmwbK/shen-ti-ru.png", weight: 4, desc: "触发涂抹剧情。Stress -10, Affection +3" },
-        { type: 'easter_egg', name: "婚纱", img: "https://i.postimg.cc/ydztDJ7B/hun-sha.png", weight: 1, desc: "触发试穿婚纱绝密剧情。Affection +30" },
-        { type: 'easter_egg', name: "对戒戒指盒", img: "https://i.postimg.cc/Y9wZv4tK/dui-jie-jie-zhi-he.png", weight: 2, desc: "触发赠礼剧情。Affection +20" },
-
-        { type: 'easter_egg', name: "Cupless Bra", img: "https://i.postimg.cc/hGmN48RR/cupless-bra.png", weight: 3, desc: "触发更衣剧情。Stress+10, Aff+3, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "兔女郎装", img: "https://i.postimg.cc/fyzPv63m/tu-nu-lang-zhuang.png", weight: 3, desc: "触发Cosplay剧情。Stress+10, Aff+8, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "奶牛比基尼", img: "https://i.postimg.cc/76Mc0xLx/nai-niu-bi-ji-ni.png", weight: 3, desc: "触发牧场摄影。Stress+10, Aff+8, Ob+15, Lust+5" },
-        { type: 'easter_egg', name: "情趣内衣", img: "https://i.postimg.cc/Yq1txyrh/qing-qu-nei-yi.png", weight: 3, desc: "触发夜间招待。Stress-10, Aff+6, Ob+10" },
-        { type: 'easter_egg', name: "幸运胖次", img: "https://i.postimg.cc/W41McHXh/xing-yun-pang-ci.png", weight: 3, desc: "触发搜查剧情。Stress-10, Aff+15, Ob+10" },
-        { type: 'easter_egg', name: "猫耳发箍", img: "https://i.postimg.cc/KY8nhHJ8/mao-er-fa-gu.png", weight: 4, desc: "触发猫娘撒娇。Stress-10, Aff+3" },
-
-        { type: 'easter_egg', name: "跳蛋", img: "https://i.postimg.cc/yN8FCbvd/tiao-dan.png", weight: 4, desc: "触发隐藏刺激事件。Stress-20, Aff+5, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "震动棒", img: "https://i.postimg.cc/N0j1vzpH/zhen-dong-bang.png", weight: 4, desc: "触发休息室调教。Stress-20, Aff+5, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "G点按摩器", img: "https://i.postimg.cc/wvdZ1tg4/G-dian-an-mo-qi-(G-spot-massager).png", weight: 3, desc: "触发深层开发。Stress-20, Aff+3, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "前列腺按摩器", img: "https://i.postimg.cc/26FJhz55/qian-lie-xian-an-mo-qi-aneros.png", weight: 2, desc: "触发特殊体质开发。Stress-20, Aff+3, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "双头龙", img: "https://i.postimg.cc/JncgZ1hK/shuang-tou-long-double-dildo.png", weight: 2, desc: "触发双人互动。Stress-20, Aff+1, Ob+20, Lust+15" },
-
-        { type: 'easter_egg', name: "乳夹", img: "https://i.postimg.cc/Y9fVYpSg/ru-jia.png", weight: 3, desc: "触发敏感度训练。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "乳环", img: "https://i.postimg.cc/rmCbx8pz/ru-huan.png", weight: 3, desc: "触发穿孔改造。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "乳钉", img: "https://i.postimg.cc/hjbwTSGv/ru-ding.png", weight: 3, desc: "触发穿孔改造。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "乳链", img: "https://i.postimg.cc/RFQ8KM0d/ru-lian.png", weight: 3, desc: "触发牵引调教。Stress+15, Aff+1, Ob+10, Lust+10" },
-        { type: 'easter_egg', name: "榨乳器", img: "https://i.postimg.cc/Y0rPxJ48/zha-ru-qi.png", weight: 2, desc: "触发催乳剧情。Stress+15, Aff+3, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "金色乳头夹", img: "https://i.postimg.cc/63Ng87BW/jin-se-ru-tou-jia.png", weight: 2, desc: "触发高级调教。Stress-15, Aff+5, Ob+10" },
-
-        { type: 'easter_egg', name: "宝石肛塞", img: "https://i.postimg.cc/Gh0cG1CY/bao-shi-gang-sai.png", weight: 3, desc: "触发常驻佩戴指令。Stress+10, Aff+3, Ob+5, Lust+5" },
-        { type: 'easter_egg', name: "尾巴肛塞", img: "https://i.postimg.cc/Dyq7cYvP/wei-ba-gang-sai.png", weight: 3, desc: "触发宠物扮演。Stress+10, Aff+6, Ob+5, Lust+5" },
-        { type: 'easter_egg', name: "拉珠", img: "https://i.postimg.cc/XJ0mrZnJ/la-zhu-anal-beads.png", weight: 3, desc: "触发登台挑战。Stress+15, Aff+1, Ob+20, Lust+15" },
-
-        { type: 'easter_egg', name: "口球", img: "https://i.postimg.cc/pTt4m9PV/kou-qiu.png", weight: 3, desc: "触发禁言惩罚。Stress+10, Aff+1, Ob+20, Lust+5" },
-        { type: 'easter_egg', name: "环形口塞", img: "https://i.postimg.cc/C1VXRZwV/huan-xing-kou-sai.png", weight: 3, desc: "触发深喉拓展。Stress+10, Aff+1, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "金属项圈", img: "https://i.postimg.cc/TY8RgX6n/jin-shu-xiang-quan.png", weight: 3, desc: "触发主奴契约。Stress+10, Aff+3, Ob+10, Lust+5" },
-        { type: 'easter_egg', name: "狗链", img: "https://i.postimg.cc/TwXFKyT8/gou-lian.png", weight: 2, desc: "触发遛狗剧情。Stress+15, Aff+1, Ob+50, Lust+10" },
-        { type: 'easter_egg', name: "手铐", img: "https://i.postimg.cc/c4Qdc5xw/shou-kao.png", weight: 3, desc: "触发拘禁审问。Stress+5, Aff+3, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "束缚带", img: "https://i.postimg.cc/ZKrJLDbd/shu-fu-dai.png", weight: 3, desc: "触发强制压制。Stress+10, Aff+3, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "龟甲缚", img: "https://i.postimg.cc/TwXFKyTv/gui-jia-fu.png", weight: 2, desc: "触发绳艺展示。Stress+10, Aff+1, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "鞭子", img: "https://i.postimg.cc/ZRh2W942/bian-zi.png", weight: 2, desc: "触发肉体惩戒。Stress+20, Aff+1, Ob+30, Lust+10" },
-        { type: 'easter_egg', name: "蜡烛", img: "https://i.postimg.cc/hjq6XJKv/la-zhu.png", weight: 2, desc: "触发滴蜡体验。Stress-10, Aff+3" },
-        { type: 'easter_egg', name: "鼻勾", img: "https://i.postimg.cc/Kzyw1KxV/bi-gou.png", weight: 2, desc: "触发屈辱姿态。Stress+10, Aff+1, Ob+5, Lust+1" },
-        { type: 'easter_egg', name: "尿道棒", img: "https://i.postimg.cc/fLjFmwbT/niao-dao-bang.png", weight: 2, desc: "触发极限忍耐。Stress+20, Aff+1, Ob+20, Lust+20" },
-        { type: 'easter_egg', name: "贞操带", img: "https://i.postimg.cc/tJqczL1k/zhen-cao-dai.png", weight: 2, desc: "触发欲望管理。Stress+15, Aff+1, Ob+20, Lust+10" },
-        { type: 'easter_egg', name: "录像带", img: "https://i.postimg.cc/PrmdMFXC/lu-xiang-dai.png", weight: 2, desc: "触发绝密要挟剧情。Stress+5, Aff+3, Ob+10, Lust+1" },
-        { type: 'easter_egg', name: "眼罩", img: "https://i.postimg.cc/WbMs7fN6/yan-zhao.png", weight: 4, desc: "触发视觉剥夺体验。Stress+10, Aff+1" }
-    ];
-
+    // 核心修复：纯净的外部变量抓取逻辑，绝不硬编码！
     const getGlobalItemPool = () => {
+        // 尝试从各个可能的作用域抓取哥哥写好的 itemPool
         if (topWin.itemPool && topWin.itemPool.length > 0) return topWin.itemPool;
         if (typeof itemPool !== 'undefined' && itemPool.length > 0) return itemPool;
         if (topWin.parent && topWin.parent.itemPool && topWin.parent.itemPool.length > 0) return topWin.parent.itemPool;
-        return fallbackItemPool; // 如果全局都没读到，直接使用内置的后备数据
+        return []; // 如果没读到就返回空，由界面给出错误提示，绝不擅自写死数据
     };
 
-    // --- 注入极致质感的CSS ---
     if (!topDoc.getElementById('qingzi-gacha-master-style')) {
         const style = topDoc.createElement('style');
         style.id = 'qingzi-gacha-master-style';
@@ -127,16 +35,13 @@
 
             .imas-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #0f172a; font-family: 'Noto Sans SC', sans-serif; position: relative; overflow: hidden; color: #fff; }
 
-            /* 顶部资产栏 */
             .imas-topbar { height: 50px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0)); display: flex; justify-content: flex-end; align-items: center; padding: 0 30px; z-index: 20; position: absolute; top:0; right:0; width: 100%; pointer-events: none;}
             .imas-currency { display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); padding: 6px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
             .imas-currency i { color: #38bdf8; font-size: 18px; filter: drop-shadow(0 0 5px #38bdf8); }
             .imas-currency span { font-size: 16px; font-weight: 900; font-family: monospace; color: #fff; letter-spacing: 1px;}
 
-            /* 主体布局 */
             .imas-main { flex: 1; display: flex; position: relative; padding-top: 20px;}
 
-            /* 左侧卡池列表 */
             .imas-pool-list { width: 260px; padding: 40px 0 20px 20px; display: flex; flex-direction: column; gap: 12px; z-index: 10; }
             .imas-pool-tab { position: relative; padding: 15px 20px; background: rgba(255,255,255,0.05); border-radius: 12px 0 0 12px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); border-right: none; overflow: hidden; }
             .imas-pool-tab:hover { background: rgba(255,255,255,0.1); }
@@ -145,21 +50,17 @@
             .imas-pool-name { font-size: 14px; font-weight: bold; color: #e2e8f0; position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
             .imas-pool-tab.active .imas-pool-name { color: #fff; text-shadow: 0 0 8px rgba(56,189,248,0.8); }
 
-            /* 右侧展示区 */
             .imas-content { flex: 1; position: relative; margin: 0 20px 20px 0; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
 
-            /* 背景与立绘 */
             .imas-banner-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.6; transition: opacity 0.5s; }
             .imas-banner-char { position: absolute; right: -5%; bottom: -5%; height: 115%; object-fit: contain; filter: drop-shadow(-20px 0 30px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
             .imas-gradient-mask { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.4) 50%, transparent 100%); pointer-events: none;}
 
-            /* Logo与描述 */
             .imas-banner-info { position: absolute; left: 40px; top: 40px; z-index: 5; max-width: 50%; }
             .imas-banner-type { display: inline-block; padding: 4px 15px; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.5); color: #38bdf8; border-radius: 20px; font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
             .imas-banner-title { font-size: 42px; font-weight: 900; line-height: 1.2; margin-bottom: 15px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
             .imas-banner-desc { font-size: 14px; color: #cbd5e1; line-height: 1.6; text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; backdrop-filter: blur(5px); border-left: 3px solid #38bdf8;}
 
-            /* 底部操作区 */
             .imas-action-area { position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px 30px; z-index: 10; }
 
             .imas-btn-detail { padding: 10px 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
@@ -182,7 +83,6 @@
             .imas-pull-cost { font-size: 12px; display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.9); font-weight: bold; z-index: 2; margin-top: 2px; }
             .imas-pull-cost i { color: #38bdf8; }
 
-            /* ================= 详情侧边栏 ================= */
             .imas-drawer { position: absolute; top: 0; right: -100%; width: 55%; max-width: 500px; height: 100%; background: rgba(15,23,42,0.95); backdrop-filter: blur(20px); box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 50; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.1); }
             .imas-drawer.open { right: 0; }
             .imas-drawer-header { padding: 25px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
@@ -196,7 +96,6 @@
 
             .imas-sec-title { font-size: 15px; font-weight: bold; color: #38bdf8; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px dashed rgba(56,189,248,0.3); }
 
-            /* 道具列表 */
             .imas-item-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
             .imas-item-row { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
             .imas-item-icon { width: 40px; height: 40px; border-radius: 6px; background: rgba(0,0,0,0.5); object-fit: contain; }
@@ -204,13 +103,11 @@
             .imas-item-name { font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 4px; }
             .imas-item-desc { font-size: 11px; color: #94a3b8; line-height: 1.4; }
 
-            /* 偶像网格 */
             .imas-idol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px; margin-bottom: 30px; }
             .imas-idol-card { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
             .imas-idol-img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin-bottom: 8px; border: 2px solid #38bdf8; }
             .imas-idol-name { font-size: 11px; font-weight: bold; color: #e2e8f0; }
 
-            /* ================= 抽卡全屏动画层 ================= */
             .imas-anim-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 100; display: none; align-items: center; justify-content: center; overflow: hidden; }
             .imas-anim-overlay.active { display: flex; }
 
@@ -222,16 +119,14 @@
             @keyframes beamExpandX { 0% { width: 0; opacity: 1; } 100% { width: 200vw; opacity: 0; } }
             @keyframes beamExpandY { 0% { height: 0; opacity: 1; } 100% { height: 200vh; opacity: 0; } }
 
-            /* ================= 结果展示层 ================= */
             .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(10px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; }
             .imas-res-overlay.active { display: flex; opacity: 1; }
 
             .imas-res-header { text-align: center; padding: 40px 0 20px; }
             .imas-res-title { font-size: 24px; font-weight: 900; letter-spacing: 8px; color: #fff; text-shadow: 0 0 20px rgba(56,189,248,0.5); }
 
-            .imas-res-grid { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 25px; padding: 20px 50px; perspective: 1000px; }
+            .imas-res-grid { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 25px; padding: 20px 50px; perspective: 1000px; overflow-y: auto;}
 
-            /* 结果卡片 */
             .imas-res-card { width: 130px; height: 180px; background: linear-gradient(180deg, rgba(51,65,85,0.8), rgba(15,23,42,0.8)); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding: 15px 10px; position: relative; transform-style: preserve-3d; transform: rotateY(90deg); opacity: 0; }
             .imas-res-card.flip-in { animation: cardFlipIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
             @keyframes cardFlipIn { to { transform: rotateY(0deg); opacity: 1; } }
@@ -250,25 +145,24 @@
 
             .imas-res-name { font-size: 12px; font-weight: bold; text-align: center; color: #fff; text-shadow: 0 1px 3px #000; width: 100%; }
 
-            /* 翻转动画所需 */
             .imas-res-card.is-dup .mark-front, .imas-res-card.is-dup .mark-back { position: absolute; top:0; left:0; width:100%; height:100%; backface-visibility: hidden; transition: transform 0.6s; border-radius: 8px; }
             .imas-res-card.is-dup .mark-front { transform: rotateY(0deg); }
             .imas-res-card.is-dup .mark-back { transform: rotateY(180deg); background: rgba(255,255,255,0.9); padding: 5px; }
             .imas-res-card.do-transform .mark-front { transform: rotateY(-180deg) !important; }
             .imas-res-card.do-transform .mark-back { transform: rotateY(0deg) !important; }
 
-            .imas-res-footer { padding: 30px; display: flex; justify-content: center; gap: 20px; }
-            .imas-btn-close-res { padding: 12px 30px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-weight: bold; cursor: pointer; transition: 0.2s; }
-            .imas-btn-close-res:hover { background: rgba(255,255,255,0.2); }
-            .imas-btn-again { padding: 12px 30px; background: linear-gradient(135deg, #d946ef, #9333ea); border: none; border-radius: 30px; color: #fff; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(217,70,239,0.4); display: flex; align-items: center; gap: 8px; transition: 0.2s; }
-            .imas-btn-again:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(217,70,239,0.6); }
+            /* 对照截图完全重构的结果页底部按钮样式 */
+            .imas-res-footer { padding: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+            .imas-btn-close-res { padding: 12px 30px; background: #334155; border: 1px solid #475569; border-radius: 30px; color: #f8fafc; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; min-width: 120px; }
+            .imas-btn-close-res:hover { background: #475569; }
+            .imas-btn-again { padding: 12px 30px; background: linear-gradient(90deg, #a855f7, #9333ea); border: none; border-radius: 30px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); min-width: 180px; justify-content: center;}
+            .imas-btn-again:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6); }
 
         `;
         topDoc.head.appendChild(style);
     }
 
     topWin.renderGachaApp = function(container) {
-        // --- 模拟卡池配置 ---
         const pools = {
             'standard': {
                 id: 'standard',
@@ -291,7 +185,7 @@
         };
 
         let currentPoolId = 'standard';
-        let actualItemPool = getGlobalItemPool(); // 获取真实道具数据
+        let actualItemPool = getGlobalItemPool(); // 直接抓取哥哥文件里的数据
 
         const html = `
             <div class="imas-container">
@@ -327,11 +221,11 @@
                             <button class="imas-btn-detail" id="btn-imas-detail"><i class="bi bi-info-circle"></i> 卡池详情</button>
                             <div class="imas-pull-group">
                                 <button class="imas-btn-pull imas-btn-single" id="btn-imas-single">
-                                    <span class="imas-pull-text">发掘 1 次</span>
+                                    <span class="imas-pull-text">单次发掘</span>
                                     <div class="imas-pull-cost"><i class="bi bi-stars"></i> 1000</div>
                                 </button>
                                 <button class="imas-btn-pull imas-btn-ten" id="btn-imas-ten">
-                                    <span class="imas-pull-text">发掘 10 次</span>
+                                    <span class="imas-pull-text">十连发掘</span>
                                     <div class="imas-pull-cost"><i class="bi bi-stars"></i> 10000</div>
                                 </button>
                             </div>
@@ -339,7 +233,6 @@
                     </div>
                 </div>
 
-                <!-- 侧边详情 -->
                 <div class="imas-drawer" id="imas-drawer">
                     <div class="imas-drawer-header">
                         <div class="imas-drawer-title">卡池情报公示</div>
@@ -348,18 +241,17 @@
                     <div class="imas-drawer-content" id="imas-drawer-content"></div>
                 </div>
 
-                <!-- 抽卡动画层 -->
                 <div class="imas-anim-overlay" id="imas-anim-overlay">
                     <div class="imas-star-center"></div>
                 </div>
 
-                <!-- 抽卡结果层 -->
                 <div class="imas-res-overlay" id="imas-res-overlay">
                     <div class="imas-res-header"><div class="imas-res-title">SCOUT RESULT</div></div>
                     <div class="imas-res-grid" id="imas-res-grid"></div>
                     <div class="imas-res-footer">
+                        <!-- 确认返回与再次发掘按钮 -->
                         <button class="imas-btn-close-res" id="btn-res-close">确认返回</button>
-                        <button class="imas-btn-again" id="btn-res-again"><i class="bi bi-arrow-repeat"></i> 再次发掘</button>
+                        <button class="imas-btn-again" id="btn-res-again"><i class="bi bi-arrow-repeat"></i> 再次发掘 (10000 <i class="bi bi-stars" style="font-size:12px;"></i>)</button>
                     </div>
                 </div>
             </div>
@@ -367,7 +259,6 @@
 
         container.innerHTML = html;
 
-        // --- 逻辑绑定 ---
         const uiStardust = container.querySelector('#imas-stardust-val');
         const uiBannerBg = container.querySelector('#imas-banner-bg');
         const uiBannerChar = container.querySelector('#imas-banner-char');
@@ -383,16 +274,14 @@
         const animOverlay = container.querySelector('#imas-anim-overlay');
         const resultOverlay = container.querySelector('#imas-res-overlay');
         const resGrid = container.querySelector('#imas-res-grid');
-        let currentPullCount = 10; // 记录最后一次抽卡是单抽还是十连
+        let currentPullCount = 10;
 
-        // 更新余额显示
         function updateCurrencyUI() {
             uiStardust.innerText = topWin.playerCurrency.stardust;
             if (topWin.playerCurrency.stardust < 1000) btnSingle.classList.add('disabled'); else btnSingle.classList.remove('disabled');
             if (topWin.playerCurrency.stardust < 10000) btnTen.classList.add('disabled'); else btnTen.classList.remove('disabled');
         }
 
-        // 切换卡池
         container.querySelectorAll('.imas-pool-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 container.querySelectorAll('.imas-pool-tab').forEach(t => t.classList.remove('active'));
@@ -416,9 +305,8 @@
             });
         });
 
-        // 渲染详情
         function renderDetailDrawer() {
-            actualItemPool = getGlobalItemPool(); // 再次获取，确保加载完毕
+            actualItemPool = getGlobalItemPool();
             const p = pools[currentPoolId];
             const iRate = p.idolRate * 100;
             const resRate = 1 - p.idolRate;
@@ -445,6 +333,25 @@
             dHtml += `</div>`;
 
             dHtml += `<div class="imas-sec-title">包含资源道具预览</div><div class="imas-item-list">`;
+
+            // 星尘和印记展示
+            dHtml += `
+                <div class="imas-item-row" style="border-color: rgba(56, 189, 248, 0.3);">
+                    <img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png" class="imas-item-icon">
+                    <div class="imas-item-info">
+                        <div class="imas-item-name" style="color: #38bdf8;">星尘返还</div>
+                        <div class="imas-item-desc">随机获得 100~5000 不等的星尘，可用于再次发掘。</div>
+                    </div>
+                </div>
+                <div class="imas-item-row" style="border-color: rgba(219, 39, 119, 0.3);">
+                    <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png" class="imas-item-icon">
+                    <div class="imas-item-info">
+                        <div class="imas-item-name" style="color: #f472b6;">偶像印记</div>
+                        <div class="imas-item-desc">发掘到已拥有的偶像时自动转化。用于突破潜力上限。</div>
+                    </div>
+                </div>
+            `;
+
             if (actualItemPool && actualItemPool.length > 0) {
                 actualItemPool.forEach(item => {
                     dHtml += `
@@ -457,7 +364,7 @@
                         </div>`;
                 });
             } else {
-                dHtml += `<div style="color:#ef4444; font-size:12px;">未读取到道具数据 (请检查 item_data.js 是否加载)</div>`;
+                dHtml += `<div style="color:#ef4444; font-size:12px;">未读取到外部道具数据 (请确保 item_data.js 正常加载)</div>`;
             }
             dHtml += `</div>`;
 
@@ -467,7 +374,6 @@
         container.querySelector('#btn-imas-detail').addEventListener('click', () => { renderDetailDrawer(); drawer.classList.add('open'); });
         container.querySelector('#btn-imas-close-drawer').addEventListener('click', () => { drawer.classList.remove('open'); });
 
-        // --- 抽卡核心逻辑 ---
         function executePull(times) {
             actualItemPool = getGlobalItemPool();
             const cost = times * 1000;
@@ -513,15 +419,11 @@
             showPullAnimation(results);
         }
 
-        // 动画演出
         function showPullAnimation(results) {
-            // 确保在显示动画前，结果层是关闭的，并且清空旧数据
             resultOverlay.classList.remove('active');
             resGrid.innerHTML = '';
-
             animOverlay.classList.add('active');
 
-            // 重置动画元素
             const star = animOverlay.querySelector('.imas-star-center');
             star.style.animation = 'none';
             void star.offsetWidth;
@@ -533,7 +435,6 @@
             }, 1200);
         }
 
-        // 渲染结果
         function renderResults(results) {
             resGrid.innerHTML = '';
             results.forEach((res, idx) => {
@@ -579,14 +480,12 @@
                 resGrid.insertAdjacentHTML('beforeend', cHtml);
             });
 
-            // 动态更新“再次发掘”按钮的文字
             const btnAgain = container.querySelector('#btn-res-again');
             btnAgain.innerHTML = `<i class="bi bi-arrow-repeat"></i> 再次发掘 (${currentPullCount * 1000} <i class="bi bi-stars" style="font-size:12px;"></i>)`;
 
             updateCurrencyUI();
             resultOverlay.classList.add('active');
 
-            // 触发重复卡翻转
             setTimeout(() => {
                 const dupCards = resGrid.querySelectorAll('.is-dup');
                 dupCards.forEach(el => {
@@ -601,16 +500,13 @@
         btnSingle.addEventListener('click', () => executePull(1));
         btnTen.addEventListener('click', () => executePull(10));
 
-        // 修复：点击确认返回时，彻底清除 active 类，让它干净利落地隐藏
         container.querySelector('#btn-res-close').addEventListener('click', () => {
             resultOverlay.classList.remove('active');
-            // 等待 CSS 动画消失后清空内容，彻底重置
             setTimeout(() => { resGrid.innerHTML = ''; }, 400);
         });
 
         container.querySelector('#btn-res-again').addEventListener('click', () => {
             resultOverlay.classList.remove('active');
-            // 立刻开始新的一轮动画和发掘
             setTimeout(() => executePull(currentPullCount), 400);
         });
 
