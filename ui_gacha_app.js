@@ -224,9 +224,24 @@
             .imas-res-header { text-align: center; padding: 40px 0 20px; flex-shrink: 0; position: absolute; top: 5%; width: 100%; }
             .imas-res-title { font-size: 24px; font-weight: 900; letter-spacing: 8px; color: #fff; text-shadow: 0 0 20px rgba(56,189,248,0.5); }
 
-            /* 自适应安全网格：利用 align-content: center 彻底解决顶部遮挡 */
-            .imas-res-grid { width: 90%; max-width: 1000px; height: 60%; margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 20px 30px; perspective: 1000px; overflow-y: auto;}
+                       /* 自适应安全网格：【已修复顶部遮挡】 */
+            .imas-res-grid { 
+                width: 95%; max-width: 1050px; flex: 1;
+                /* 关键修复 1：利用上下 padding 给标题和卡片顶部 Tag 留出绝对的安全空间 */
+                padding-top: 120px; 
+                padding-bottom: 100px;
+                display: flex; flex-wrap: wrap; justify-content: center; 
+                /* 关键修复 2：默认居中，但通过下方媒体查询保证小屏不遮挡 */
+                align-content: center; 
+                gap: 30px 25px; perspective: 1000px; overflow-y: auto;
+            }
             .imas-res-grid::-webkit-scrollbar { display: none; }
+
+            /* 关键修复 3：当屏幕高度较小（比如笔记本横屏）时，改为顶部对齐，彻底防止上方溢出被切断 */
+            @media (max-height: 850px) {
+                .imas-res-grid { align-content: flex-start; }
+            }
+
 
             /* 锁定比例外壳 */
             .imas-res-card-wrap { width: calc(20% - 30px); min-width: 110px; max-width: 140px; aspect-ratio: 3 / 4.2; position: relative; }
