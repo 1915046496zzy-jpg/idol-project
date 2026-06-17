@@ -97,4 +97,4 @@ var itemPool = [
     { type: 'easter_egg', name: "眼罩", img: "https://i.postimg.cc/WbMs7fN6/yan-zhao.png", weight: 4, desc: "触发视觉剥夺体验。Stress+10, Aff+1" }
 ];
 
-try { window.parent.itemPool = itemPool; } catch(e) {}
+
