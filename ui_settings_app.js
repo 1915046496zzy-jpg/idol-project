@@ -1,13 +1,12 @@
 // ==========================================
-// 秋青子专属终端：系统设置 App (API与本地化)
+// 秋青子专属终端：系统设置 App (API与时区时钟)
 // ==========================================
 (function(global) {
-    // 默认设置项
+    // 默认设置项 (已删除语言)
     const defaultSettings = {
         apiKey: '',
         apiEndpoint: 'https://api.openai.com/v1/chat/completions',
         apiModel: 'gpt-4',
-        language: 'zh-CN',
         autoTimezone: true,
         customTimezone: 'Asia/Tokyo'
     };
@@ -35,6 +34,39 @@
             return false;
         }
     }
+
+    // 🌟 秋青子新增：全局时钟更新逻辑
+    global.updatePadClock = function() {
+        const timeEl = document.getElementById('pad-time');
+        if (!timeEl) return;
+
+        const settings = loadSettings();
+        let timeString = '';
+
+        try {
+            const now = new Date();
+            let options = { hour: '2-digit', minute: '2-digit', hour12: false };
+
+            // 如果不跟随本地时区，就使用自定义时区
+            if (!settings.autoTimezone && settings.customTimezone) {
+                options.timeZone = settings.customTimezone;
+            }
+
+            timeString = new Intl.DateTimeFormat('en-US', options).format(now);
+        } catch(e) {
+            // 如果时区字符串错误，降级为本地时间
+            timeString = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+
+        // 保留原有的电池图标，只替换时间文字
+        timeEl.innerHTML = `${timeString} <i class="bi bi-battery-full"></i> 98%`;
+    };
+
+    // 启动时钟定时器 (每秒检查一次，保证跨分钟时立刻更新)
+    setInterval(global.updatePadClock, 1000);
+    // 立即执行一次
+    global.updatePadClock();
+
 
     // 渲染 App 界面
     global.renderSettingsApp = function(container) {
@@ -85,18 +117,9 @@
                     <button id="btn-save-api" class="btn-save"><i class="bi bi-cloud-check"></i> 保存 API 配置</button>
                 </div>
 
-                <!-- 本地化设置 -->
+                <!-- 时区设置 -->
                 <div class="settings-section">
-                    <h3 class="section-title"><i class="bi bi-globe"></i> 本地化设置</h3>
-                    <div class="setting-item">
-                        <label>系统语言 (Language)</label>
-                        <select id="set-language">
-                            <option value="zh-CN" ${currentSettings.language === 'zh-CN' ? 'selected' : ''}>简体中文</option>
-                            <option value="zh-TW" ${currentSettings.language === 'zh-TW' ? 'selected' : ''}>繁體中文</option>
-                            <option value="en" ${currentSettings.language === 'en' ? 'selected' : ''}>English</option>
-                        </select>
-                    </div>
-
+                    <h3 class="section-title"><i class="bi bi-clock-history"></i> 时区设置</h3>
                     <div class="setting-item switch-wrap">
                         <label>跟随本地时区</label>
                         <label class="switch">
@@ -114,7 +137,7 @@
                             <option value="Europe/London" ${currentSettings.customTimezone === 'Europe/London' ? 'selected' : ''}>伦敦时间 (UTC+0)</option>
                         </select>
                     </div>
-                    <button id="btn-save-locale" class="btn-save" style="margin-top:10px; background:#64748b;"><i class="bi bi-save"></i> 保存本地化设置</button>
+                    <button id="btn-save-locale" class="btn-save" style="margin-top:10px; background:#64748b;"><i class="bi bi-save"></i> 保存时区设置</button>
                 </div>
             </div>
         `;
@@ -151,28 +174,28 @@
             }
         });
 
-        // 保存本地化按钮
+        // 保存时区按钮
         container.querySelector('#btn-save-locale').addEventListener('click', function() {
             const newSettings = loadSettings();
-            newSettings.language = container.querySelector('#set-language').value;
             newSettings.autoTimezone = container.querySelector('#set-auto-timezone').checked;
             newSettings.customTimezone = container.querySelector('#set-timezone').value;
 
             if(saveSettings(newSettings)) {
                 this.innerHTML = '<i class="bi bi-check-circle-fill"></i> 已保存';
                 this.style.background = '#10b981';
-                // 触发全局时间更新事件 (如果在其他文件里有更新顶部状态栏时钟的逻辑)
-                if(typeof updatePadClock === 'function') updatePadClock();
+
+                // 🌟 保存时立刻强制刷新右上角的时钟！
+                if(typeof global.updatePadClock === 'function') global.updatePadClock();
 
                 setTimeout(() => {
-                    this.innerHTML = '<i class="bi bi-save"></i> 保存本地化设置';
+                    this.innerHTML = '<i class="bi bi-save"></i> 保存时区设置';
                     this.style.background = '#64748b';
                 }, 2000);
             }
         });
     };
 
-    // 暴露获取设置的全局方法，方便其他App调用（比如发起请求时读取API）
+    // 暴露获取设置的全局方法
     global.getQingziSettings = loadSettings;
 
 })(window.parent || window);
