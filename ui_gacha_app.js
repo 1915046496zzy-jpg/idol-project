@@ -218,30 +218,15 @@
             @keyframes flashOut { 0% { opacity: 0; } 40% { opacity: 1; } 100% { opacity: 0; } }
 
             /* ================= 【特效升级2】：丝滑且防遮挡的抽卡网格 ================= */
-            .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(10px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; align-items: center;}
+            .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(10px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; justify-content: center; align-items: center; gap: 20px; padding: 20px 0; }
             .imas-res-overlay.active { display: flex; opacity: 1; }
 
-            .imas-res-header { text-align: center; padding: 40px 0 20px; flex-shrink: 0; position: absolute; top: 5%; width: 100%; }
+            .imas-res-header { text-align: center; padding: 0; /* 清理旧的内边距 */ flex-shrink: 0; }
             .imas-res-title { font-size: 24px; font-weight: 900; letter-spacing: 8px; color: #fff; text-shadow: 0 0 20px rgba(56,189,248,0.5); }
 
-                       /* 自适应安全网格：【已修复顶部遮挡】 */
-            .imas-res-grid { 
-                width: 95%; max-width: 1050px; flex: 1;
-                /* 关键修复 1：利用上下 padding 给标题和卡片顶部 Tag 留出绝对的安全空间 */
-                padding-top: 120px; 
-                padding-bottom: 100px;
-                display: flex; flex-wrap: wrap; justify-content: center; 
-                /* 关键修复 2：默认居中，但通过下方媒体查询保证小屏不遮挡 */
-                align-content: center; 
-                gap: 30px 25px; perspective: 1000px; overflow-y: auto;
-            }
+            /* 自适应安全网格：利用 align-content: center 彻底解决顶部遮挡 */
+            .imas-res-grid { width: 90%; max-width: 1000px; /* height 和其他属性保留 */ display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 20px 30px; perspective: 1000px; overflow-y: auto;}
             .imas-res-grid::-webkit-scrollbar { display: none; }
-
-            /* 关键修复 3：当屏幕高度较小（比如笔记本横屏）时，改为顶部对齐，彻底防止上方溢出被切断 */
-            @media (max-height: 850px) {
-                .imas-res-grid { align-content: flex-start; }
-            }
-
 
             /* 锁定比例外壳 */
             .imas-res-card-wrap { width: calc(20% - 30px); min-width: 110px; max-width: 140px; aspect-ratio: 3 / 4.2; position: relative; }
@@ -272,7 +257,7 @@
             .imas-res-card.do-transform .mark-front { transform: rotateY(-180deg) !important; }
             .imas-res-card.do-transform .mark-back { transform: rotateY(0deg) !important; }
 
-            .imas-res-footer { padding: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; flex-shrink: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); position: absolute; bottom: 0; width: 100%;}
+            .imas-res-footer { padding: 10px 30px; /* 调整内边距 */ display: flex; justify-content: center; align-items: center; gap: 20px; flex-shrink: 0; background: transparent; /* 去掉背景，因为不再覆盖卡片 */ }
             .imas-btn-close-res { padding: 12px 30px; background: #334155; border: 1px solid #475569; border-radius: 30px; color: #f8fafc; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; min-width: 120px; }
             .imas-btn-close-res:hover { background: #475569; }
             .imas-btn-again { padding: 12px 30px; background: linear-gradient(90deg, #a855f7, #9333ea); border: none; border-radius: 30px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); min-width: 180px; justify-content: center;}
