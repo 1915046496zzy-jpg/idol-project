@@ -1,5 +1,6 @@
 // ==========================================
-// 星探寻访 (Gacha) APP 独立模块 - 视觉升级融合版
+// 星探寻访 (Gacha) APP 独立模块 - 偶像大师幻光重制版 v2.3 (特效升级版)
+// 升级内容：保留原版UI布局，新增金光/蓝光转场彩蛋 + 丝滑且绝对防遮挡的自适应10连网格
 // ==========================================
 
 (function() {
@@ -17,13 +18,16 @@
         topWin.playerCurrency = { stardust: 50000 };
     }
 
+    // 直接把道具数据写死在这里，彻底抛弃外部读取
     const localItemPool = [
         // ================= 【心理状态干预】 =================
+        // Stress类
         { type: 'psychology', name: "薄荷糖", img: "https://i.postimg.cc/d3kyKtLB/bao-he-tang-(1).png", weight: 100, desc: "微量缓解压力 (Stress -5%)" },
         { type: 'psychology', name: "热牛奶", img: "https://i.postimg.cc/VvxbsQCM/re-niu-nai-(1).png", weight: 30, desc: "少量缓解压力 (Stress -15%)" },
         { type: 'psychology', name: "安眠香薰", img: "https://i.postimg.cc/vTgVdHcv/an-mian-xiang-xun-(1).png", weight: 20, desc: "中度舒缓精神 (Stress -30%)" },
         { type: 'psychology', name: "度假机票", img: "https://i.postimg.cc/fyG0Wn9m/du-jia-ji-piao-(1).png", weight: 2, desc: "彻底清空压力 (Stress -80%)" },
 
+        // Obedience/Lust类
         { type: 'psychology', name: "镇静药片", img: "https://i.postimg.cc/pL7chsD5/zhen-jing-yao-pian-(1).png", weight: 60, desc: "微量提升堕落度 (Lust +10)" },
         { type: 'psychology', name: "VIP房卡", img: "https://i.postimg.cc/W1KYF5MJ/vip-fang-ka-(1).png", weight: 40, desc: "开启密会 (Lust +20)" },
         { type: 'psychology', name: "高额合同", img: "https://i.postimg.cc/P5cVpSmZ/gao-e-he-tong-(1).png", weight: 20, desc: "中度提升堕落度 (Lust +40)" },
@@ -33,12 +37,14 @@
         { type: 'psychology', name: "制作人徽章", img: "https://i.postimg.cc/025mw31C/zhi-zuo-ren-hui-zhang.png", weight: 8, desc: "权威象征 (Obedience +15)" },
         { type: 'psychology', name: "金色企划书", img: "https://i.postimg.cc/ZKY3dgzx/jin-se-qi-hua-shu.png", weight: 2, desc: "绝对服从 (Obedience +20)" },
 
+        // Affection类
         { type: 'psychology', name: "粉丝来信", img: "https://i.postimg.cc/y8VfWnLJ/fen-si-lai-xin.png", weight: 40, desc: "增加偶像羁绊 (Affection +2)" },
         { type: 'psychology', name: "手写便签", img: "https://i.postimg.cc/cLsD6TF8/shou-xie-bian-qian.png", weight: 30, desc: "传递关怀 (Affection +4)" },
         { type: 'psychology', name: "纪念相册", img: "https://i.postimg.cc/qvkmgQ16/ji-nian-xiang-ce.png", weight: 20, desc: "回忆杀 (Affection +7)" },
         { type: 'psychology', name: "情书", img: "https://i.postimg.cc/BnqhtNmj/qing-shu.png", weight: 10, desc: "直球告白 (Affection +10)" },
 
         // ================= 【业务能力提升】 =================
+        // Vocal/Dance/Visual
         { type: 'business', name: "练习话筒", img: "https://i.postimg.cc/gkvzGc7d/lian-xi-hua-tong.png", weight: 20, desc: "Vocal能力微量提升 (+2)" },
         { type: 'business', name: "专业麦克风", img: "https://i.postimg.cc/TYrdT2sY/zhuan-ye-mai-ke-feng.png", weight: 12, desc: "Vocal能力少量提升 (+5)" },
         { type: 'business', name: "水晶麦克风", img: "https://i.postimg.cc/MKy6zZLW/shui-jing-mai-ke-feng.png", weight: 6, desc: "Vocal能力中量提升 (+8)" },
@@ -55,13 +61,14 @@
         { type: 'business', name: "封面海报", img: "https://i.postimg.cc/t70mJjYz/feng-mian-hai-bao.png", weight: 2, desc: "Visual能力大幅提升 (+10)" },
 
         // ================= 【特殊彩蛋与剧情】 =================
+        // 彩蛋类
         { type: 'easter_egg', name: "冰棒", img: "https://i.postimg.cc/85V97FNx/bing-bang.png", weight: 40, desc: "降温解暑 (Stress -10%, Affection +5)" },
         { type: 'easter_egg', name: "珍珠奶茶", img: "https://i.postimg.cc/6qWPhD7H/zhen-zhu-nai-cha.png", weight: 25, desc: "甜品治愈 (Stress -20%, Affection +3)" },
         { type: 'easter_egg', name: "麦片粥", img: "https://i.postimg.cc/26fM1qCq/mai-pian-zhou.png", weight: 15, desc: "温暖肠胃 (Stress -25%, Affection +1)" },
         { type: 'easter_egg', name: "巧克力蛋糕", img: "https://i.postimg.cc/d1mXrq01/qiao-ke-li-dan-gao.png", weight: 8, desc: "高热量治愈 (Stress -50%, Affection +3)" },
 
         { type: 'easter_egg', name: "小黄鸭", img: "https://i.postimg.cc/vmZWwN3D/xiao-huang-ya.png", weight: 5, desc: "触发共浴剧情。Stress -20, Affection +5" },
-        { type: 'easter_egg', name: "草莓饭团", img: "https://i.postimg.cc/vBdk41bJ/cao-mei-fan-tuan.png", weight: 5, desc: "触发投喂剧情。Stress -10, Affection +1" },
+        { type: 'easter_egg', name: "草莓饭团", img: "https://i.postimg.cc/vBdk41bJ/cao-mei-fan-tuan.png", weight: 5, desc: "触发投喂剧情。Stress -10, Affection +1 (芦田希未额外加成)" },
         { type: 'easter_egg', name: "制作人玩偶", img: "https://i.postimg.cc/YSC1BsbG/zhi-zuo-ren-wan-ou.png", weight: 4, desc: "触发制作人玩偶剧情。Stress -40, Affection +20" },
         { type: 'easter_egg', name: "创可贴", img: "https://i.postimg.cc/NMwSKyBW/chuang-ke-tie.png", weight: 5, desc: "触发包扎剧情。Stress -15, Affection +5" },
         { type: 'easter_egg', name: "星星布丁", img: "https://i.postimg.cc/NFsnxWy8/xing-xing-bu-ding.png", weight: 5, desc: "触发甜点时间。Stress -30, Affection +5" },
@@ -117,25 +124,25 @@
 
             .imas-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #0f172a; font-family: 'Noto Sans SC', sans-serif; position: relative; overflow: hidden; color: #fff; }
 
-            /* 升级顶部导航栏 */
-            .imas-topbar { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 20; position: absolute; top:0; left:0; width: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0)); }
-
-            .imas-tabs { display: flex; gap: 15px; }
-            .imas-tab { padding: 8px 20px; background: rgba(255,255,255,0.05); border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); font-size: 14px; font-weight: bold; color: #94a3b8; }
-            .imas-tab:hover { background: rgba(255,255,255,0.1); }
-            .imas-tab.active { background: linear-gradient(90deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.05)); border-color: #38bdf8; color: #fff; box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
-
-            .imas-currency { display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); padding: 6px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
+            .imas-topbar { height: 50px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0)); display: flex; justify-content: flex-end; align-items: center; padding: 0 30px; z-index: 20; position: absolute; top:0; right:0; width: 100%; pointer-events: none;}
+            .imas-currency { display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); padding: 6px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
             .imas-currency i { color: #38bdf8; font-size: 18px; filter: drop-shadow(0 0 5px #38bdf8); }
             .imas-currency span { font-size: 16px; font-weight: 900; font-family: monospace; color: #fff; letter-spacing: 1px;}
 
-            /* 调整主区域，不再有侧边栏 */
-            .imas-main { flex: 1; display: flex; position: relative; padding: 70px 20px 20px 20px; }
+            .imas-main { flex: 1; display: flex; position: relative; padding-top: 20px;}
 
-            .imas-content { flex: 1; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; background: #000; }
+            .imas-pool-list { width: 260px; padding: 40px 0 20px 20px; display: flex; flex-direction: column; gap: 12px; z-index: 10; }
+            .imas-pool-tab { position: relative; padding: 15px 20px; background: rgba(255,255,255,0.05); border-radius: 12px 0 0 12px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); border-right: none; overflow: hidden; }
+            .imas-pool-tab:hover { background: rgba(255,255,255,0.1); }
+            .imas-pool-tab.active { background: linear-gradient(90deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.05)); border-color: rgba(56, 189, 248, 0.5); }
+            .imas-pool-tab.active::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8; }
+            .imas-pool-name { font-size: 14px; font-weight: bold; color: #e2e8f0; position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
+            .imas-pool-tab.active .imas-pool-name { color: #fff; text-shadow: 0 0 8px rgba(56,189,248,0.8); }
+
+            .imas-content { flex: 1; position: relative; margin: 0 20px 20px 0; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
 
             .imas-banner-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.6; transition: opacity 0.5s; }
-            .imas-banner-char { position: absolute; right: 0%; bottom: -5%; height: 110%; object-fit: contain; filter: drop-shadow(-20px 0 30px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
+            .imas-banner-char { position: absolute; right: -5%; bottom: -5%; height: 115%; object-fit: contain; filter: drop-shadow(-20px 0 30px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
             .imas-gradient-mask { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.4) 50%, transparent 100%); pointer-events: none;}
 
             .imas-banner-info { position: absolute; left: 40px; top: 40px; z-index: 5; max-width: 50%; }
@@ -191,10 +198,10 @@
             .imas-idol-img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin-bottom: 8px; border: 2px solid #38bdf8; }
             .imas-idol-name { font-size: 11px; font-weight: bold; color: #e2e8f0; }
 
-            /* 升级版：彩蛋转场动画 */
-            .imas-anim-overlay { position: absolute; inset: 0; background: #000; z-index: 100; display: none; align-items: center; justify-content: center; overflow: hidden; }
+            /* ================= 【特效升级1】：抽卡等待演出动画 (转场彩蛋) ================= */
+            .imas-anim-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 100; display: none; align-items: center; justify-content: center; overflow: hidden; }
             .imas-anim-overlay.active { display: flex; }
-
+            
             .imas-anim-overlay.theme-blue { --anim-color: #38bdf8; --anim-glow: rgba(56, 189, 248, 0.8); }
             .imas-anim-overlay.theme-gold { --anim-color: #fbbf24; --anim-glow: rgba(251, 191, 36, 0.9); }
 
@@ -210,45 +217,52 @@
             @keyframes beamY { 0% { height: 0; opacity: 1; } 100% { height: 200vh; opacity: 0; } }
             @keyframes flashOut { 0% { opacity: 0; } 40% { opacity: 1; } 100% { opacity: 0; } }
 
-            /* 结果结算与丝滑入场 */
-            .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(10px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; }
+            /* ================= 【特效升级2】：丝滑且防遮挡的抽卡网格 ================= */
+            .imas-res-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(10px); z-index: 110; display: none; flex-direction: column; opacity: 0; transition: 0.4s; align-items: center;}
             .imas-res-overlay.active { display: flex; opacity: 1; }
 
-            .imas-res-header { text-align: center; padding: 40px 0 20px; flex-shrink: 0;}
+            .imas-res-header { text-align: center; padding: 40px 0 20px; flex-shrink: 0; position: absolute; top: 5%; width: 100%; }
             .imas-res-title { font-size: 24px; font-weight: 900; letter-spacing: 8px; color: #fff; text-shadow: 0 0 20px rgba(56,189,248,0.5); }
 
-            .imas-res-grid { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 25px; padding: 20px 50px 50px; perspective: 1000px; overflow-y: auto;}
+            /* 自适应安全网格：利用 align-content: center 彻底解决顶部遮挡 */
+            .imas-res-grid { width: 90%; max-width: 1000px; height: 60%; margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 20px 30px; perspective: 1000px; overflow-y: auto;}
+            .imas-res-grid::-webkit-scrollbar { display: none; }
 
-            /* 升级版：丝滑翻转入场 */
-            .imas-res-card { width: 130px; height: 180px; background: linear-gradient(180deg, rgba(51,65,85,0.8), rgba(15,23,42,0.8)); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding: 15px 10px; position: relative; transform-style: preserve-3d; transform: translateY(30px) rotateX(15deg); opacity: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+            /* 锁定比例外壳 */
+            .imas-res-card-wrap { width: calc(20% - 30px); min-width: 110px; max-width: 140px; aspect-ratio: 3 / 4.2; position: relative; }
+
+            .imas-res-card { width: 100%; height: 100%; background: linear-gradient(180deg, rgba(51,65,85,0.8), rgba(15,23,42,0.8)); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding: 15px 10px; position: relative; transform-style: preserve-3d; transform: translateY(30px) rotateX(15deg); opacity: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.5);}
+            
+            /* 丝滑弹出动画 */
             .imas-res-card.flip-in { animation: smoothPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
             @keyframes smoothPop { to { transform: translateY(0) rotateX(0deg); opacity: 1; } }
 
             .imas-res-card.is-idol { background: linear-gradient(180deg, rgba(251,191,36,0.2), rgba(180,83,9,0.8)); border-color: #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.3); }
             .imas-res-card.is-dup { background: linear-gradient(180deg, rgba(56,189,248,0.2), rgba(30,58,138,0.8)); border-color: #38bdf8; box-shadow: 0 0 20px rgba(56,189,248,0.3); }
 
-            .imas-res-tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: bold; padding: 2px 10px; border-radius: 10px; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); white-space: nowrap; z-index: 5; }
+            .imas-res-tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: bold; padding: 2px 10px; border-radius: 10px; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); white-space: nowrap; }
             .is-idol .imas-res-tag { background: linear-gradient(90deg, #f59e0b, #d97706); }
             .is-dup .imas-res-tag { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
             .imas-res-card:not(.is-idol):not(.is-dup) .imas-res-tag { background: #475569; }
 
-            .imas-res-img-wrap { width: 70px; height: 70px; margin-top: 10px; margin-bottom: 15px; border-radius: 8px; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; position: relative; }
-            .imas-res-img-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+            .imas-res-img-wrap { width: 65%; aspect-ratio: 1; margin-top: 10px; margin-bottom: 15px; border-radius: 8px; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; position: relative; }
+            .imas-res-img-wrap img { width: 80%; height: 80%; object-fit: contain; border-radius: 8px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));}
+            .imas-res-img-wrap i { font-size: 30px; color: #38bdf8; }
 
-            .imas-res-name { font-size: 12px; font-weight: bold; text-align: center; color: #fff; text-shadow: 0 1px 3px #000; width: 100%; z-index: 5;}
+            .imas-res-name { font-size: 12px; font-weight: bold; text-align: center; color: #fff; text-shadow: 0 1px 3px #000; width: 100%; line-height: 1.3;}
 
-            /* 重复偶像的印记内部翻转，不冲突入场动画 */
             .imas-res-card.is-dup .mark-front, .imas-res-card.is-dup .mark-back { position: absolute; top:0; left:0; width:100%; height:100%; backface-visibility: hidden; transition: transform 0.6s; border-radius: 8px; }
             .imas-res-card.is-dup .mark-front { transform: rotateY(0deg); }
             .imas-res-card.is-dup .mark-back { transform: rotateY(180deg); background: rgba(255,255,255,0.9); padding: 5px; }
             .imas-res-card.do-transform .mark-front { transform: rotateY(-180deg) !important; }
             .imas-res-card.do-transform .mark-back { transform: rotateY(0deg) !important; }
 
-            .imas-res-footer { padding: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; flex-shrink: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+            .imas-res-footer { padding: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; flex-shrink: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); position: absolute; bottom: 0; width: 100%;}
             .imas-btn-close-res { padding: 12px 30px; background: #334155; border: 1px solid #475569; border-radius: 30px; color: #f8fafc; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; min-width: 120px; }
             .imas-btn-close-res:hover { background: #475569; }
             .imas-btn-again { padding: 12px 30px; background: linear-gradient(90deg, #a855f7, #9333ea); border: none; border-radius: 30px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); min-width: 180px; justify-content: center;}
             .imas-btn-again:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6); }
+
         `;
         topDoc.head.appendChild(style);
     }
@@ -279,20 +293,23 @@
 
         const html = `
             <div class="imas-container">
-                <!-- 升级：顶部导航栏 -->
                 <div class="imas-topbar">
-                    <div class="imas-tabs">
-                        <div class="imas-tab active" data-target="standard">常驻星探发掘</div>
-                        <div class="imas-tab" data-target="limited">【限定】星光坠落之夜</div>
-                    </div>
                     <div class="imas-currency">
                         <i class="bi bi-stars"></i>
                         <span id="imas-stardust-val">${topWin.playerCurrency.stardust}</span>
                     </div>
                 </div>
 
-                <!-- 去掉侧边栏的主区域 -->
                 <div class="imas-main">
+                    <div class="imas-pool-list">
+                        <div class="imas-pool-tab active" data-target="standard">
+                            <div class="imas-pool-name">常驻星探发掘</div>
+                        </div>
+                        <div class="imas-pool-tab" data-target="limited">
+                            <div class="imas-pool-name">【限定】星光坠落之夜</div>
+                        </div>
+                    </div>
+
                     <div class="imas-content">
                         <img src="${pools[currentPoolId].bg}" class="imas-banner-bg" id="imas-banner-bg">
                         <div class="imas-gradient-mask"></div>
@@ -328,7 +345,7 @@
                     <div class="imas-drawer-content" id="imas-drawer-content"></div>
                 </div>
 
-                <!-- 升级：转场彩蛋层 -->
+                <!-- 替换点：使用空的动画容器供JS动态注入 -->
                 <div class="imas-anim-overlay" id="imas-anim-overlay"></div>
 
                 <div class="imas-res-overlay" id="imas-res-overlay">
@@ -367,10 +384,9 @@
             if (topWin.playerCurrency.stardust < 10000) btnTen.classList.add('disabled'); else btnTen.classList.remove('disabled');
         }
 
-        // 绑定顶部 Tab 切换
-        container.querySelectorAll('.imas-tab').forEach(tab => {
+        container.querySelectorAll('.imas-pool-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                container.querySelectorAll('.imas-tab').forEach(t => t.classList.remove('active'));
+                container.querySelectorAll('.imas-pool-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentPoolId = tab.getAttribute('data-target');
                 const p = pools[currentPoolId];
@@ -392,7 +408,6 @@
         });
 
         function renderDetailDrawer() {
-            // 此处保留原有渲染卡池详情的代码，不动
             const p = pools[currentPoolId];
             const iRate = p.idolRate * 100;
             const resRate = 1 - p.idolRate;
@@ -445,14 +460,7 @@
                 if(businessItems.length > 0) {
                     dHtml += `<div class="imas-cate-title">📊 业务能力提升</div><div class="imas-item-list">`;
                     businessItems.forEach(item => {
-                        dHtml += `
-                            <div class="imas-item-row">
-                                <img src="${item.img}" class="imas-item-icon">
-                                <div class="imas-item-info">
-                                    <div class="imas-item-name">${item.name}</div>
-                                    <div class="imas-item-desc">${item.desc}</div>
-                                </div>
-                            </div>`;
+                        dHtml += `<div class="imas-item-row"><img src="${item.img}" class="imas-item-icon"><div class="imas-item-info"><div class="imas-item-name">${item.name}</div><div class="imas-item-desc">${item.desc}</div></div></div>`;
                     });
                     dHtml += `</div>`;
                 }
@@ -461,14 +469,7 @@
                 if(psychItems.length > 0) {
                     dHtml += `<div class="imas-cate-title">❤️ 心理与状态干预</div><div class="imas-item-list">`;
                     psychItems.forEach(item => {
-                        dHtml += `
-                            <div class="imas-item-row">
-                                <img src="${item.img}" class="imas-item-icon">
-                                <div class="imas-item-info">
-                                    <div class="imas-item-name">${item.name}</div>
-                                    <div class="imas-item-desc">${item.desc}</div>
-                                </div>
-                            </div>`;
+                        dHtml += `<div class="imas-item-row"><img src="${item.img}" class="imas-item-icon"><div class="imas-item-info"><div class="imas-item-name">${item.name}</div><div class="imas-item-desc">${item.desc}</div></div></div>`;
                     });
                     dHtml += `</div>`;
                 }
@@ -477,14 +478,7 @@
                 if(eggItems.length > 0) {
                     dHtml += `<div class="imas-cate-title">🎁 特殊彩蛋与剧情</div><div class="imas-item-list">`;
                     eggItems.forEach(item => {
-                        dHtml += `
-                            <div class="imas-item-row">
-                                <img src="${item.img}" class="imas-item-icon">
-                                <div class="imas-item-info">
-                                    <div class="imas-item-name">${item.name}</div>
-                                    <div class="imas-item-desc">${item.desc}</div>
-                                </div>
-                            </div>`;
+                        dHtml += `<div class="imas-item-row"><img src="${item.img}" class="imas-item-icon"><div class="imas-item-info"><div class="imas-item-name">${item.name}</div><div class="imas-item-desc">${item.desc}</div></div></div>`;
                     });
                     dHtml += `</div>`;
                 }
@@ -495,6 +489,7 @@
         container.querySelector('#btn-imas-detail').addEventListener('click', () => { renderDetailDrawer(); drawer.classList.add('open'); });
         container.querySelector('#btn-imas-close-drawer').addEventListener('click', () => { drawer.classList.remove('open'); });
 
+        // ================= 【核心逻辑替换区】 =================
         function executePull(times) {
             const cost = times * 1000;
             if (topWin.playerCurrency.stardust < cost) return;
@@ -509,12 +504,12 @@
             const db = topWin.idolDatabase || [];
             const currentTotalItemWeight = localItemPool.length > 0 ? localItemPool.reduce((sum, item) => sum + item.weight, 0) : 1;
 
-            let hasSSR = false; // 用于判断彩蛋动画主题
+            let hasSSR = false; // 用于判定是否触发金光彩蛋
 
             for(let i=0; i<times; i++) {
                 let roll = Math.random();
                 if (roll <= p.idolRate && db.length > 0) {
-                    hasSSR = true;
+                    hasSSR = true; // 抽到偶像，触发金光！
                     let rIdol = db[Math.floor(Math.random() * db.length)];
                     let isDup = Math.random() < 0.3 || seenIdols.has(rIdol.name);
                     if (isDup) { results.push({ type: 'duplicate', name: rIdol.name, img: rIdol.image }); }
@@ -539,17 +534,19 @@
                 }
             }
 
+            // 将预测结果传递给演出动画
             showPullAnimation(results, hasSSR);
         }
 
-        // 升级版动画调度
         function showPullAnimation(results, hasSSR) {
             resultOverlay.classList.remove('active');
-
-            // 动态设置主题色并注入动画核心DOM
+            resGrid.innerHTML = '';
+            
+            // 核心：根据有无 SSR 动态切换蓝光/金光主题，并注入DOM刷新动画
             animOverlay.className = `imas-anim-overlay active ${hasSSR ? 'theme-gold' : 'theme-blue'}`;
             animOverlay.innerHTML = `<div class="anim-core"></div><div class="anim-flash"></div>`;
 
+            // 白屏高潮时 (1.2s) 显示抽卡结果
             setTimeout(() => {
                 animOverlay.classList.remove('active');
                 renderResults(results);
@@ -559,42 +556,51 @@
         function renderResults(results) {
             resGrid.innerHTML = '';
             results.forEach((res, idx) => {
-                let delay = idx * 0.08; // 稍微调快一点弹出节奏
+                let delay = idx * 0.08; // 丝滑的错列展示延迟 (Staggered Animation)
                 let cHtml = '';
 
+                // 注意：外层包裹了 imas-res-card-wrap，用于实现自适应不遮挡网格
                 if (res.type === 'idol') {
                     cHtml = `
-                        <div class="imas-res-card is-idol flip-in" style="animation-delay:${delay}s">
-                            <div class="imas-res-tag">NEW IDOL</div>
-                            <div class="imas-res-img-wrap" style="background:transparent;"><img src="${res.img}"></div>
-                            <div class="imas-res-name">${res.name}</div>
+                        <div class="imas-res-card-wrap">
+                            <div class="imas-res-card is-idol flip-in" style="animation-delay:${delay}s">
+                                <div class="imas-res-tag">NEW IDOL</div>
+                                <div class="imas-res-img-wrap" style="background:transparent;"><img src="${res.img}"></div>
+                                <div class="imas-res-name">${res.name}</div>
+                            </div>
                         </div>
                     `;
                 } else if (res.type === 'duplicate') {
                     cHtml = `
-                        <div class="imas-res-card is-dup flip-in" style="animation-delay:${delay}s">
-                            <div class="imas-res-tag">印记转化</div>
-                            <div class="imas-res-img-wrap">
-                                <img src="${res.img}" class="mark-front">
-                                <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png" class="mark-back">
+                        <div class="imas-res-card-wrap">
+                            <div class="imas-res-card is-dup flip-in" style="animation-delay:${delay}s">
+                                <div class="imas-res-tag">印记转化</div>
+                                <div class="imas-res-img-wrap">
+                                    <img src="${res.img}" class="mark-front">
+                                    <img src="https://i.postimg.cc/ZqyRBBxD/yin-ji-png-xiao.png" class="mark-back">
+                                </div>
+                                <div class="imas-res-name dup-name" data-name="${res.name}">${res.name}</div>
                             </div>
-                            <div class="imas-res-name dup-name" data-name="${res.name}">${res.name}</div>
                         </div>
                     `;
                 } else if (res.type === 'stardust') {
                     cHtml = `
-                        <div class="imas-res-card type-currency flip-in" style="animation-delay:${delay}s">
-                            <div class="imas-res-tag">资源返还</div>
-                            <div class="imas-res-img-wrap" style="background:transparent;"><img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png"></div>
-                            <div class="imas-res-name">星尘 ×${res.amount}</div>
+                        <div class="imas-res-card-wrap">
+                            <div class="imas-res-card type-currency flip-in" style="animation-delay:${delay}s">
+                                <div class="imas-res-tag">资源返还</div>
+                                <div class="imas-res-img-wrap" style="background:transparent;"><img src="https://i.postimg.cc/JhBnDD5Y/xing-chen-png-xiao.png"></div>
+                                <div class="imas-res-name">星尘 ×${res.amount}</div>
+                            </div>
                         </div>
                     `;
                 } else {
                     cHtml = `
-                        <div class="imas-res-card type-item flip-in" style="animation-delay:${delay}s">
-                            <div class="imas-res-tag">获得道具</div>
-                            <div class="imas-res-img-wrap" style="background:transparent;"><img src="${res.data.img}"></div>
-                            <div class="imas-res-name">${res.data.name}</div>
+                        <div class="imas-res-card-wrap">
+                            <div class="imas-res-card type-item flip-in" style="animation-delay:${delay}s">
+                                <div class="imas-res-tag">获得道具</div>
+                                <div class="imas-res-img-wrap" style="background:transparent;"><img src="${res.data.img}"></div>
+                                <div class="imas-res-name">${res.data.name}</div>
+                            </div>
                         </div>
                     `;
                 }
@@ -607,6 +613,7 @@
             updateCurrencyUI();
             resultOverlay.classList.add('active');
 
+            // 处理印记转化的 3D 翻转动画
             setTimeout(() => {
                 const dupCards = resGrid.querySelectorAll('.is-dup');
                 dupCards.forEach(el => {
