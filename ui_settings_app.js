@@ -1,12 +1,14 @@
 // ==========================================
-// 秋青子专属终端：系统设置 App (API与时区时钟)
+// 秋青子专属终端：系统设置 App (专业 API 控制台与时区)
 // ==========================================
 (function(global) {
-    // 默认设置项 (已删除语言)
+    // 默认设置项
     const defaultSettings = {
+        apiMode: 'openai',
         apiKey: '',
-        apiEndpoint: 'https://api.openai.com/v1/chat/completions',
-        apiModel: 'gpt-4',
+        apiHost: 'https://api.openai.com',
+        apiPath: '/v1/chat/completions',
+        apiModel: 'gpt-3.5-turbo',
         autoTimezone: true,
         customTimezone: 'Asia/Tokyo'
     };
@@ -35,38 +37,36 @@
         }
     }
 
-    // 🌟 秋青子新增：全局时钟更新逻辑
+    // 智能拼接完整 URL
+    function getFullUrl(host, path) {
+        let h = host.trim();
+        let p = path.trim();
+        if (h.endsWith('/')) h = h.slice(0, -1);
+        if (!p.startsWith('/') && p !== '') p = '/' + p;
+        return h + p;
+    }
+
+    // 🌟 全局时钟更新逻辑 (保持不变)
     global.updatePadClock = function() {
         const timeEl = document.getElementById('pad-time');
         if (!timeEl) return;
-
         const settings = loadSettings();
         let timeString = '';
-
         try {
             const now = new Date();
             let options = { hour: '2-digit', minute: '2-digit', hour12: false };
-
-            // 如果不跟随本地时区，就使用自定义时区
             if (!settings.autoTimezone && settings.customTimezone) {
                 options.timeZone = settings.customTimezone;
             }
-
             timeString = new Intl.DateTimeFormat('en-US', options).format(now);
         } catch(e) {
-            // 如果时区字符串错误，降级为本地时间
             timeString = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
         }
-
-        // 保留原有的电池图标，只替换时间文字
         timeEl.innerHTML = `${timeString} <i class="bi bi-battery-full"></i> 98%`;
     };
 
-    // 启动时钟定时器 (每秒检查一次，保证跨分钟时立刻更新)
     setInterval(global.updatePadClock, 1000);
-    // 立即执行一次
     global.updatePadClock();
-
 
     // 渲染 App 界面
     global.renderSettingsApp = function(container) {
@@ -76,121 +76,331 @@
 
         const html = `
             <style>
-                .settings-wrap { padding: 25px; display: flex; flex-direction: column; gap: 30px; font-family: sans-serif; background: #f8fafc; min-height: 100%;}
-                .settings-section { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);}
-                .section-title { font-size: 16px; font-weight: 900; color: #1e293b; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(0,0,0,0.1);}
-                .section-title i { color: #64748b; }
-                .setting-item { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-                .setting-item label { font-size: 13px; font-weight: bold; color: #475569; }
-                .setting-item input[type="text"], .setting-item input[type="password"], .setting-item select { padding: 12px 15px; border-radius: 10px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #334155; font-size: 14px; outline: none; transition: 0.2s;}
-                .setting-item input:focus, .setting-item select:focus { border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);}
+                .settings-wrap { padding: 30px; display: flex; flex-direction: column; gap: 35px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8fafc; min-height: 100%;}
 
-                .btn-save { background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-size: 15px;}
-                .btn-save:hover { background: #2563eb; transform: translateY(-2px);}
+                .settings-section { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05);}
+                .section-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;}
+                .title-left { display: flex; align-items: center; gap: 10px; }
+                .title-left i { color: #3b82f6; }
+
+                .setting-group { margin-bottom: 20px; }
+                .setting-label { font-size: 14px; font-weight: 600; color: #334155; margin-bottom: 8px; display: block; }
+
+                .input-row { display: flex; gap: 10px; align-items: center; }
+                .input-col { flex: 1; display: flex; flex-direction: column; }
+
+                .form-control { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font-size: 14px; outline: none; transition: 0.2s; box-sizing: border-box;}
+                .form-control:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15);}
+                .form-control:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+
+                .btn { padding: 10px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; border: none; display: flex; align-items: center; gap: 6px; justify-content: center;}
+                .btn-primary { background: #3b82f6; color: #fff; }
+                .btn-primary:hover { background: #2563eb; }
+                .btn-secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;}
+                .btn-secondary:hover { background: #e2e8f0; color: #1e293b;}
+                .btn-danger { background: #fee2e2; color: #ef4444; }
+                .btn-danger:hover { background: #fecaca; }
+
+                .url-preview { font-size: 12px; color: #64748b; margin-top: 6px; word-break: break-all; }
+
+                /* 模型列表区 */
+                .model-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 30px;}
+                .model-list-title { font-size: 15px; font-weight: 700; color: #1e293b; }
+                .model-actions { display: flex; gap: 8px; }
+
+                .model-card-list { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px;}
+                .model-card-list::-webkit-scrollbar { width: 6px; }
+                .model-card-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+                .model-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; transition: 0.2s; cursor: pointer;}
+                .model-card:hover { border-color: #3b82f6; background: #fff;}
+                .model-card.active { border-color: #3b82f6; background: #eff6ff; box-shadow: 0 0 0 1px #3b82f6 inset;}
+                .model-name { font-size: 14px; font-weight: 600; color: #1e293b; }
+                .model-status { display: flex; gap: 10px; color: #94a3b8; font-size: 14px;}
 
                 /* 开关样式 */
-                .switch-wrap { display: flex; justify-content: space-between; align-items: center; }
-                .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+                .switch-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
+                .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
                 .switch input { opacity: 0; width: 0; height: 0; }
                 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
-                .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
-                input:checked + .slider { background-color: #10b981; }
-                input:checked + .slider:before { transform: translateX(24px); }
+                .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+                input:checked + .slider { background-color: #3b82f6; }
+                input:checked + .slider:before { transform: translateX(20px); }
+
+                /* 提示框 */
+                #api-toast { font-size: 13px; margin-top: 10px; padding: 10px; border-radius: 6px; display: none;}
+                .toast-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0;}
+                .toast-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;}
+                .toast-info { background: #e0e7ff; color: #1e40af; border: 1px solid #bfdbfe;}
             </style>
 
             <div class="settings-wrap">
                 <!-- API 配置 -->
                 <div class="settings-section">
-                    <h3 class="section-title"><i class="bi bi-hdd-network-fill"></i> API 核心配置</h3>
-                    <div class="setting-item">
-                        <label>API Key</label>
-                        <input type="password" id="set-api-key" placeholder="sk-..." value="${currentSettings.apiKey}" />
+                    <div class="section-title">
+                        <div class="title-left"><i class="bi bi-hdd-network"></i> API 连接配置</div>
+                        <button id="btn-save-api" class="btn btn-primary" style="padding: 6px 12px; font-size: 13px;">保存当前配置</button>
                     </div>
-                    <div class="setting-item">
-                        <label>Endpoint URL</label>
-                        <input type="text" id="set-api-url" placeholder="https://api.openai.com/v1/chat/completions" value="${currentSettings.apiEndpoint}" />
+
+                    <div class="setting-group">
+                        <label class="setting-label">API 模式</label>
+                        <select class="form-control" id="set-api-mode">
+                            <option value="openai" ${currentSettings.apiMode === 'openai' ? 'selected' : ''}>OpenAI API 兼容</option>
+                            <option value="claude" ${currentSettings.apiMode === 'claude' ? 'selected' : ''}>Anthropic (Claude)</option>
+                        </select>
                     </div>
-                    <div class="setting-item">
-                        <label>Model</label>
-                        <input type="text" id="set-api-model" placeholder="gpt-4" value="${currentSettings.apiModel}" />
+
+                    <div class="setting-group">
+                        <label class="setting-label">API 密钥 (API Key)</label>
+                        <div class="input-row">
+                            <input type="password" class="form-control" id="set-api-key" placeholder="sk-..." value="${currentSettings.apiKey}" />
+                            <button class="btn btn-secondary" id="btn-toggle-eye" style="padding: 10px;"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-primary" id="btn-test-api">检查</button>
+                        </div>
                     </div>
-                    <button id="btn-save-api" class="btn-save"><i class="bi bi-cloud-check"></i> 保存 API 配置</button>
+
+                    <div class="input-row setting-group" style="align-items: flex-start;">
+                        <div class="input-col">
+                            <label class="setting-label">API 主机 (Host)</label>
+                            <input type="text" class="form-control" id="set-api-host" placeholder="https://api.openai.com" value="${currentSettings.apiHost}" />
+                        </div>
+                        <div class="input-col">
+                            <label class="setting-label">API 路径 (Path)</label>
+                            <input type="text" class="form-control" id="set-api-path" placeholder="/v1/chat/completions" value="${currentSettings.apiPath}" />
+                        </div>
+                    </div>
+                    <div class="url-preview" id="url-preview-text">请求地址: ${getFullUrl(currentSettings.apiHost, currentSettings.apiPath)}</div>
+
+                    <div id="api-toast"></div>
+
+                    <!-- 模型管理 -->
+                    <div class="model-list-header">
+                        <div class="model-list-title">当前模型: <span id="current-model-display" style="color:#3b82f6;">${currentSettings.apiModel || '未选择'}</span></div>
+                        <div class="model-actions">
+                            <button class="btn btn-secondary" id="btn-fetch-models"><i class="bi bi-arrow-repeat"></i> 获取网络模型</button>
+                        </div>
+                    </div>
+
+                    <div class="model-card-list" id="model-list-container">
+                        <!-- 默认显示一个当前模型 -->
+                        <div class="model-card active" data-model="${currentSettings.apiModel}">
+                            <div class="model-name">${currentSettings.apiModel}</div>
+                            <div class="model-status"><i class="bi bi-check-circle-fill" style="color:#3b82f6;"></i></div>
+                        </div>
+                    </div>
+                    <div style="font-size: 12px; color: #94a3b8; margin-top: 10px;">* 点击列表中的模型即可切换使用。</div>
                 </div>
 
-                <!-- 时区设置 -->
+                <!-- 时区设置 (简化版) -->
                 <div class="settings-section">
-                    <h3 class="section-title"><i class="bi bi-clock-history"></i> 时区设置</h3>
-                    <div class="setting-item switch-wrap">
-                        <label>跟随本地时区</label>
+                    <div class="section-title">
+                        <div class="title-left"><i class="bi bi-clock-history"></i> 本地化与时钟</div>
+                    </div>
+                    <div class="switch-wrap">
+                        <label class="setting-label" style="margin:0;">跟随本地设备时区</label>
                         <label class="switch">
                             <input type="checkbox" id="set-auto-timezone" ${currentSettings.autoTimezone ? 'checked' : ''}>
                             <span class="slider"></span>
                         </label>
                     </div>
 
-                    <div class="setting-item" id="manual-timezone-wrap" style="${currentSettings.autoTimezone ? 'display:none;' : ''}">
-                        <label>自定义时区</label>
-                        <select id="set-timezone">
+                    <div class="setting-group" id="manual-timezone-wrap" style="${currentSettings.autoTimezone ? 'display:none;' : ''}">
+                        <label class="setting-label">自定义时区</label>
+                        <select class="form-control" id="set-timezone">
                             <option value="Asia/Shanghai" ${currentSettings.customTimezone === 'Asia/Shanghai' ? 'selected' : ''}>北京时间 (UTC+8)</option>
                             <option value="Asia/Tokyo" ${currentSettings.customTimezone === 'Asia/Tokyo' ? 'selected' : ''}>东京时间 (UTC+9)</option>
                             <option value="America/New_York" ${currentSettings.customTimezone === 'America/New_York' ? 'selected' : ''}>纽约时间 (UTC-5)</option>
                             <option value="Europe/London" ${currentSettings.customTimezone === 'Europe/London' ? 'selected' : ''}>伦敦时间 (UTC+0)</option>
                         </select>
                     </div>
-                    <button id="btn-save-locale" class="btn-save" style="margin-top:10px; background:#64748b;"><i class="bi bi-save"></i> 保存时区设置</button>
+                    <button id="btn-save-locale" class="btn btn-secondary" style="width: 100%;">保存时钟设置</button>
                 </div>
             </div>
         `;
 
         container.innerHTML = html;
 
-        // 绑定事件
-        const autoTzSwitch = container.querySelector('#set-auto-timezone');
-        const manualTzWrap = container.querySelector('#manual-timezone-wrap');
+        // ------------------ DOM 元素 ------------------
+        const inputHost = container.querySelector('#set-api-host');
+        const inputPath = container.querySelector('#set-api-path');
+        const previewText = container.querySelector('#url-preview-text');
+        const inputKey = container.querySelector('#set-api-key');
+        const btnToggleEye = container.querySelector('#btn-toggle-eye');
+        const btnTestApi = container.querySelector('#btn-test-api');
+        const btnFetchModels = container.querySelector('#btn-fetch-models');
+        const modelListContainer = container.querySelector('#model-list-container');
+        const currentModelDisplay = container.querySelector('#current-model-display');
+        const toast = container.querySelector('#api-toast');
+        const btnSaveApi = container.querySelector('#btn-save-api');
 
-        // 时区开关切换
-        autoTzSwitch.addEventListener('change', function() {
-            if (this.checked) {
-                manualTzWrap.style.display = 'none';
+        let selectedModel = currentSettings.apiModel;
+
+        // ------------------ 逻辑交互 ------------------
+
+        // 1. 实时预览 URL
+        function updateUrlPreview() {
+            previewText.innerText = '请求地址: ' + getFullUrl(inputHost.value, inputPath.value);
+        }
+        inputHost.addEventListener('input', updateUrlPreview);
+        inputPath.addEventListener('input', updateUrlPreview);
+
+        // 2. 密码显隐
+        btnToggleEye.addEventListener('click', () => {
+            if (inputKey.type === 'password') {
+                inputKey.type = 'text';
+                btnToggleEye.innerHTML = '<i class="bi bi-eye-slash"></i>';
             } else {
-                manualTzWrap.style.display = 'flex';
+                inputKey.type = 'password';
+                btnToggleEye.innerHTML = '<i class="bi bi-eye"></i>';
             }
         });
 
-        // 保存 API 按钮
-        container.querySelector('#btn-save-api').addEventListener('click', function() {
+        // 3. 吐司提示工具
+        function showToast(msg, type) {
+            toast.className = 'toast-' + type;
+            toast.innerHTML = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
+        }
+
+        // 4. 测试 API 连接
+        btnTestApi.addEventListener('click', async () => {
+            const host = inputHost.value.trim();
+            const key = inputKey.value.trim();
+            if(!host) { showToast('主机地址不能为空哦', 'error'); return; }
+
+            btnTestApi.disabled = true;
+            btnTestApi.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+            showToast('正在测试连接...', 'info');
+
+            // 构造测试请求 (向 /v1/models 发请求最安全)
+            let testUrl = host;
+            if (testUrl.endsWith('/')) testUrl = testUrl.slice(0, -1);
+            testUrl += '/v1/models';
+
+            try {
+                const res = await fetch(testUrl, {
+                    method: 'GET',
+                    headers: { 'Authorization': 'Bearer ' + key }
+                });
+                if (res.ok) {
+                    showToast('🎉 连接成功！API 节点正常响应。', 'success');
+                } else {
+                    showToast(`❌ 连接失败：HTTP ${res.status}`, 'error');
+                }
+            } catch(e) {
+                showToast(`❌ 网络请求错误：${e.message}`, 'error');
+            }
+            btnTestApi.disabled = false;
+            btnTestApi.innerHTML = '检查';
+        });
+
+        // 5. 获取并渲染模型列表
+        btnFetchModels.addEventListener('click', async () => {
+            const host = inputHost.value.trim();
+            const key = inputKey.value.trim();
+
+            btnFetchModels.disabled = true;
+            btnFetchModels.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> 获取中...';
+
+            let fetchUrl = host;
+            if (fetchUrl.endsWith('/')) fetchUrl = fetchUrl.slice(0, -1);
+            fetchUrl += '/v1/models';
+
+            try {
+                const res = await fetch(fetchUrl, {
+                    method: 'GET',
+                    headers: { 'Authorization': 'Bearer ' + key }
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const data = await res.json();
+                let models = [];
+                if (data && data.data && Array.isArray(data.data)) {
+                    models = data.data.map(m => m.id).sort(); // OpenAI 格式
+                } else if (Array.isArray(data)) {
+                    models = data.map(m => m.id || m.name || m).sort(); // 兼容格式
+                }
+
+                if (models.length === 0) {
+                    showToast('未能从该节点获取到有效模型列表', 'error');
+                } else {
+                    renderModelList(models);
+                    showToast(`成功获取 ${models.length} 个模型！`, 'success');
+                }
+            } catch(e) {
+                showToast(`获取模型失败：${e.message}`, 'error');
+            }
+
+            btnFetchModels.disabled = false;
+            btnFetchModels.innerHTML = '<i class="bi bi-arrow-repeat"></i> 获取网络模型';
+        });
+
+        function renderModelList(models) {
+            modelListContainer.innerHTML = '';
+            models.forEach(modelId => {
+                const isActive = (modelId === selectedModel);
+                const card = document.createElement('div');
+                card.className = `model-card ${isActive ? 'active' : ''}`;
+                card.dataset.model = modelId;
+                card.innerHTML = `
+                    <div class="model-name">${modelId}</div>
+                    <div class="model-status">${isActive ? '<i class="bi bi-check-circle-fill" style="color:#3b82f6;"></i>' : ''}</div>
+                `;
+                card.addEventListener('click', () => {
+                    // 清除其他激活状态
+                    container.querySelectorAll('.model-card').forEach(c => {
+                        c.classList.remove('active');
+                        c.querySelector('.model-status').innerHTML = '';
+                    });
+                    // 设置当前激活
+                    card.classList.add('active');
+                    card.querySelector('.model-status').innerHTML = '<i class="bi bi-check-circle-fill" style="color:#3b82f6;"></i>';
+                    selectedModel = modelId;
+                    currentModelDisplay.innerText = modelId;
+                });
+                modelListContainer.appendChild(card);
+            });
+        }
+
+        // 6. 保存所有 API 配置
+        btnSaveApi.addEventListener('click', () => {
             const newSettings = loadSettings();
-            newSettings.apiKey = container.querySelector('#set-api-key').value.trim();
-            newSettings.apiEndpoint = container.querySelector('#set-api-url').value.trim();
-            newSettings.apiModel = container.querySelector('#set-api-model').value.trim();
+            newSettings.apiMode = container.querySelector('#set-api-mode').value;
+            newSettings.apiKey = inputKey.value.trim();
+            newSettings.apiHost = inputHost.value.trim();
+            newSettings.apiPath = inputPath.value.trim();
+            newSettings.apiModel = selectedModel;
 
             if(saveSettings(newSettings)) {
-                this.innerHTML = '<i class="bi bi-check-circle-fill"></i> 已保存';
-                this.style.background = '#10b981';
+                const oldText = btnSaveApi.innerHTML;
+                btnSaveApi.innerHTML = '<i class="bi bi-check2"></i> 已保存';
+                btnSaveApi.style.background = '#10b981';
                 setTimeout(() => {
-                    this.innerHTML = '<i class="bi bi-cloud-check"></i> 保存 API 配置';
-                    this.style.background = '#3b82f6';
-                }, 2000);
+                    btnSaveApi.innerHTML = oldText;
+                    btnSaveApi.style.background = '#3b82f6';
+                }, 1500);
             }
         });
 
-        // 保存时区按钮
-        container.querySelector('#btn-save-locale').addEventListener('click', function() {
+        // 7. 时区开关逻辑与保存
+        const autoTzSwitch = container.querySelector('#set-auto-timezone');
+        const manualTzWrap = container.querySelector('#manual-timezone-wrap');
+        const btnSaveLocale = container.querySelector('#btn-save-locale');
+
+        autoTzSwitch.addEventListener('change', function() {
+            manualTzWrap.style.display = this.checked ? 'none' : 'flex';
+        });
+
+        btnSaveLocale.addEventListener('click', () => {
             const newSettings = loadSettings();
-            newSettings.autoTimezone = container.querySelector('#set-auto-timezone').checked;
+            newSettings.autoTimezone = autoTzSwitch.checked;
             newSettings.customTimezone = container.querySelector('#set-timezone').value;
 
             if(saveSettings(newSettings)) {
-                this.innerHTML = '<i class="bi bi-check-circle-fill"></i> 已保存';
-                this.style.background = '#10b981';
-
-                // 🌟 保存时立刻强制刷新右上角的时钟！
+                btnSaveLocale.innerHTML = '<i class="bi bi-check2"></i> 已保存';
                 if(typeof global.updatePadClock === 'function') global.updatePadClock();
-
-                setTimeout(() => {
-                    this.innerHTML = '<i class="bi bi-save"></i> 保存时区设置';
-                    this.style.background = '#64748b';
-                }, 2000);
+                setTimeout(() => { btnSaveLocale.innerHTML = '保存时钟设置'; }, 1500);
             }
         });
     };
