@@ -299,7 +299,14 @@ var idolDatabase = [
                         { url: "https://i.postimg.cc/VNBSXXWc/lu-tian-xi-wei-zi-wei.png", title: "深夜的个人修行" },
                         { url: "https://i.postimg.cc/MGbc11mS/lu-tian-xi-wei-xi-zao.png", title: "花洒下的哼唱时光" },
                         { url: "https://i.postimg.cc/Bbh7b8VY/lu-tian-xi-wei-chuan-jiao-shi-nei-she.png", title: "契约的最终流向" },
-                        { url: "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png", title: "毫无防备的身后" }
+                        { url: "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png", title: "毫无防备的身后" },
+                        { url: "https://i.postimg.cc/nV5zM44t/lu-tian-xi-wei-ru-jiao.png", title: "为你献上最柔软的栖息地" },
+                        { url: "https://i.postimg.cc/MZ4TX77S/lu-tian-xi-wei-shi-hou-nei-she.png", title: "此刻，我们结为一体" },
+                        { url: "https://i.postimg.cc/L47XhttS/lu-tian-xi-wei-shi-hou2.png", title: "印满爱意的证明" },
+                        { url: "https://i.postimg.cc/BbdQy3SH/lu-tian-xi-wei-chuan-jiao-shi.png", title: "连同灵魂一起融化" },
+                        { url: "https://i.postimg.cc/BbdQy3Sp/lu-tian-xi-wei-kou-jiao.png", title: "只想将你的一切温柔包裹" },
+                        { url: "https://i.postimg.cc/fy6TFsz8/lu-tian-xi-wei-kou-jiao-hou-kou-qiang-jing-ye.png", title: "这是只属于我的甘甜" },
+                        { url: "https://i.postimg.cc/qq9MYrJm/lu-tian-xi-wei-kou-jiao-hou-kou-qiang-jing-ye2.png", title: "直到被幸福彻底填满" }
                     ]
                 },
                 basic: {
