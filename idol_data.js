@@ -236,7 +236,7 @@ var idolDatabase = [
                 image: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
                 memories: {
                     sfw: [
-                        { url: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png", title: "最后一步是勇气" },
+                        { url: "https://iili.io/Cf5fqlV.webp", title: "最后一步是勇气" },
                         { url: "https://i.postimg.cc/43qwcb8c/qian-gong-jia-ai-xiao-fu.png", title: "夏服 · 笑容确认" },
                         { url: "https://i.postimg.cc/gJJJCQ8C/qian-gong-jia-ai-gan-xie-ji.png", title: "谢谢你看到这里" },
                         { url: "https://i.postimg.cc/JnnnfvZ9/qian-gong-jia-ai-yu-zhong.png", title: "伞下的空想临界" },
@@ -291,7 +291,7 @@ var idolDatabase = [
                 image: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
                 memories: {
                     sfw: [
-                        { url: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png", title: "闪耀的星辰" },
+                        { url: "https://iili.io/Cf5x41a.webp", title: "闪耀的星辰" },
                         { url: "https://i.postimg.cc/wxsZw3L9/lu-tian-xi-wei-zhun-bei-deng-tai.png", title: "后台五分钟" },
                         { url: "https://i.postimg.cc/RC8Fq779/lu-tian-xi-wei-shi-yin.png", title: "只为你献唱的独家单曲" }
                     ],
@@ -419,13 +419,13 @@ var idolDatabase = [
     "image": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png",
     "memories": {
         "sfw": [
+            { "url": "https://iili.io/Cxdex4f.webp", "title": "永远的首席女主角" },
             { "url": "https://i.postimg.cc/3xBVF253/yi-tian-chun-zi-zuo-zai-sha-fa.png", "title": "追忆的窗边" },
             { "url": "https://i.postimg.cc/8cz935h2/yi-tian-chun-zi-he-fu-pin-cha.png", "title": "春凪の茶歇" },
             { "url": "https://i.postimg.cc/Kj8wVznp/yi-tian-chun-zi-he-xiao-hai-zi.png", "title": "慈愛の箱庭" },
             { "url": "https://i.postimg.cc/T13FSwrZ/yi-tian-chun-zi-na-zhe-ka-fei.png", "title": "微苦的清晨" },
             { "url": "https://i.postimg.cc/44FXGkmW/yi-tian-chun-zi-chu-fang-liao-li.png", "title": "日常的香辛料" },
             { "url": "https://i.postimg.cc/hPrBPX4j/yi-tian-chun-zi-wei-ni-da-san.png", "title": "突如其来的阵雨" },
-            { "url": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png", "title": "永远的首席女主角" },
             { "url": "https://i.postimg.cc/vHMysryG/yi-tian-chun-zi-gong-yuan-de-zhang-yi.png", "title": "夜风中的片刻" },
             { "url": "https://i.postimg.cc/wvkzv720/yi-tian-chun-zi-fen-si-jian-mian-hui.png", "title": "粉丝见面会" },
             { "url": "https://i.postimg.cc/yNYtPvyp/yi-tian-chun-zi-he-cha.png", "title": "贵妇人的嗜好" },
@@ -537,13 +537,13 @@ var idolDatabase = [
     "image": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png",
     "memories": {
         "sfw": [
+            { "url": "https://iili.io/CxdNRcl.webp", "title": "小水手" },
             { "url": "https://i.postimg.cc/c1M0Kg9D/she-nai-hong-hua-tian-bing-qi-lin.png", "title": "盛夏融梦" },
             { "url": "https://i.postimg.cc/Rhc7mQ4L/she-nai-hong-hua-hong-qi-pao.png", "title": "红莲的走廊" },
             { "url": "https://i.postimg.cc/KzjpmWH6/she-nai-hong-hua-sheng-dan-jie.png", "title": "被灯火与雪所祝福的、午夜赠礼" },
             { "url": "https://i.postimg.cc/1tX7yddy/she-nai-hong-hua-xiao-fu.png", "title": "樱花的上学路" },
             { "url": "https://i.postimg.cc/PxJVd7R0/she-nai-hong-hua-si-ku-shui.png", "title": "池畔的小天使" },
-            { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "枫语" },
-            { "url": "https://i.postimg.cc/WphSstnw/she-nai-hong-hua-shui-shou-ou-xiang-fu.png", "title": "小水手" },
+            { "url": "https://i.postimg.cc/26y9Ctt8/she-nai-hong-hua-qiu.png", "title": "枫语" },            
             { "url": "https://i.postimg.cc/h47fy8SJ/she-nai-hong-hua-ou-xiang-fu1.png", "title": "绽放于星尘的Pink Reverie" },
             { "url": "https://i.postimg.cc/7PTfs1xf/she-nai-hong-hua-ou-xiang-fu3.png", "title": "咏叹" },
             { "url": "https://i.postimg.cc/sfZv6PVW/she-nai-hong-hua-ou-xiang-fu2.png", "title": "把全部的视线、都献给我吧" }
@@ -648,7 +648,7 @@ var idolDatabase = [
         image: "https://i.postimg.cc/cJ5rC104/san-liu-hua-ou-xiang-fu.png",
         memories: {
             sfw: [
-                { url: "https://i.postimg.cc/cJ5rC104/san-liu-hua-ou-xiang-fu.png", title: "和想象中不一样的偶像服" },
+                { url: "https://iili.io/CxdeTYl.webp", title: "和想象中不一样的偶像服" },
                 { url: "https://i.postimg.cc/632Tvsp2/san-liu-hua-ou-xiang-fu2.png", title: "今日的拍摄任务" },
                 { url: "https://i.postimg.cc/MGrvHZqk/san-liu-hua-ou-xiang-fu-yu-mao.png", title: "小猫，要等我回来哦" }
             ],
