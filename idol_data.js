@@ -363,7 +363,7 @@ var idolDatabase = [
                 image: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png",
                 memories: {
                     sfw: [
-                        { url: "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png", title: "深蓝色咏叹调" },
+                        { url: "https://iili.io/Cf5awnR.webp", title: "深蓝色咏叹调" },
                         { url: "https://i.postimg.cc/T17Gx3q3/ya-tian-zhi-sui-wu-tai-ge-chang2.png", title: "高一级的拟声唱法" },
                         { url: "https://i.postimg.cc/prGxvLYy/ya-tian-zhi-sui-wu-tai-ge-chang3.png", title: "传达到了吗？" },
                         { url: "https://i.postimg.cc/cC9ZWLM1/ya-tian-zhi-sui-du-gao.png", title: "排练的陷阱" },
