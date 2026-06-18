@@ -75,8 +75,23 @@
                 if(btn) btn.click();
             };
 
-            // 定时器实时同步音乐 APP 的状态
-            setInterval(() => {
+            // 👇 新增：初始化函数
+            function init() {
+                // 只有在未播放时才执行预加载
+                const audio = window.qingziAudio;
+                if(audio && (audio.paused || !audio.src)) {
+                     // 尝试从全局 musicData 获取第一首歌
+                    if(window.musicData && window.musicData.length > 0) {
+                        const firstSong = window.musicData[0];
+                        title.innerText = firstSong.title;
+                        artist.innerText = firstSong.artist;
+                        cover.src = firstSong.cover;
+                        bg.style.backgroundImage = `url(${firstSong.cover})`;
+                    }
+                }
+            }
+
+            function syncState() {
                 let doc = window.parent.document || document;
                 const audio = window.qingziAudio;
 
@@ -95,8 +110,15 @@
                         cover.src = miniCover.src;
                         bg.style.backgroundImage = `url(${miniCover.src})`;
                     }
+                } else {
+                    init(); // 如果音乐停止且重置了，也尝试恢复初始状态
                 }
-            }, 500);
+            }
+
+            init(); // 首次渲染时立即执行
+            setInterval(syncState, 500); // 定时同步
         }
+    };
+})();
     };
 })();
