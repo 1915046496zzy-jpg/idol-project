@@ -6,7 +6,7 @@
     window.QingziWidgets = window.QingziWidgets || {};
 
     window.QingziWidgets['music'] = {
-        size: '4x2', // 占用 4x2 的宽条格子
+        size: '4x2',
         render: function(container) {
             container.innerHTML = `
                 <style>
@@ -64,17 +64,14 @@
             const btnPrev = container.querySelector('#wg-btn-prev');
             const btnNext = container.querySelector('#wg-btn-next');
 
-            // 绑定按钮事件到全局挂载的音乐方法
             btnPlay.onclick = () => { if(window.toggleMusicPlay) window.toggleMusicPlay(); };
             btnNext.onclick = () => { if(window.nextMusicSong) window.nextMusicSong(); };
-            // prevSong 因为原版没有暴露，我们可以通过点击触发音乐APP内的按钮，或者暴露出来。
-            // 这里用简单的 DOM 触发魔法：
             btnPrev.onclick = () => {
                 let doc = window.parent.document || document;
                 let btn = doc.querySelector('#mini-btn-prev');
                 if(btn) btn.click();
             };
-
+            
             // 👇 新增：初始化函数
             function init() {
                 // 只有在未播放时才执行预加载
