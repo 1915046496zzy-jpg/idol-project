@@ -292,7 +292,8 @@ var idolDatabase = [
                 memories: {
                     sfw: [
                         { url: "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png", title: "闪耀的星辰" },
-                        { url: "https://i.postimg.cc/wxsZw3L9/lu-tian-xi-wei-zhun-bei-deng-tai.png", title: "后台五分钟" }
+                        { url: "https://i.postimg.cc/wxsZw3L9/lu-tian-xi-wei-zhun-bei-deng-tai.png", title: "后台五分钟" },
+                        { url: "https://i.postimg.cc/RC8Fq779/lu-tian-xi-wei-shi-yin.png", title: "只为你献唱的独家单曲" }
                     ],
                     nsfw: [
                         { url: "https://i.postimg.cc/3JJTnmjb/lu-tian-xi-wei-luo-ti-chen-shan.png", title: "借来的慵懒" },
@@ -301,12 +302,22 @@ var idolDatabase = [
                         { url: "https://i.postimg.cc/Bbh7b8VY/lu-tian-xi-wei-chuan-jiao-shi-nei-she.png", title: "契约的最终流向" },
                         { url: "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png", title: "毫无防备的身后" },
                         { url: "https://i.postimg.cc/nV5zM44t/lu-tian-xi-wei-ru-jiao.png", title: "为你献上最柔软的栖息地" },
-                        { url: "https://i.postimg.cc/MZ4TX77S/lu-tian-xi-wei-shi-hou-nei-she.png", title: "此刻，我们结为一体" },
+                        { url: "https://i.postimg.cc/MZ4TX77S/lu-tian-xi-wei-shi-hou-nei-she.png", title: "拆封完毕的特制礼物" },
                         { url: "https://i.postimg.cc/L47XhttS/lu-tian-xi-wei-shi-hou2.png", title: "印满爱意的证明" },
                         { url: "https://i.postimg.cc/BbdQy3SH/lu-tian-xi-wei-chuan-jiao-shi.png", title: "连同灵魂一起融化" },
                         { url: "https://i.postimg.cc/BbdQy3Sp/lu-tian-xi-wei-kou-jiao.png", title: "只想将你的一切温柔包裹" },
                         { url: "https://i.postimg.cc/fy6TFsz8/lu-tian-xi-wei-kou-jiao-hou-kou-qiang-jing-ye.png", title: "这是只属于我的甘甜" },
-                        { url: "https://i.postimg.cc/qq9MYrJm/lu-tian-xi-wei-kou-jiao-hou-kou-qiang-jing-ye2.png", title: "直到被幸福彻底填满" }
+                        { url: "https://i.postimg.cc/qq9MYrJm/lu-tian-xi-wei-kou-jiao-hou-kou-qiang-jing-ye2.png", title: "直到被幸福彻底填满" },
+                        { url: "https://i.postimg.cc/1XL5TSmF/lu-tian-xi-wei-hou-ru2.png", title: "宴会后的秘密加餐" },
+                        { url: "https://i.postimg.cc/L5r67S9j/lu-tian-xi-wei-hou-ru3.png", title: "夏日！防不胜防的背后奇袭！" },
+                        { url: "https://i.postimg.cc/mk02q4LN/lu-tian-xi-wei-hou-ru4.png", title: "此刻，我们结为一体" },
+                        { url: "https://i.postimg.cc/Y0JqV7rz/lu-tian-xi-wei-hou-ru5.png", title: "与制作人的违规加班" },
+                        { url: "https://i.postimg.cc/0jL23vkX/lu-tian-xi-wei-nu-shang-wei.png", title: "专属的晨间叫醒服务" },
+                        { url: "https://i.postimg.cc/sxtD8zj6/lu-tian-xi-wei-nu-shang-wei-nei-she.png", title: "预料之外的暴击(Critical Hit)！" },
+                        { url: "https://i.postimg.cc/T1ZYSxd4/lu-tian-xi-wei-nu-shang-wei2.png", title: "100%纯度的独家糖霜" },
+                        { url: "https://i.postimg.cc/wMSTPzqJ/lu-tian-xi-wei-gang-jiao.png", title: "情人节的隐藏路线（开发中）" },
+                        { url: "https://i.postimg.cc/C5WLt0h4/lu-tian-xi-wei-huo-che-bian-dang.png", title: "突发事件：主厨的强制打包！" },
+                        { url: "https://i.postimg.cc/dQX1D22Q/lu-tian-xi-wei-zhan-shi-xiao-xue.png", title: "看招！无死角的晨间问候！" }
                     ]
                 },
                 basic: {
