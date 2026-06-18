@@ -1,14 +1,13 @@
 // ==========================================
-// 秋青子专属小组件：同步音乐播放面板 (修复初始化)
+// 秋青子专属小组件：同步音乐播放面板
 // 文件名：widget_music.js
 // ==========================================
 (function() {
     window.QingziWidgets = window.QingziWidgets || {};
 
     window.QingziWidgets['music'] = {
-        size: '4x2',
+        size: '4x2', // 占用 4x2 的宽条格子
         render: function(container) {
-            // --- 1. HTML 结构（完整版，不要省略） ---
             container.innerHTML = `
                 <style>
                     .widget-music-wrap {
@@ -20,6 +19,7 @@
                         position: relative; overflow: hidden;
                         color: #fff;
                     }
+                    /* 背景高斯模糊 */
                     .wg-music-bg {
                         position: absolute; top: -20%; left: -20%; width: 140%; height: 140%;
                         background-size: cover; background-position: center;
@@ -31,6 +31,7 @@
                     .wg-info { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
                     .wg-title { font-size: 18px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
                     .wg-artist { font-size: 14px; color: rgba(255,255,255,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
                     .wg-controls { display: flex; gap: 15px; align-items: center; margin-top: 10px; }
                     .wg-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 0; transition: 0.2s; }
                     .wg-btn:active { transform: scale(0.9); opacity: 0.7; }
@@ -55,7 +56,6 @@
                 </div>
             `;
 
-            // --- 2. 获取 DOM 元素 ---
             const bg = container.querySelector('#wg-m-bg');
             const cover = container.querySelector('#wg-m-cover');
             const title = container.querySelector('#wg-m-title');
@@ -64,42 +64,26 @@
             const btnPrev = container.querySelector('#wg-btn-prev');
             const btnNext = container.querySelector('#wg-btn-next');
 
-            // --- 3. 绑定按钮事件 ---
+            // 绑定按钮事件到全局挂载的音乐方法
             btnPlay.onclick = () => { if(window.toggleMusicPlay) window.toggleMusicPlay(); };
             btnNext.onclick = () => { if(window.nextMusicSong) window.nextMusicSong(); };
+            // prevSong 因为原版没有暴露，我们可以通过点击触发音乐APP内的按钮，或者暴露出来。
+            // 这里用简单的 DOM 触发魔法：
             btnPrev.onclick = () => {
                 let doc = window.parent.document || document;
                 let btn = doc.querySelector('#mini-btn-prev');
                 if(btn) btn.click();
             };
 
-            // --- 4. 👇 新增：初始化函数 ---
-            function init() {
-                // 只有在未播放时才执行预加载
-                const audio = window.qingziAudio;
-                if(audio && (audio.paused || !audio.src)) {
-                    // 尝试从全局 musicData 获取第一首歌
-                    if(window.musicData && window.musicData.length > 0) {
-                        const firstSong = window.musicData[0];
-                        title.innerText = firstSong.title;
-                        artist.innerText = firstSong.artist;
-                        cover.src = firstSong.cover;
-                        bg.style.backgroundImage = `url(${firstSong.cover})`;
-                    }
-                }
-            }
-
-            // --- 5. 👇 新增：状态同步函数 ---
-            function syncState() {
+            // 定时器实时同步音乐 APP 的状态
+            setInterval(() => {
                 let doc = window.parent.document || document;
                 const audio = window.qingziAudio;
 
-                // 更新播放/暂停按钮状态
                 if (audio) {
                     btnPlay.innerHTML = (!audio.paused && audio.src) ? '<i class="bi bi-pause-circle-fill"></i>' : '<i class="bi bi-play-circle-fill"></i>';
                 }
 
-                // 从音乐 APP 的 mini 控件同步信息
                 const miniTitle = doc.querySelector('#mini-title');
                 const miniArtist = doc.querySelector('#mini-artist');
                 const miniCover = doc.querySelector('#mini-cover');
@@ -111,14 +95,8 @@
                         cover.src = miniCover.src;
                         bg.style.backgroundImage = `url(${miniCover.src})`;
                     }
-                } else {
-                    init(); // 如果音乐停止且重置了，也尝试恢复初始状态
                 }
-            }
-
-            // --- 6. 执行初始化 & 定时同步 ---
-            init(); // 首次渲染时立即执行
-            setInterval(syncState, 500); // 定时同步
+            }, 500);
         }
     };
 })();
