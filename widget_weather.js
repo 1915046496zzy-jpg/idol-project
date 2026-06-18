@@ -36,9 +36,6 @@
                 </div>
             `;
 
-            let lastWeatherUpdate = 0;
-            let weatherCache = null;
-
             function updateWeather() {
                 const cityEl = container.querySelector('#wg-w-city');
                 const modeEl = container.querySelector('#wg-w-mode');
@@ -48,9 +45,14 @@
                 const bgEl = container.querySelector('#wg-w-bg');
 
                 let mode = 'local';
-                try { if (window.getQingziSettings) mode = window.getQingziSettings().weatherMode || 'local'; } catch(e){}
+                try {
+                    if (window.getQingziSettings) {
+                        mode = window.getQingziSettings().weatherMode || 'local';
+                    }
+                } catch(e){}
 
                 if (mode === 'virtual') {
+                    // 虚拟剧情天气
                     modeEl.innerText = "剧情";
                     cityEl.innerText = "秋叶原";
                     tempEl.innerText = "24°";
@@ -58,63 +60,19 @@
                     iconEl.className = "bi bi-sun-fill wg-w-icon";
                     bgEl.style.background = "linear-gradient(to bottom, #f59e0b, #fbbf24)";
                 } else {
-                    // 10分钟更新一次天气，避免频繁请求
-                    if (Date.now() - lastWeatherUpdate < 600000 && weatherCache) {
-                        applyWeatherData(weatherCache);
-                        return;
-                    }
-
+                    // 模拟现实天气 (如果哥哥需要真实API，青子以后可以接上哦)
                     modeEl.innerText = "现实";
-                    cityEl.innerText = "定位中...";
-
-                    // 👇 接入真实API
-                    fetch('https://ip-api.com/json/?lang=zh-CN')
-                        .then(res => res.json())
-                        .then(data => {
-                            const city = data.city || '未知地点';
-                            return fetch(`https://wttr.in/${city}?format=j1`);
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            weatherCache = data;
-                            lastWeatherUpdate = Date.now();
-                            applyWeatherData(data);
-                        })
-                        .catch(err => {
-                            cityEl.innerText = "获取失败";
-                            console.error("天气API请求失败:", err);
-                        });
-                }
-
-                function applyWeatherData(data) {
-                    const current = data.current_condition[0];
-                    const lang = current.lang_zh[0].value;
-                    const weatherDesc = lang.split(',')[0];
-
-                    cityEl.innerText = data.nearest_area[0].areaName[0].value;
-                    tempEl.innerText = `${current.temp_C}°`;
-                    descEl.innerText = weatherDesc;
-
-                    // 根据天气代码简单映射图标和背景
-                    const code = parseInt(current.weatherCode);
-                    if ([113].includes(code)) { // 晴
-                        iconEl.className = "bi bi-sun-fill wg-w-icon";
-                        bgEl.style.background = "linear-gradient(to bottom, #3b82f6, #60a5fa)";
-                    } else if ([116, 119, 122].includes(code)) { // 多云
-                        iconEl.className = "bi bi-cloud-fill wg-w-icon";
-                        bgEl.style.background = "linear-gradient(to bottom, #64748b, #94a3b8)";
-                    } else if (code >= 263) { // 雨
-                        iconEl.className = "bi bi-cloud-drizzle-fill wg-w-icon";
-                        bgEl.style.background = "linear-gradient(to bottom, #4b5563, #6b7280)";
-                    } else { // 默认
-                        iconEl.className = "bi bi-cloud-sun-fill wg-w-icon";
-                        bgEl.style.background = "linear-gradient(to bottom, #3b82f6, #60a5fa)";
-                    }
+                    cityEl.innerText = "东京市";
+                    tempEl.innerText = "18°";
+                    descEl.innerText = "多云转晴";
+                    iconEl.className = "bi bi-cloud-sun-fill wg-w-icon";
+                    bgEl.style.background = "linear-gradient(to bottom, #3b82f6, #60a5fa)";
                 }
             }
 
+            // 初始更新，并定时检查设置变化
             updateWeather();
-            setInterval(updateWeather, 60000); // 每分钟检查一次是否需要更新
+            setInterval(updateWeather, 2000);
         }
     };
 })();
