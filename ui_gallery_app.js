@@ -49,18 +49,18 @@
             return;
         }
 
-        // 用纯内联样式构建整个App，彻底避免CSS被覆盖的问题
+        // 用纯内联样式构建整个App，彻底避免CSS被覆盖的问题 (已修复滚动和挤压问题)
         container.innerHTML = `
             <div id="gal-root" style="width:100%;height:100%;position:relative;overflow:hidden;background:#f8fafc;display:flex;flex-direction:column;">
                 <!-- 主页 -->
-                <div id="gal-home" style="flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:15px;align-content:start;"></div>
+                <div id="gal-home" style="flex:1;min-height:0;overflow-y:auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:16px;align-content:start;box-sizing:border-box;padding-bottom:40px;"></div>
                 <!-- 详情页 -->
                 <div id="gal-detail" style="position:absolute;top:0;left:0;width:100%;height:100%;background:#f8fafc;z-index:10;display:none;flex-direction:column;">
                     <div id="gal-d-header" style="display:flex;align-items:center;padding:12px 20px;background:rgba(255,255,255,0.95);border-bottom:1px solid rgba(0,0,0,0.08);gap:12px;flex-shrink:0;">
                         <button id="gal-btn-back" style="width:36px;height:36px;border-radius:50%;background:#f1f5f9;border:none;color:#db2777;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">◀</button>
                         <img id="gal-d-avatar" src="${DEFAULT_AVATAR}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;flex-shrink:0;">
                         <div style="flex:1;min-width:0;">
-                            <div id="gal-d-name" style="font-size:15px;font-weight:bold;color:#1e293b;"></div>
+                            <div id="gal-d-name" style="font-size:15px;font-weight:bold;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
                             <div id="gal-d-title" style="font-size:11px;color:#db2777;font-weight:bold;"></div>
                         </div>
                     </div>
@@ -68,7 +68,8 @@
                         <div class="gal-tab-btn" data-tab="sfw" style="flex:1;padding:10px;text-align:center;font-size:13px;font-weight:bold;cursor:pointer;color:#db2777;border-bottom:3px solid #db2777;">日常写真 <span id="gal-cnt-sfw" style="font-size:10px;background:rgba(219,39,119,0.15);color:#db2777;padding:1px 5px;border-radius:8px;">0</span></div>
                         <div class="gal-tab-btn" data-tab="nsfw" style="flex:1;padding:10px;text-align:center;font-size:13px;font-weight:bold;cursor:pointer;color:#94a3b8;border-bottom:3px solid transparent;">秘密档案 <span id="gal-cnt-nsfw" style="font-size:10px;background:#e2e8f0;color:#64748b;padding:1px 5px;border-radius:8px;">0</span></div>
                     </div>
-                    <div id="gal-grid" style="flex:1;overflow-y:auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;align-content:start;"></div>
+                    <!-- 加上 min-height:0 彻底解决被挤压的问题 -->
+                    <div id="gal-grid" style="flex:1;min-height:0;overflow-y:auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:12px;align-content:start;box-sizing:border-box;padding-bottom:50px;"></div>
                 </div>
                 <!-- 大图查看器 -->
                 <div id="gal-viewer" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;">
@@ -123,12 +124,14 @@
             photos.forEach(p => {
                 if (p.isUnlocked) {
                     g += `<div data-photo-url="${p.url}" data-photo-title="${p.title}" style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.08);aspect-ratio:3/4;background:#e2e8f0;">
-                        <img src="${p.url}" style="width:100%;height:100%;object-fit:cover;display:block;">
-                        <div style="position:absolute;bottom:0;left:0;width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;font-size:10px;padding:18px 6px 5px;box-sizing:border-box;">${p.title}</div>
+                        <!-- 图片改为绝对定位，填满父级框，绝不把父级撑爆 -->
+                        <img src="${p.url}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;">
+                        <!-- 文字增加防折行和截断，防止长标题破坏高度 -->
+                        <div style="position:absolute;bottom:0;left:0;width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;font-size:10px;padding:18px 6px 5px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.title}</div>
                     </div>`;
                 } else {
                     g += `<div style="position:relative;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);aspect-ratio:3/4;background:#1e293b;">
-                        <img src="${p.url}" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.08) blur(10px);">
+                        <img src="${p.url}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.08) blur(10px);">
                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);">
                             <span style="font-size:26px;">🔒</span>
                             <span style="font-size:11px;font-weight:bold;margin-top:4px;">条件未达成</span>
