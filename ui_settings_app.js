@@ -1,5 +1,5 @@
 // ==========================================
-// 秋青子专属终端：系统设置 App (专业 API 控制台、时区、天气与Dock栏设置)
+// 秋青子专属终端：系统设置 App (专业 API 控制台、时区)
 // ==========================================
 (function(global) {
     // 默认设置项
@@ -10,30 +10,8 @@
         apiPath: '/v1/chat/completions',
         apiModel: 'gpt-3.5-turbo',
         autoTimezone: true,
-        customTimezone: 'Asia/Tokyo',
-        // 👇 新增：天气数据源设置
-        weatherMode: 'local', // 'local' 为本地现实天气, 'virtual' 为剧情虚拟天气
-        // 👇 新增：Dock栏APP设置 (存储APP的ID)
-        dockApps: ['map', 'contact', 'twitter', 'music']
+        customTimezone: 'Asia/Tokyo'
     };
-
-    // 所有可用的 APP 列表 (用于生成Dock栏选择界面)
-    const availableApps = [
-        { id: 'map', name: '地图探索', icon: 'bi-map-fill', color: '#334155' },
-        { id: 'contact', name: 'LINE', icon: 'bi-chat-dots-fill', color: '#10b981' },
-        { id: 'gallery', name: '秘密相册', icon: 'bi-images', color: '#334155' },
-        { id: 'twitter', name: 'IdolX', icon: 'bi-twitter', color: '#3b82f6' },
-        { id: 'schedule', name: '日程安排', icon: 'bi-calendar3', color: '#334155' },
-        { id: 'task', name: '任务看板', icon: 'bi-clipboard-data-fill', color: '#334155' },
-        { id: 'wiki', name: '情报Wiki', icon: 'bi-book-half', color: '#334155' },
-        { id: 'gacha', name: '星探寻访', icon: 'bi-controller', color: '#f59e0b' },
-        { id: 'music', name: '音乐', icon: 'bi-music-note-beamed', color: '#ec4899' },
-        { id: 'settings', name: '设置', icon: 'bi-gear-fill', color: '#64748b' },
-        { id: 'inventory', name: '背包仓储', icon: 'bi-bag-fill', color: '#8b5cf6' },
-        { id: 'wallpaper', name: '主题壁纸', icon: 'bi-palette-fill', color: '#14b8a6' },
-        { id: 'darkweb', name: 'DarkWeb', icon: 'bi-incognito', color: '#ef4444' },
-        { id: 'fortune', name: '今日运势', icon: 'bi-box2-heart-fill', color: '#dc2626' }
-    ];
 
     // 读取本地设置
     function loadSettings() {
@@ -68,7 +46,7 @@
         return h + p;
     }
 
-    // 🌟 全局时钟更新逻辑 (保持不变)
+    // 🌟 全局时钟更新逻辑
     global.updatePadClock = function() {
         const timeEl = document.getElementById('pad-time');
         if (!timeEl) return;
@@ -96,21 +74,6 @@
 
         const currentSettings = loadSettings();
 
-        // 生成 Dock 栏 APP 选择列表的 HTML
-        let dockAppsHtml = '';
-        availableApps.forEach(app => {
-            const isChecked = currentSettings.dockApps.includes(app.id) ? 'checked' : '';
-            dockAppsHtml += `
-                <label class="dock-app-item">
-                    <input type="checkbox" class="dock-app-checkbox" value="${app.id}" ${isChecked}>
-                    <div class="dock-app-card">
-                        <i class="bi ${app.icon}" style="color: ${app.color};"></i>
-                        <span>${app.name}</span>
-                    </div>
-                </label>
-            `;
-        });
-
         const html = `
             <style>
                 .settings-wrap { padding: 30px; display: flex; flex-direction: column; gap: 35px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8fafc; min-height: 100%; padding-bottom: 80px;}
@@ -135,8 +98,6 @@
                 .btn-primary:hover { background: #2563eb; }
                 .btn-secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;}
                 .btn-secondary:hover { background: #e2e8f0; color: #1e293b;}
-                .btn-danger { background: #fee2e2; color: #ef4444; }
-                .btn-danger:hover { background: #fecaca; }
 
                 .url-preview { font-size: 12px; color: #64748b; margin-top: 6px; word-break: break-all; }
 
@@ -169,20 +130,10 @@
                 .toast-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0;}
                 .toast-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;}
                 .toast-info { background: #e0e7ff; color: #1e40af; border: 1px solid #bfdbfe;}
-
-                /* 👇 新增：Dock栏选择网格样式 */
-                .dock-app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 15px;}
-                .dock-app-item { cursor: pointer; display: block;}
-                .dock-app-checkbox { display: none; }
-                .dock-app-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 15px 10px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; transition: 0.2s;}
-                .dock-app-card i { font-size: 24px; }
-                .dock-app-card span { font-size: 12px; font-weight: 600; color: #475569; text-align: center;}
-                .dock-app-checkbox:checked + .dock-app-card { border-color: #3b82f6; background: #eff6ff; box-shadow: 0 4px 10px rgba(59,130,246,0.15);}
-                .dock-app-checkbox:checked + .dock-app-card i, .dock-app-checkbox:checked + .dock-app-card span { color: #1e40af !important; }
             </style>
 
             <div class="settings-wrap">
-                <!-- API 配置 (保持不变) -->
+                <!-- API 配置 -->
                 <div class="settings-section">
                     <div class="section-title">
                         <div class="title-left"><i class="bi bi-hdd-network"></i> API 连接配置</div>
@@ -238,7 +189,7 @@
                     <div style="font-size: 12px; color: #94a3b8; margin-top: 10px;">* 点击列表中的模型即可切换使用。</div>
                 </div>
 
-                <!-- 时区设置 (保持不变) -->
+                <!-- 时区设置 -->
                 <div class="settings-section">
                     <div class="section-title">
                         <div class="title-left"><i class="bi bi-clock-history"></i> 本地化与时钟</div>
@@ -261,33 +212,6 @@
                         </select>
                     </div>
                     <button id="btn-save-locale" class="btn btn-secondary" style="width: 100%;">保存时钟设置</button>
-                </div>
-
-                <!-- 👇 新增：个性化与桌面设置 -->
-                <div class="settings-section">
-                    <div class="section-title">
-                        <div class="title-left"><i class="bi bi-palette-fill" style="color: #14b8a6;"></i> 个性化与桌面</div>
-                    </div>
-
-                    <div class="setting-group">
-                        <label class="setting-label">天气数据源</label>
-                        <select class="form-control" id="set-weather-mode">
-                            <option value="local" ${currentSettings.weatherMode === 'local' ? 'selected' : ''}>跟随本地现实天气</option>
-                            <option value="virtual" ${currentSettings.weatherMode === 'virtual' ? 'selected' : ''}>跟随剧情虚拟天气</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-group">
-                        <label class="setting-label" style="display:flex; justify-content:space-between;">
-                            <span>Dock 栏常驻应用 (最多建议 6 个)</span>
-                            <span id="dock-count" style="color:#3b82f6;">已选: ${currentSettings.dockApps.length}</span>
-                        </label>
-                        <div class="dock-app-grid" id="dock-app-container">
-                            ${dockAppsHtml}
-                        </div>
-                    </div>
-
-                    <button id="btn-save-personal" class="btn btn-secondary" style="width: 100%;"><i class="bi bi-save"></i> 保存个性化设置</button>
                 </div>
             </div>
         `;
@@ -347,7 +271,6 @@
             btnTestApi.innerHTML = '<i class="bi bi-hourglass-split"></i>';
             showToast('正在测试连接...', 'info');
 
-            // 构造测试请求 (向 /v1/models 发请求最安全)
             let testUrl = host;
             if (testUrl.endsWith('/')) testUrl = testUrl.slice(0, -1);
             testUrl += '/v1/models';
@@ -391,9 +314,9 @@
                 const data = await res.json();
                 let models = [];
                 if (data && data.data && Array.isArray(data.data)) {
-                    models = data.data.map(m => m.id).sort(); // OpenAI 格式
+                    models = data.data.map(m => m.id).sort();
                 } else if (Array.isArray(data)) {
-                    models = data.map(m => m.id || m.name || m).sort(); // 兼容格式
+                    models = data.map(m => m.id || m.name || m).sort();
                 }
 
                 if (models.length === 0) {
@@ -422,12 +345,10 @@
                     <div class="model-status">${isActive ? '<i class="bi bi-check-circle-fill" style="color:#3b82f6;"></i>' : ''}</div>
                 `;
                 card.addEventListener('click', () => {
-                    // 清除其他激活状态
                     container.querySelectorAll('.model-card').forEach(c => {
                         c.classList.remove('active');
                         c.querySelector('.model-status').innerHTML = '';
                     });
-                    // 设置当前激活
                     card.classList.add('active');
                     card.querySelector('.model-status').innerHTML = '<i class="bi bi-check-circle-fill" style="color:#3b82f6;"></i>';
                     selectedModel = modelId;
@@ -475,50 +396,6 @@
                 btnSaveLocale.innerHTML = '<i class="bi bi-check2"></i> 已保存';
                 if(typeof global.updatePadClock === 'function') global.updatePadClock();
                 setTimeout(() => { btnSaveLocale.innerHTML = '保存时钟设置'; }, 1500);
-            }
-        });
-
-        // 👇 8. 新增：个性化与桌面设置的交互与保存
-        const dockCheckboxes = container.querySelectorAll('.dock-app-checkbox');
-        const dockCountDisplay = container.querySelector('#dock-count');
-        const btnSavePersonal = container.querySelector('#btn-save-personal');
-
-        // 实时更新选中数量显示
-        dockCheckboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                const selectedCount = container.querySelectorAll('.dock-app-checkbox:checked').length;
-                dockCountDisplay.innerText = `已选: ${selectedCount}`;
-                if (selectedCount > 6) {
-                    dockCountDisplay.style.color = '#ef4444'; // 超过建议数量变红
-                } else {
-                    dockCountDisplay.style.color = '#3b82f6';
-                }
-            });
-        });
-
-        btnSavePersonal.addEventListener('click', () => {
-            const newSettings = loadSettings();
-            newSettings.weatherMode = container.querySelector('#set-weather-mode').value;
-
-            // 收集选中的 Dock 栏 APP ID
-            const selectedDockApps = [];
-            container.querySelectorAll('.dock-app-checkbox:checked').forEach(cb => {
-                selectedDockApps.push(cb.value);
-            });
-            newSettings.dockApps = selectedDockApps;
-
-            if(saveSettings(newSettings)) {
-                const oldText = btnSavePersonal.innerHTML;
-                btnSavePersonal.innerHTML = '<i class="bi bi-check2"></i> 已保存，重启平板生效';
-                btnSavePersonal.style.background = '#10b981';
-                btnSavePersonal.style.color = '#fff';
-                btnSavePersonal.style.border = 'none';
-                setTimeout(() => {
-                    btnSavePersonal.innerHTML = oldText;
-                    btnSavePersonal.style.background = '#f1f5f9';
-                    btnSavePersonal.style.color = '#475569';
-                    btnSavePersonal.style.border = '1px solid #cbd5e1';
-                }, 2000);
             }
         });
     };
