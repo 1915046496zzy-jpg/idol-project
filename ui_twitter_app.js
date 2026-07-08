@@ -1,5 +1,5 @@
 // ==========================================
-// ui_twitter_app.js (IdolX 应用模块 - 真实API接入版)
+// ui_twitter_app.js (IdolX 应用模块 - 真实API接入 + 终极容错版)
 // ==========================================
 (function() {
     let topWin = window.parent || window;
@@ -7,8 +7,8 @@
     topWin.renderTwitterApp = function(container) {
         if (!container) return;
 
-        // 优化头像获取逻辑
-        let mainAvatar = 'https://i.postimg.cc/QxX9b7k0/default-avatar.png'; // 默认保底头像
+        // 获取主角头像 (优先从数据库获取，降级到默认图)
+        let mainAvatar = 'https://i.postimg.cc/QxX9b7k0/default-avatar.png';
         if (typeof topWin.getAssetUrl === 'function') {
             let tryAvatar = topWin.getAssetUrl('idol_avatar', 'avatar');
             if (tryAvatar && tryAvatar !== '') {
@@ -16,7 +16,7 @@
             }
         }
 
-        // 1. 构建 UI
+        // 1. 构建真实推特风格 UI 结构 (亮色主题)
         container.innerHTML = `
             <div class="idolx-container" style="display:flex; flex-direction:column; height:100%; background:#ffffff; color:#0f1419; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; position:relative;">
 
@@ -40,10 +40,13 @@
 
                 <!-- 内容区 -->
                 <div class="idolx-body" style="display:flex; flex:1; overflow:hidden;">
+                    <!-- 时间线 -->
                     <div class="idolx-timeline" id="idolx-timeline-scroll" style="flex:1; overflow-y:auto; position:relative; padding-bottom:60px;">
+                        <!-- 刷新提示区 -->
                         <div id="idolx-refresh-btn" style="text-align:center; padding:12px; color:#1d9bf0; cursor:pointer; font-size:14px; transition:background 0.2s;">
                             下拉或点击刷新
                         </div>
+                        <!-- 推文列表容器 -->
                         <div id="idolx-tweets-container">
                             <div style="padding:40px 20px; text-align:center; color:#536471; font-size:15px;">
                                 欢迎来到 IdolX<br>点击右上角或刷新获取最新动态吧！
@@ -52,7 +55,7 @@
                     </div>
                 </div>
 
-                <!-- 底部导航栏 -->
+                <!-- 底部导航栏 (手机端特有) -->
                 <div class="idolx-bottom-nav" style="height:53px; border-top:1px solid #eff3f4; display:flex; justify-content:space-around; align-items:center; background:#ffffff; position:absolute; bottom:0; width:100%; z-index:10;">
                     <i class="bi bi-house-door-fill" style="font-size:24px; color:#0f1419; cursor:pointer;"></i>
                     <i class="bi bi-search" style="font-size:24px; color:#536471; cursor:pointer;" id="btn-show-trends"></i>
@@ -60,7 +63,7 @@
                     <i class="bi bi-envelope btn-unimplemented" style="font-size:24px; color:#536471; cursor:pointer;"></i>
                 </div>
 
-                <!-- 悬浮发推按钮 -->
+                <!-- 悬浮发推按钮 (FAB) -->
                 <div id="btn-compose-tweet" style="position:absolute; right:20px; bottom:70px; width:56px; height:56px; background:#1d9bf0; border-radius:50%; display:flex; justify-content:center; align-items:center; color:#fff; font-size:24px; box-shadow:0 8px 28px rgba(0,0,0,0.28); cursor:pointer; z-index:20; transition:transform 0.2s;">
                     <i class="bi bi-feather"></i>
                 </div>
@@ -92,7 +95,7 @@
                     </div>
                 </div>
 
-                <!-- 简单的 Toast 提示 -->
+                <!-- Toast 提示 -->
                 <div id="idolx-toast" style="display:none; position:absolute; top:60px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:#fff; padding:8px 16px; border-radius:20px; font-size:13px; z-index:99; white-space:nowrap;"></div>
             </div>
         `;
@@ -115,7 +118,7 @@
         function showToast(msg) {
             toastEl.innerText = msg;
             toastEl.style.display = 'block';
-            setTimeout(() => { toastEl.style.display = 'none'; }, 2000);
+            setTimeout(() => { toastEl.style.display = 'none'; }, 3000);
         }
 
         unimplBtns.forEach(btn => {
@@ -127,14 +130,16 @@
         btnShowTrends.addEventListener('click', () => trendsPanel.style.display = 'flex');
         btnCloseTrends.addEventListener('click', () => trendsPanel.style.display = 'none');
 
-        // 4. 真实 API 请求逻辑 (秋青子加固版)
+        // 4. 真实 API 请求逻辑 (秋青子终极加固版)
         async function fetchIdolXData(actionType = 'refresh') {
+            // 获取数值状态
             let currentStats = {
                 fame: typeof topWin.getFame === 'function' ? topWin.getFame() : 5000,
                 stress: typeof topWin.getStress === 'function' ? topWin.getStress() : 30,
                 action: actionType
             };
 
+            // 获取 API 配置
             let settings = { apiKey: '', apiHost: '', apiPath: '', apiModel: '' };
             if (typeof topWin.getQingziSettings === 'function') {
                 settings = topWin.getQingziSettings();
@@ -150,6 +155,7 @@
                 throw new Error("API未配置");
             }
 
+            // 构造 Prompt
             const promptText = `
 你现在是偶像企划游戏里的社交媒体(IdolX)生成引擎。
 当前偶像状态: 粉丝数(Fame)=${currentStats.fame}, 压力值(Stress)=${currentStats.stress}。
@@ -160,14 +166,14 @@
 2. 必须且只能返回纯JSON格式数据，不要有任何多余的解释、不要Markdown代码块标记。
 返回JSON结构严格如下:
 {
-  <q>"tweets"</q>: [
+  "tweets": [
     {
-      <q>"name"</q>: <q>"用户昵称"</q>, <q>"handle"</q>: <q>"@用户ID"</q>, <q>"time"</q>: <q>"几分钟前"</q>, <q>"isVerified"</q>: false,
-      <q>"content"</q>: <q>"推文内容"</q>, <q>"replies"</q>: <q>"数字"</q>, <q>"retweets"</q>: <q>"数字"</q>, <q>"likes"</q>: <q>"数字"</q>, <q>"views"</q>: <q>"数字"</q>
+      "name": "用户昵称", "handle": "@用户ID", "time": "几分钟前", "isVerified": false,
+      "content": "推文内容", "replies": "数字", "retweets": "数字", "likes": "数字", "views": "数字"
     }
   ],
-  <q>"trends"</q>: [
-    { <q>"keyword"</q>: <q>"#词条"</q>, <q>"posts"</q>: <q>"讨论量"</q> }
+  "trends": [
+    { "keyword": "#词条", "posts": "讨论量" }
   ]
 }`;
 
@@ -183,7 +189,7 @@
                 // 移除了 response_format，防止部分模型报错
             };
 
-            console.log("【秋青子】正在请求真实API...", fetchUrl, requestBody);
+            console.log("【秋青子】正在请求真实API...", fetchUrl);
 
             try {
                 const response = await fetch(fetchUrl, {
@@ -198,24 +204,48 @@
                 if (!response.ok) {
                     const errText = await response.text();
                     console.error("【秋青子】API报错啦:", errText);
-                    showToast(`API 错误: HTTP ${response.status}`);
+                    showToast(`API 错误: HTTP ${response.status}，请看控制台`);
                     throw new Error(`API 请求失败: ${response.status}`);
                 }
 
                 const resData = await response.json();
-                let contentStr = resData.choices[0].message.content;
-                console.log("【秋青子】大模型返回的原始内容:", contentStr);
+                let contentStr = '';
 
-                // 提取 JSON (防止模型自作聪明加上 ```json 代码块)
-                let jsonMatch = contentStr.match(/\{[\s\S]*\}/);
-                if (!jsonMatch) {
-                    showToast("大模型没有返回有效的JSON格式");
-                    throw new Error("JSON 匹配失败");
+                // 兼容不同的API返回结构
+                if (resData.choices && resData.choices.length > 0) {
+                    contentStr = resData.choices[0].message.content;
+                } else if (resData.response) {
+                    contentStr = resData.response;
+                } else {
+                    contentStr = JSON.stringify(resData);
                 }
 
-                let parsedData = JSON.parse(jsonMatch[0]);
+                console.log("【秋青子】大模型返回的原始内容:", contentStr);
 
-                if(parsedData.tweets && parsedData.tweets.length > 0) {
+                let parsedData = null;
+
+                try {
+                    // 1. 尝试直接去除可能存在的 Markdown 代码块包裹
+                    let cleanStr = contentStr.replace(/^```json/i, '').replace(/^```/i, '').replace(/```$/i, '').trim();
+                    parsedData = JSON.parse(cleanStr);
+                } catch (parseErr1) {
+                    console.warn(<q>"【秋青子】直接解析失败，尝试使用正则提取..."</q>, parseErr1);
+                    try {
+                        // 2. 如果直接去代码块还不行，尝试暴力提取大括号里的内容
+                        let jsonMatch = contentStr.match(/{[\s\S]*}/);
+                        if (!jsonMatch) {
+                            throw new Error(<q>"找不到任何JSON大括号"</q>);
+                        }
+                        parsedData = JSON.parse(jsonMatch[0]);
+                    } catch (parseErr2) {
+                        console.error(<q>"【秋青子】终极提取依然失败！请检查大模型到底返回了什么鬼东西:"</q>, contentStr);
+                        showToast(<q>"大模型返回格式错误，解析崩溃"</q>);
+                        throw parseErr2;
+                    }
+                }
+
+                // 把偶像的头像塞进去
+                if(parsedData && parsedData.tweets && parsedData.tweets.length > 0) {
                     parsedData.tweets[0].avatar = mainAvatar;
                     parsedData.tweets[0].isVerified = true;
                     for(let i=1; i<parsedData.tweets.length; i++) {
@@ -227,39 +257,104 @@
 
             } catch (err) {
                 console.error("【秋青子】捕获到异常:", err);
-                // 抛出错误给外层捕获
                 throw err;
             }
         }
 
+        // 渲染推文
+        function renderTweets(tweets) {
+            tweetsContainer.innerHTML = '';
+            if (!tweets || tweets.length === 0) {
+                tweetsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#536471;">暂时没有动态</div>';
+                return;
+            }
+            tweets.forEach(tweet => {
+                tweetsContainer.innerHTML += `
+                    <div style="padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px; cursor:pointer; hover:bg:#f7f9f9; transition:background 0.2s;">
+                        <img src="\${tweet.avatar || 'https://i.postimg.cc/QxX9b7k0/default-avatar.png'}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">
+                        <div style="flex:1; min-width:0;">
+                            <div style="display:flex; align-items:center; gap:4px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                <span style="font-weight:bold; color:#0f1419; font-size:15px;">\${tweet.name || 'Unknown'}</span>
+                                \${tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0; font-size:14px;"></i>' : ''}
+                                <span style="color:#536471; font-size:15px; margin-left:2px;">\${tweet.handle || '@user'}</span>
+                                <span style="color:#536471; font-size:15px;">· \${tweet.time || '刚刚'}</span>
+                            </div>
+                            <div style="font-size:15px; color:#0f1419; line-height:1.4; margin-bottom:12px; word-break:break-word;">
+                                \${tweet.content || ''}
+                            </div>
+                            <div style="display:flex; justify-content:space-between; color:#536471; font-size:13px; max-width:425px; margin-top:12px;">
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-chat"></i> \${tweet.replies || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-arrow-repeat"></i> \${tweet.retweets || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-heart"></i> \${tweet.likes || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-bar-chart"></i> \${tweet.views || '0'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // 渲染热搜
+        function renderTrends(trends) {
+            trendsContainer.innerHTML = '';
+            if (!trends || trends.length === 0) {
+                trendsContainer.innerHTML = '<div style="text-align:center; color:#536471; margin-top:20px;">暂无趋势数据</div>';
+                return;
+            }
+            trends.forEach((trend, index) => {
+                trendsContainer.innerHTML += `
+                    <div style="padding:12px 0; cursor:pointer;">
+                        <div style="color:#536471; font-size:13px; margin-bottom:2px; display:flex; justify-content:space-between;">
+                            <span>\${index + 1} · 流行趋势</span>
+                            <i class="bi bi-three-dots"></i>
+                        </div>
+                        <div style="font-weight:bold; font-size:15px; color:#0f1419;">\${trend.keyword || '#未知词条'}</div>
+                        <div style="color:#536471; font-size:13px; margin-top:4px;">\${trend.posts || '0'} 帖子</div>
+                    </div>
+                `;
+            });
+        }
 
         // 5. 绑定刷新与发推事件
         refreshBtn.addEventListener('click', async () => {
             refreshBtn.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status" style="width:1rem; height:1rem;"></div>';
+            refreshBtn.style.background = '#f7f9f9';
             try {
                 const data = await fetchIdolXData('refresh');
-                renderTweets(data.tweets);
-                renderTrends(data.trends);
+                if(data) {
+                    renderTweets(data.tweets);
+                    renderTrends(data.trends);
+                }
             } catch(e) {
-                showToast("获取数据失败，请检查API设置");
                 console.error(e);
             }
             refreshBtn.innerHTML = '下拉或点击刷新';
+            refreshBtn.style.background = 'transparent';
         });
 
         tweetButtons.forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const type = e.target.getAttribute('data-type');
+                if (type === 'breakdown') {
+                    let stress = typeof topWin.getStress === 'function' ? topWin.getStress() : 0;
+                    if (stress < 80) {
+                        showToast("目前压力值不够，无法触发崩溃发推哦~");
+                        return;
+                    }
+                }
+
                 let originalText = e.target.innerText;
                 e.target.innerText = "发布中...";
                 try {
                     const data = await fetchIdolXData(type);
-                    renderTweets(data.tweets);
-                    renderTrends(data.trends);
-                    composeModal.style.display = 'none';
-                    container.querySelector('#idolx-timeline-scroll').scrollTop = 0;
+                    if(data) {
+                        renderTweets(data.tweets);
+                        renderTrends(data.trends);
+                        composeModal.style.display = 'none';
+                        container.querySelector('#idolx-timeline-scroll').scrollTop = 0;
+                    }
                 } catch(err) {
-                    showToast("发布失败，请检查API设置");
+                    console.error(err);
                 }
                 e.target.innerText = originalText;
             });
