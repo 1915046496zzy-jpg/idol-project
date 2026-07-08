@@ -20,7 +20,7 @@
         container.innerHTML = `
             <div class="idolx-container" style="display:flex; flex-direction:column; height:100%; background:#ffffff; color:#0f1419; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; position:relative;">
 
-                <!-- 顶部栏 -->
+                <!-- 顶部栏 (精简手机版) -->
                 <div class="idolx-header" style="height:53px; padding:0 16px; border-bottom:1px solid #eff3f4; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); z-index:10;">
                     <img src="\${mainAvatar}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#e1e8ed; cursor:pointer; box-shadow:0 0 2px rgba(0,0,0,0.1);">
                     <i class="bi bi-twitter" style="font-size:24px; color:#1d9bf0;"></i>
@@ -42,14 +42,16 @@
                 <div class="idolx-body" style="display:flex; flex:1; overflow:hidden;">
                     <!-- 时间线 -->
                     <div class="idolx-timeline" id="idolx-timeline-scroll" style="flex:1; overflow-y:auto; position:relative; padding-bottom:60px;">
+
                         <!-- 刷新提示区 -->
                         <div id="idolx-refresh-btn" style="text-align:center; padding:12px; color:#1d9bf0; cursor:pointer; font-size:14px; transition:background 0.2s;">
                             下拉或点击刷新
                         </div>
+
                         <!-- 推文列表容器 -->
                         <div id="idolx-tweets-container">
                             <div style="padding:40px 20px; text-align:center; color:#536471; font-size:15px;">
-                                欢迎来到 IdolX<br>点击右上角或刷新获取最新动态吧！
+                                欢迎来到 IdolX<br>点击右上角或下拉刷新获取最新动态吧！
                             </div>
                         </div>
                     </div>
@@ -68,7 +70,7 @@
                     <i class="bi bi-feather"></i>
                 </div>
 
-                <!-- 发推操作弹窗 -->
+                <!-- 发推操作弹窗 (默认隐藏) -->
                 <div id="idolx-compose-modal" style="display:none; position:absolute; bottom:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:30; flex-direction:column; justify-content:flex-end;">
                     <div style="background:#fff; border-radius:20px 20px 0 0; padding:20px; box-shadow:0 -5px 20px rgba(0,0,0,0.1);">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -83,7 +85,7 @@
                     </div>
                 </div>
 
-                <!-- 热搜面板 -->
+                <!-- 热搜面板 (侧滑/全屏) -->
                 <div id="idolx-trends-panel" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#fff; z-index:25; flex-direction:column;">
                     <div style="height:53px; padding:0 16px; border-bottom:1px solid #eff3f4; display:flex; align-items:center; gap:20px;">
                         <i class="bi bi-arrow-left" id="btn-close-trends" style="font-size:20px; cursor:pointer;"></i>
@@ -95,7 +97,7 @@
                     </div>
                 </div>
 
-                <!-- Toast 提示 -->
+                <!-- 简单的 Toast 提示 -->
                 <div id="idolx-toast" style="display:none; position:absolute; top:60px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:#fff; padding:8px 16px; border-radius:20px; font-size:13px; z-index:99; white-space:nowrap;"></div>
             </div>
         `;
@@ -118,7 +120,7 @@
         function showToast(msg) {
             toastEl.innerText = msg;
             toastEl.style.display = 'block';
-            setTimeout(() => { toastEl.style.display = 'none'; }, 3000);
+            setTimeout(() => { toastEl.style.display = 'none'; }, 2500);
         }
 
         unimplBtns.forEach(btn => {
@@ -132,14 +134,12 @@
 
         // 4. 真实 API 请求逻辑 (秋青子终极加固版)
         async function fetchIdolXData(actionType = 'refresh') {
-            // 获取数值状态
             let currentStats = {
                 fame: typeof topWin.getFame === 'function' ? topWin.getFame() : 5000,
                 stress: typeof topWin.getStress === 'function' ? topWin.getStress() : 30,
                 action: actionType
             };
 
-            // 获取 API 配置
             let settings = { apiKey: '', apiHost: '', apiPath: '', apiModel: '' };
             if (typeof topWin.getQingziSettings === 'function') {
                 settings = topWin.getQingziSettings();
@@ -155,7 +155,6 @@
                 throw new Error("API未配置");
             }
 
-            // 构造 Prompt
             const promptText = `
 你现在是偶像企划游戏里的社交媒体(IdolX)生成引擎。
 当前偶像状态: 粉丝数(Fame)=${currentStats.fame}, 压力值(Stress)=${currentStats.stress}。
@@ -166,14 +165,14 @@
 2. 必须且只能返回纯JSON格式数据，不要有任何多余的解释、不要Markdown代码块标记。
 返回JSON结构严格如下:
 {
-  "tweets": [
+  <q>"tweets"</q>: [
     {
-      "name": "用户昵称", "handle": "@用户ID", "time": "几分钟前", "isVerified": false,
-      "content": "推文内容", "replies": "数字", "retweets": "数字", "likes": "数字", "views": "数字"
+      <q>"name"</q>: <q>"用户昵称"</q>, <q>"handle"</q>: <q>"@用户ID"</q>, <q>"time"</q>: <q>"几分钟前"</q>, <q>"isVerified"</q>: false,
+      <q>"content"</q>: <q>"推文内容"</q>, <q>"replies"</q>: <q>"数字"</q>, <q>"retweets"</q>: <q>"数字"</q>, <q>"likes"</q>: <q>"数字"</q>, <q>"views"</q>: <q>"数字"</q>
     }
   ],
-  "trends": [
-    { "keyword": "#词条", "posts": "讨论量" }
+  <q>"trends"</q>: [
+    { <q>"keyword"</q>: <q>"#词条"</q>, <q>"posts"</q>: <q>"讨论量"</q> }
   ]
 }`;
 
@@ -186,7 +185,6 @@
             const requestBody = {
                 model: settings.apiModel || "gpt-3.5-turbo",
                 messages: [{ role: "user", content: promptText }]
-                // 移除了 response_format，防止部分模型报错
             };
 
             console.log("【秋青子】正在请求真实API...", fetchUrl);
@@ -204,7 +202,7 @@
                 if (!response.ok) {
                     const errText = await response.text();
                     console.error("【秋青子】API报错啦:", errText);
-                    showToast(`API 错误: HTTP ${response.status}，请看控制台`);
+                    showToast(`API 错误: HTTP ${response.status}`);
                     throw new Error(`API 请求失败: ${response.status}`);
                 }
 
@@ -215,7 +213,7 @@
                 if (resData.choices && resData.choices.length > 0) {
                     contentStr = resData.choices[0].message.content;
                 } else if (resData.response) {
-                    contentStr = resData.response;
+                    contentStr = resData.response; // 兼容部分其他模型格式
                 } else {
                     contentStr = JSON.stringify(resData);
                 }
@@ -229,17 +227,17 @@
                     let cleanStr = contentStr.replace(/^```json/i, '').replace(/^```/i, '').replace(/```$/i, '').trim();
                     parsedData = JSON.parse(cleanStr);
                 } catch (parseErr1) {
-                    console.warn(<q>"【秋青子】直接解析失败，尝试使用正则提取..."</q>, parseErr1);
+                    console.warn("【秋青子】直接解析失败，尝试使用正则提取...", parseErr1);
                     try {
-                        // 2. 如果直接去代码块还不行，尝试暴力提取大括号里的内容
+                        // 2. 暴力提取大括号里的内容
                         let jsonMatch = contentStr.match(/{[\s\S]*}/);
                         if (!jsonMatch) {
-                            throw new Error(<q>"找不到任何JSON大括号"</q>);
+                            throw new Error("找不到任何JSON大括号");
                         }
                         parsedData = JSON.parse(jsonMatch[0]);
                     } catch (parseErr2) {
-                        console.error(<q>"【秋青子】终极提取依然失败！请检查大模型到底返回了什么鬼东西:"</q>, contentStr);
-                        showToast(<q>"大模型返回格式错误，解析崩溃"</q>);
+                        console.error("【秋青子】终极提取依然失败！内容格式彻底崩溃:", contentStr);
+                        showToast("模型返回格式错误，解析崩溃");
                         throw parseErr2;
                     }
                 }
@@ -261,22 +259,19 @@
             }
         }
 
-        // 渲染推文
+        // 渲染函数
         function renderTweets(tweets) {
             tweetsContainer.innerHTML = '';
-            if (!tweets || tweets.length === 0) {
-                tweetsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#536471;">暂时没有动态</div>';
-                return;
-            }
+            if (!tweets || tweets.length === 0) return;
             tweets.forEach(tweet => {
                 tweetsContainer.innerHTML += `
-                    <div style="padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px; cursor:pointer; hover:bg:#f7f9f9; transition:background 0.2s;">
+                    <div style="padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px; cursor:pointer; transition:background 0.2s;">
                         <img src="\${tweet.avatar || 'https://i.postimg.cc/QxX9b7k0/default-avatar.png'}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">
                         <div style="flex:1; min-width:0;">
                             <div style="display:flex; align-items:center; gap:4px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                <span style="font-weight:bold; color:#0f1419; font-size:15px;">\${tweet.name || 'Unknown'}</span>
+                                <span style="font-weight:bold; color:#0f1419; font-size:15px;">\${tweet.name || '未知用户'}</span>
                                 \${tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0; font-size:14px;"></i>' : ''}
-                                <span style="color:#536471; font-size:15px; margin-left:2px;">\${tweet.handle || '@user'}</span>
+                                <span style="color:#536471; font-size:15px; margin-left:2px;">\${tweet.handle || '@unknown'}</span>
                                 <span style="color:#536471; font-size:15px;">· \${tweet.time || '刚刚'}</span>
                             </div>
                             <div style="font-size:15px; color:#0f1419; line-height:1.4; margin-bottom:12px; word-break:break-word;">
@@ -294,13 +289,9 @@
             });
         }
 
-        // 渲染热搜
         function renderTrends(trends) {
             trendsContainer.innerHTML = '';
-            if (!trends || trends.length === 0) {
-                trendsContainer.innerHTML = '<div style="text-align:center; color:#536471; margin-top:20px;">暂无趋势数据</div>';
-                return;
-            }
+            if (!trends || trends.length === 0) return;
             trends.forEach((trend, index) => {
                 trendsContainer.innerHTML += `
                     <div style="padding:12px 0; cursor:pointer;">
@@ -308,7 +299,7 @@
                             <span>\${index + 1} · 流行趋势</span>
                             <i class="bi bi-three-dots"></i>
                         </div>
-                        <div style="font-weight:bold; font-size:15px; color:#0f1419;">\${trend.keyword || '#未知词条'}</div>
+                        <div style="font-weight:bold; font-size:15px; color:#0f1419;">\${trend.keyword || '未知趋势'}</div>
                         <div style="color:#536471; font-size:13px; margin-top:4px;">\${trend.posts || '0'} 帖子</div>
                     </div>
                 `;
@@ -321,12 +312,10 @@
             refreshBtn.style.background = '#f7f9f9';
             try {
                 const data = await fetchIdolXData('refresh');
-                if(data) {
-                    renderTweets(data.tweets);
-                    renderTrends(data.trends);
-                }
+                renderTweets(data.tweets);
+                renderTrends(data.trends);
             } catch(e) {
-                console.error(e);
+                // Toast 已经在 catch 里提示过了，这里可以忽略
             }
             refreshBtn.innerHTML = '下拉或点击刷新';
             refreshBtn.style.background = 'transparent';
@@ -335,10 +324,11 @@
         tweetButtons.forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const type = e.target.getAttribute('data-type');
+
                 if (type === 'breakdown') {
                     let stress = typeof topWin.getStress === 'function' ? topWin.getStress() : 0;
                     if (stress < 80) {
-                        showToast("目前压力值不够，无法触发崩溃发推哦~");
+                        alert("目前压力值不够，无法触发崩溃发推哦~");
                         return;
                     }
                 }
@@ -347,14 +337,12 @@
                 e.target.innerText = "发布中...";
                 try {
                     const data = await fetchIdolXData(type);
-                    if(data) {
-                        renderTweets(data.tweets);
-                        renderTrends(data.trends);
-                        composeModal.style.display = 'none';
-                        container.querySelector('#idolx-timeline-scroll').scrollTop = 0;
-                    }
+                    renderTweets(data.tweets);
+                    renderTrends(data.trends);
+                    composeModal.style.display = 'none';
+                    container.querySelector('#idolx-timeline-scroll').scrollTop = 0;
                 } catch(err) {
-                    console.error(err);
+                    // Toast 已经在 catch 里提示过了
                 }
                 e.target.innerText = originalText;
             });
