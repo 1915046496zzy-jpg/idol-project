@@ -1,5 +1,5 @@
 // ==========================================
-// ui_twitter_app.js (IdolX 应用模块 - 独立生成 + 深度交互升级版)
+// ui_twitter_app.js (IdolX 应用模块 - 纯净修复版)
 // ==========================================
 (function() {
     let topWin = window.parent || window;
@@ -14,7 +14,7 @@
             if (tryAvatar && tryAvatar !== '') mainAvatar = tryAvatar;
         }
 
-        // 随机路人头像库 (Bootstrap Icons + 颜色)
+        // 随机路人头像库
         const bgColors = ['#f87171', '#fb923c', '#fbbf24', '#34d399', '#38bdf8', '#22d3ee', '#818cf8', '#a78bfa', '#c084fc', '#f472b6', '#fb7185'];
         const iconList = ['bi-person', 'bi-emoji-smile', 'bi-emoji-sunglasses', 'bi-robot', 'bi-alien', 'bi-ghost', 'bi-moon', 'bi-snow', 'bi-lightning', 'bi-cup-hot', 'bi-controller'];
 
@@ -24,20 +24,19 @@
             return `<div style="width:48px; height:48px; border-radius:50%; background:${color}; display:flex; justify-content:center; align-items:center; color:#fff; font-size:24px; flex-shrink:0;"><i class="bi ${icon}"></i></div>`;
         }
 
-        // 1. 构建 UI 结构 (增加了详情页和独立的探索页结构)
+        // 1. 构建 UI 结构
         container.innerHTML = `
             <div class="idolx-container" style="display:flex; flex-direction:column; height:100%; background:#ffffff; color:#0f1419; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; position:relative; overflow:hidden;">
 
                 <!-- 顶部栏 -->
                 <div class="idolx-header" style="height:53px; padding:0 16px; border-bottom:1px solid #eff3f4; display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); z-index:10; flex-shrink:0;">
-                    <img src="\${mainAvatar}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#e1e8ed; box-shadow:0 0 2px rgba(0,0,0,0.1);">
+                    <img src="${mainAvatar}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#e1e8ed; box-shadow:0 0 2px rgba(0,0,0,0.1);">
                     <i class="bi bi-twitter" style="font-size:24px; color:#1d9bf0;"></i>
                     <i class="bi bi-stars btn-unimplemented" style="font-size:20px; color:#0f1419; cursor:pointer;"></i>
                 </div>
 
                 <!-- 页面容器 (Tab切换) -->
                 <div id="idolx-view-home" class="idolx-view" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
-                    <!-- 标签页 -->
                     <div style="display:flex; border-bottom:1px solid #eff3f4; font-weight:bold; font-size:15px; color:#536471; flex-shrink:0;">
                         <div style="flex:1; text-align:center; padding:15px 0; color:#0f1419; position:relative; cursor:pointer;">
                             为你推荐
@@ -45,7 +44,6 @@
                         </div>
                         <div class="btn-unimplemented" style="flex:1; text-align:center; padding:15px 0; cursor:pointer;">正在关注</div>
                     </div>
-                    <!-- 时间线 -->
                     <div id="idolx-timeline-scroll" style="flex:1; overflow-y:auto; position:relative; padding-bottom:60px;">
                         <div id="idolx-refresh-btn-home" style="text-align:center; padding:15px; color:#1d9bf0; cursor:pointer; font-size:14px; transition:0.2s;">
                             <i class="bi bi-arrow-down-circle"></i> 下拉或点击刷新推文
@@ -103,18 +101,16 @@
                     </div>
                 </div>
 
-                <!-- 推文详情面板 (全屏覆盖) -->
+                <!-- 推文详情面板 -->
                 <div id="idolx-tweet-detail" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#fff; z-index:40; flex-direction:column;">
                     <div style="height:53px; padding:0 16px; border-bottom:1px solid #eff3f4; display:flex; align-items:center; gap:20px; flex-shrink:0;">
                         <i class="bi bi-arrow-left" id="btn-close-detail" style="font-size:20px; cursor:pointer;"></i>
                         <span style="font-weight:bold; font-size:18px;">推文</span>
                     </div>
                     <div id="detail-content-area" style="flex:1; overflow-y:auto; padding-bottom:70px;">
-                        <!-- 详情内容将通过JS注入 -->
                     </div>
-                    <!-- 评论输入框 -->
                     <div style="position:absolute; bottom:0; width:100%; background:#fff; border-top:1px solid #eff3f4; padding:10px 16px; display:flex; gap:10px; align-items:center;">
-                        <img src="\${mainAvatar}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; background:#e1e8ed;">
+                        <img src="${mainAvatar}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; background:#e1e8ed;">
                         <input type="text" id="input-reply" placeholder="发布你的回复" style="flex:1; background:#eff3f4; border:none; padding:10px 16px; border-radius:20px; outline:none; font-size:15px;">
                         <button id="btn-send-reply" style="background:#1d9bf0; color:#fff; border:none; padding:8px 16px; border-radius:20px; font-weight:bold; cursor:pointer;">回复</button>
                     </div>
@@ -150,10 +146,6 @@
         const toastEl = container.querySelector('#idolx-toast');
         const unimplBtns = container.querySelectorAll('.btn-unimplemented');
 
-        // 全局保存当前渲染的推文数据，用于详情页
-        let currentTweetsData = [];
-        let currentActiveTweetId = null;
-
         // 3. UI 基础交互
         function showToast(msg) {
             toastEl.innerText = msg;
@@ -166,7 +158,7 @@
         btnCloseCompose.addEventListener('click', () => composeModal.style.display = 'none');
         btnCloseDetail.addEventListener('click', () => tweetDetailPanel.style.display = 'none');
 
-        // 底部导航切换 (主页 vs 探索)
+        // 导航切换
         navTabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
                 navTabs.forEach(t => { t.style.color = '#536471'; t.classList.remove('active'); });
@@ -180,12 +172,12 @@
                 } else {
                     viewHome.style.display = 'none';
                     viewExplore.style.display = 'flex';
-                    btnCompose.style.display = 'none'; // 探索页隐藏发推按钮
+                    btnCompose.style.display = 'none';
                 }
             });
         });
 
-        // 4. API 请求封装 (分离逻辑)
+        // 4. API 请求封装
         async function fetchIdolXData(targetType, action = 'refresh') {
             let currentStats = {
                 fame: typeof topWin.getFame === 'function' ? topWin.getFame() : 5000,
@@ -209,8 +201,7 @@
 
             let promptText = "";
             if (targetType === 'timeline') {
-                promptText = `
-你现在是偶像企划游戏里的社交媒体引擎。
+                promptText = `你现在是偶像企划游戏里的社交媒体引擎。
 当前状态: 粉丝数=${currentStats.fame}, 压力值=${currentStats.stress}。
 玩家操作: ${action === 'refresh' ? '刷新时间线' : '发送' + action + '推文'}。
 请生成3-5条推文(tweets)。第一条必须是Idol_Official发推，其余是粉丝或路人。
@@ -221,8 +212,7 @@
   ]
 }`;
             } else if (targetType === 'trends') {
-                promptText = `
-你现在是社交媒体引擎。当前偶像状态: 粉丝数=${currentStats.fame}, 压力值=${currentStats.stress}。
+                promptText = `你现在是社交媒体引擎。当前偶像状态: 粉丝数=${currentStats.fame}, 压力值=${currentStats.stress}。
 请生成5个当前日本的热搜趋势(trends)，包含社会日常与偶像相关的词条。
 严格返回JSON格式，不能有任何代码块标记：
 {
@@ -267,56 +257,47 @@
             }
         }
 
-        // 5. 渲染函数与交互绑定
-
-        // 渲染推文列表 (带点赞和详情点击)
+        // 5. 渲染推文
         function renderTweets(tweets) {
             tweetsContainer.innerHTML = '';
             if (!tweets || tweets.length === 0) return;
 
-            currentTweetsData = tweets; // 保存数据用于详情页
-
             tweets.forEach((tweet, index) => {
-                // 处理头像：官方用立绘，路人随机
                 let isOfficial = tweet.name === 'Idol_Official' || tweet.handle.toLowerCase().includes('idol');
                 let avatarHtml = isOfficial
-                    ? `<img src="\${mainAvatar}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">`
+                    ? `<img src="${mainAvatar}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">`
                     : getRandomAvatarHtml();
 
-                // 确保有ID
                 tweet.id = tweet.id || 'tweet_' + index;
 
                 let tweetEl = document.createElement('div');
                 tweetEl.style.cssText = <q>"padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px; cursor:pointer; transition:background 0.2s;"</q>;
                 tweetEl.innerHTML = `
-                    \${avatarHtml}
+                    ${avatarHtml}
                     <div style="flex:1; min-width:0;">
                         <div style="display:flex; align-items:center; gap:4px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                            <span style="font-weight:bold; color:#0f1419; font-size:15px;">\${tweet.name || '未知用户'}</span>
-                            \${isOfficial || tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0; font-size:14px;"></i>' : ''}
-                            <span style="color:#536471; font-size:15px; margin-left:2px;">\${tweet.handle || '@unknown'}</span>
-                            <span style="color:#536471; font-size:15px;">· \${tweet.time || '刚刚'}</span>
+                            <span style="font-weight:bold; color:#0f1419; font-size:15px;">${tweet.name || '未知用户'}</span>
+                            ${isOfficial || tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0; font-size:14px;"></i>' : ''}
+                            <span style="color:#536471; font-size:15px; margin-left:2px;">${tweet.handle || '@unknown'}</span>
+                            <span style="color:#536471; font-size:15px;">· ${tweet.time || '刚刚'}</span>
                         </div>
                         <div style="font-size:15px; color:#0f1419; line-height:1.4; margin-bottom:12px; word-break:break-word;">
-                            \${tweet.content || ''}
+                            ${tweet.content || ''}
                         </div>
                         <div style="display:flex; justify-content:space-between; color:#536471; font-size:13px; max-width:425px; margin-top:12px;">
-                            <div class="action-reply" style="display:flex; align-items:center; gap:8px;"><i class="bi bi-chat"></i> \${tweet.replies || '0'}</div>
-                            <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-arrow-repeat"></i> \${tweet.retweets || '0'}</div>
-                            <div class="action-like" style="display:flex; align-items:center; gap:8px; transition:0.2s;" data-liked="false"><i class="bi bi-heart"></i> <span class="like-count">\${tweet.likes || '0'}</span></div>
-                            <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-bar-chart"></i> \${tweet.views || '0'}</div>
+                            <div class="action-reply" style="display:flex; align-items:center; gap:8px;"><i class="bi bi-chat"></i> ${tweet.replies || '0'}</div>
+                            <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-arrow-repeat"></i> ${tweet.retweets || '0'}</div>
+                            <div class="action-like" style="display:flex; align-items:center; gap:8px; transition:0.2s;" data-liked="false"><i class="bi bi-heart"></i> <span class="like-count">${tweet.likes || '0'}</span></div>
+                            <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-bar-chart"></i> ${tweet.views || '0'}</div>
                         </div>
                     </div>
                 `;
 
-                // 绑定点击推文进入详情
                 tweetEl.addEventListener('click', (e) => {
-                    // 如果点的是操作按钮，不进入详情
                     if(e.target.closest('.action-like') || e.target.closest('.action-reply')) return;
                     openTweetDetail(tweet, avatarHtml, isOfficial);
                 });
 
-                // 绑定点赞逻辑
                 let likeBtn = tweetEl.querySelector('.action-like');
                 likeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -343,26 +324,24 @@
             });
         }
 
-        // 打开推文详情
+        // 渲染详情
         function openTweetDetail(tweet, avatarHtml, isOfficial) {
-            currentActiveTweetId = tweet.id;
-
             detailContentArea.innerHTML = `
                 <div style="padding:16px;">
                     <div style="display:flex; gap:12px; margin-bottom:15px;">
-                        \${avatarHtml}
+                        ${avatarHtml}
                         <div style="display:flex; flex-direction:column; justify-content:center;">
                             <div style="font-weight:bold; color:#0f1419; font-size:16px; display:flex; align-items:center; gap:4px;">
-                                \${tweet.name} \${isOfficial || tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0;"></i>' : ''}
+                                ${tweet.name} ${isOfficial || tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0;"></i>' : ''}
                             </div>
-                            <div style="color:#536471; font-size:15px;">\${tweet.handle}</div>
+                            <div style="color:#536471; font-size:15px;">${tweet.handle}</div>
                         </div>
                     </div>
                     <div style="font-size:18px; color:#0f1419; line-height:1.5; margin-bottom:15px; word-break:break-word;">
-                        \${tweet.content}
+                        ${tweet.content}
                     </div>
                     <div style="color:#536471; font-size:15px; margin-bottom:15px; padding-bottom:15px; border-bottom:1px solid #eff3f4;">
-                        \${new Date().toLocaleTimeString()} · \${tweet.views || '0'} 次查看
+                        ${new Date().toLocaleTimeString()} · ${tweet.views || '0'} 次查看
                     </div>
                     <div style="display:flex; justify-content:space-around; color:#536471; font-size:20px; padding:10px 0; border-bottom:1px solid #eff3f4;">
                         <i class="bi bi-chat"></i>
@@ -378,15 +357,13 @@
             tweetDetailPanel.style.display = 'flex';
             inputReply.value = '';
 
-            // 模拟加载评论
             setTimeout(() => {
                 let repliesArea = detailContentArea.querySelector('#detail-replies-area');
                 repliesArea.innerHTML = '';
-                // 伪造一条随机评论
                 let replyAvatar = getRandomAvatarHtml();
                 repliesArea.innerHTML += `
                     <div style="padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px;">
-                        \${replyAvatar}
+                        ${replyAvatar}
                         <div>
                             <div style="display:flex; gap:5px;"><span style="font-weight:bold;">热心网友</span><span style="color:#536471;">@user_99</span></div>
                             <div style="margin-top:4px;">前排围观！支持！</div>
@@ -396,7 +373,7 @@
             }, 500);
         }
 
-        // 发送本地假评论
+        // 发送假评论
         btnSendReply.addEventListener('click', () => {
             let text = inputReply.value.trim();
             if(!text) return;
@@ -404,10 +381,10 @@
             if(repliesArea) {
                 repliesArea.innerHTML = `
                     <div style="padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px; background:#f7f9f9;">
-                        <img src="\${mainAvatar}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">
+                        <img src="${mainAvatar}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">
                         <div>
                             <div style="display:flex; gap:5px;"><span style="font-weight:bold;">制作人</span><span style="color:#536471;">@producer</span></div>
-                            <div style="margin-top:4px;">\${text}</div>
+                            <div style="margin-top:4px;">${text}</div>
                         </div>
                     </div>
                 ` + repliesArea.innerHTML;
@@ -416,7 +393,7 @@
             showToast(<q>"回复已发送"</q>);
         });
 
-        // 渲染热搜列表 (带点击交互)
+        // 渲染热搜
         function renderTrends(trends) {
             trendsContainer.innerHTML = '';
             if (!trends || trends.length === 0) return;
@@ -428,26 +405,22 @@
 
                 trendEl.innerHTML = `
                     <div style="color:#536471; font-size:13px; margin-bottom:2px; display:flex; justify-content:space-between;">
-                        <span>\${index + 1} · 流行趋势</span>
+                        <span>${index + 1} · 流行趋势</span>
                         <i class="bi bi-three-dots"></i>
                     </div>
-                    <div style="font-weight:bold; font-size:15px; color:#0f1419;">\${trend.keyword || '未知趋势'}</div>
-                    <div style="color:#536471; font-size:13px; margin-top:4px;">\${trend.posts || '0'} 帖子</div>
+                    <div style="font-weight:bold; font-size:15px; color:#0f1419;">${trend.keyword || '未知趋势'}</div>
+                    <div style="color:#536471; font-size:13px; margin-top:4px;">${trend.posts || '0'} 帖子</div>
                 `;
 
-                // 热搜点击交互
                 trendEl.addEventListener('click', () => {
-                    showToast(`正在搜索关于 \${trend.keyword} 的内容...`);
-                    // 未来这里可以再次调用API搜索相关推文，目前做UI反馈
+                    showToast(`正在搜索关于 ${trend.keyword} 的内容...`);
                 });
 
                 trendsContainer.appendChild(trendEl);
             });
         }
 
-        // 6. 分离的刷新事件绑定
-
-        // 主页刷新 (只生成 Timeline)
+        // 6. 刷新事件
         refreshHomeBtn.addEventListener('click', async () => {
             refreshHomeBtn.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status" style="width:1rem; height:1rem; margin-right:5px;"></div> 正在生成推文，请等待...';
             try {
@@ -459,7 +432,6 @@
             refreshHomeBtn.innerHTML = '<i class="bi bi-arrow-down-circle"></i> 下拉或点击刷新推文';
         });
 
-        // 探索页刷新 (只生成 Trends)
         refreshExploreBtn.addEventListener('click', async () => {
             refreshExploreBtn.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status" style="width:1rem; height:1rem; margin-right:5px;"></div> 正在生成热搜，请等待...';
             try {
@@ -471,7 +443,6 @@
             refreshExploreBtn.innerHTML = '<i class="bi bi-arrow-down-circle"></i> 点击获取最新热搜';
         });
 
-        // 主动发推 (只影响 Timeline)
         tweetButtons.forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const type = e.target.getAttribute('data-type');
@@ -487,7 +458,6 @@
                     renderTweets(data.tweets);
                     composeModal.style.display = 'none';
                     container.querySelector('#idolx-timeline-scroll').scrollTop = 0;
-                    // 如果当前在探索页，自动切回主页看推文
                     navTabs[0].click();
                 } catch(err) {
                     showToast("发布失败，请检查网络");
