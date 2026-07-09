@@ -22,7 +22,7 @@
 
                 <!-- 顶部栏 (精简手机版) -->
                 <div class="idolx-header" style="height:53px; padding:0 16px; border-bottom:1px solid #eff3f4; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); z-index:10;">
-                    <img src="\${mainAvatar}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#e1e8ed; cursor:pointer; box-shadow:0 0 2px rgba(0,0,0,0.1);">
+                    <img src="${mainAvatar}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#e1e8ed; cursor:pointer; box-shadow:0 0 2px rgba(0,0,0,0.1);">
                     <i class="bi bi-twitter" style="font-size:24px; color:#1d9bf0;"></i>
                     <i class="bi bi-stars btn-unimplemented" style="font-size:20px; color:#0f1419; cursor:pointer;"></i>
                 </div>
@@ -266,22 +266,22 @@
             tweets.forEach(tweet => {
                 tweetsContainer.innerHTML += `
                     <div style="padding:12px 16px; border-bottom:1px solid #eff3f4; display:flex; gap:12px; cursor:pointer; transition:background 0.2s;">
-                        <img src="\${tweet.avatar || 'https://i.postimg.cc/QxX9b7k0/default-avatar.png'}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">
+                        <img src="${tweet.avatar || 'https://i.postimg.cc/QxX9b7k0/default-avatar.png'}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; background:#e1e8ed; flex-shrink:0;">
                         <div style="flex:1; min-width:0;">
                             <div style="display:flex; align-items:center; gap:4px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                <span style="font-weight:bold; color:#0f1419; font-size:15px;">\${tweet.name || '未知用户'}</span>
-                                \${tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0; font-size:14px;"></i>' : ''}
-                                <span style="color:#536471; font-size:15px; margin-left:2px;">\${tweet.handle || '@unknown'}</span>
-                                <span style="color:#536471; font-size:15px;">· \${tweet.time || '刚刚'}</span>
+                                <span style="font-weight:bold; color:#0f1419; font-size:15px;">${tweet.name || '未知用户'}</span>
+                                ${tweet.isVerified ? '<i class="bi bi-patch-check-fill" style="color:#1d9bf0; font-size:14px;"></i>' : ''}
+                                <span style="color:#536471; font-size:15px; margin-left:2px;">${tweet.handle || '@unknown'}</span>
+                                <span style="color:#536471; font-size:15px;">· ${tweet.time || '刚刚'}</span>
                             </div>
                             <div style="font-size:15px; color:#0f1419; line-height:1.4; margin-bottom:12px; word-break:break-word;">
-                                \${tweet.content || ''}
+                                ${tweet.content || ''}
                             </div>
                             <div style="display:flex; justify-content:space-between; color:#536471; font-size:13px; max-width:425px; margin-top:12px;">
-                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-chat"></i> \${tweet.replies || '0'}</div>
-                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-arrow-repeat"></i> \${tweet.retweets || '0'}</div>
-                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-heart"></i> \${tweet.likes || '0'}</div>
-                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-bar-chart"></i> \${tweet.views || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-chat"></i> ${tweet.replies || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-arrow-repeat"></i> ${tweet.retweets || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-heart"></i> ${tweet.likes || '0'}</div>
+                                <div style="display:flex; align-items:center; gap:8px;"><i class="bi bi-bar-chart"></i> ${tweet.views || '0'}</div>
                             </div>
                         </div>
                     </div>
@@ -296,11 +296,11 @@
                 trendsContainer.innerHTML += `
                     <div style="padding:12px 0; cursor:pointer;">
                         <div style="color:#536471; font-size:13px; margin-bottom:2px; display:flex; justify-content:space-between;">
-                            <span>\${index + 1} · 流行趋势</span>
+                            <span>${index + 1} · 流行趋势</span>
                             <i class="bi bi-three-dots"></i>
                         </div>
-                        <div style="font-weight:bold; font-size:15px; color:#0f1419;">\${trend.keyword || '未知趋势'}</div>
-                        <div style="color:#536471; font-size:13px; margin-top:4px;">\${trend.posts || '0'} 帖子</div>
+                        <div style="font-weight:bold; font-size:15px; color:#0f1419;">${trend.keyword || '未知趋势'}</div>
+                        <div style="color:#536471; font-size:13px; margin-top:4px;">${trend.posts || '0'} 帖子</div>
                     </div>
                 `;
             });
