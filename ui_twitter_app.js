@@ -1,5 +1,5 @@
 // ==========================================
-// ui_twitter_app.js (IdolX 深度重构版 - 分离视图 & 交互升级)
+// ui_twitter_app.js (IdolX 深度重构版 - 分离视图 & 交互升级1)
 // ==========================================
 (function() {
     let topWin = window.parent || window;
