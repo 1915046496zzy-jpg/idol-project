@@ -1,5 +1,5 @@
 // ==========================================
-// ui_twitter_app.js (IdolX 应用模块 - 稳定动画版)
+// ui_twitter_app.js (IdolX 应用模块 - 稳定动画版1)
 // ==========================================
 (function() {
     let topWin = window.parent || window;
