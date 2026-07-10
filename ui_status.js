@@ -163,6 +163,7 @@ function renderStatusPage(parsedSysData) {
                  </div>`;
 
 
+
         // 2. 身体监察子面板
         html += `<div class="sub-panel" id="pad-status-body">
                     <div class="sub-panel-header">
