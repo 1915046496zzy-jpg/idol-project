@@ -30,7 +30,7 @@ const customIcons = {
             </svg>`,
 
     // 2. 身体面板使用的图标
-    '胸部': `<svg viewBox="0 0 512 512" width="1.1em" height="1.1em" style="vertical-align: -0.15em; margin-right: 4px;">
+    '胸部': `<svg viewBox="0 0 512 512" width="28px" height="28px" style="vertical-align: -0.15em; margin-right: 4px;">
                 <!-- <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generator: https://ezgif.com/png-to-svg -->
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512">
