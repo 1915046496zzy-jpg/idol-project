@@ -114,12 +114,17 @@ function renderStatusPage(parsedSysData) {
                         <div class="gear-list">
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-layers-half"></i> 上衣</div><div class="gear-text">${isCurrentStatus ? (sData['上衣']||'-') : '-'}</div></div>
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-layers"></i> 下衣</div><div class="gear-text">${isCurrentStatus ? (sData['下衣']||'-') : '-'}</div></div>
-                            <div class="gear-item"><div class="gear-label"><i class="bi bi-suit-heart-fill"></i> 内衣裤</div><div class="gear-text">${isCurrentStatus ? (sData['内衣内裤']||'-') : '-'}</div></div>
+                            
+                            <!-- 修改部分：拆分为独立的内衣和内裤 -->
+                            <div class="gear-item"><div class="gear-label"><i class="bi bi-suit-heart-fill"></i> 内衣</div><div class="gear-text">${isCurrentStatus ? (sData['内衣']||'-') : '-'}</div></div>
+                            <div class="gear-item"><div class="gear-label"><i class="bi bi-triangle-half"></i> 内裤</div><div class="gear-text">${isCurrentStatus ? (sData['内裤']||'-') : '-'}</div></div>
+                            
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-cursor-fill"></i> 鞋袜</div><div class="gear-text">${isCurrentStatus ? (sData['鞋袜']||'-') : '-'}</div></div>
                             <div class="gear-item" style="grid-column:1/-1;"><div class="gear-label"><i class="bi bi-gem"></i> 饰品配件</div><div class="gear-text">${isCurrentStatus ? (sData['持有佩戴品']||'-') : '-'}</div></div>
                         </div>
                     </div>
                  </div>`;
+
 
         // 2. 身体监察子面板
         html += `<div class="sub-panel" id="pad-status-body">
