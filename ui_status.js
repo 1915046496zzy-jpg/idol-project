@@ -13,7 +13,33 @@ function renderStatusPage(parsedSysData) {
             window.currentIdolNameForStatus = idolDatabase[0].name;
         }
 
+        // ------------------------------------------------------------------
+        // ⚠️ 自定义 SVG 图标库 ⚠️
+        // 请将你提供的 8 个 txt 文件里面的全部代码，分别对应粘贴到下面的反引号(``)中间：
+        // ------------------------------------------------------------------
+        const SVGS = {
+            neiku: ``,       // ← 在这里粘贴 内裤.txt 的内容
+            zhongchu: ``,    // ← 在这里粘贴 中出.txt 的内容
+            gangjiao: ``,    // ← 在这里粘贴 肛交.txt 的内容
+            rujiao: ``,      // ← 在这里粘贴 乳交.txt 的内容
+            xiongbu: ``,     // ← 在这里粘贴 胸部.txt 的内容
+            yindaojiao: ``,  // ← 在这里粘贴 阴道交.txt 的内容
+            koujiao: ``,     // ← 在这里粘贴 口交.txt 的内容
+            shoujiao: ``     // ← 在这里粘贴 手交.txt 的内容
+        };
+        // ------------------------------------------------------------------
+
         html += '<div id="page-status" class="page">';
+        
+        // 注入 SVG 尺寸保护与对齐样式 (保护页面不被 512px 原图撑爆)
+        html += `<style>
+            .s-svg-icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+            .s-svg-icon svg { width: 100%; height: 100%; }
+            /* 面板小图标微调 */
+            .gear-label .s-svg-icon, .node-title .s-svg-icon { width: 1.2em; height: 1.2em; margin-right: 4px; vertical-align: -0.15em; }
+            /* 经验统计大图标微调 */
+            .exp-icon .s-svg-icon { width: 26px; height: 26px; }
+        </style>`;
 
         // 1. 顶部头像选择列表
         html += '<div class="idol-list-container">';
@@ -104,7 +130,7 @@ function renderStatusPage(parsedSysData) {
 
         // ================= 隐藏的子面板 (覆盖层) =================
 
-        // 1. 着装子面板
+        // 1. 着装子面板 (应用内裤SVG)
         html += `<div class="sub-panel" id="pad-status-gear">
                     <div class="sub-panel-header">
                         <button class="btn-sub-back" onclick="closeSubPanel('pad-status-gear')"><i class="bi bi-arrow-left" style="margin:0;"></i></button>
@@ -112,39 +138,20 @@ function renderStatusPage(parsedSysData) {
                     </div>
                     <div class="sub-panel-content">
                         <div class="gear-list">
-                            <!-- 第一排：外衣并排 -->
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-layers-half"></i> 上衣</div><div class="gear-text">${isCurrentStatus ? (sData['上衣']||'-') : '-'}</div></div>
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-layers"></i> 下衣</div><div class="gear-text">${isCurrentStatus ? (sData['下衣']||'-') : '-'}</div></div>
-                            
-                            <!-- 第二排：内衣裤并排 (内裤使用自定义SVG) -->
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-suit-heart-fill"></i> 内衣</div><div class="gear-text">${isCurrentStatus ? (sData['内衣']||'-') : '-'}</div></div>
                             <div class="gear-item">
-                                <div class="gear-label">
-                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-                                         viewBox="0 0 512 512" xml:space="preserve" 
-                                         width="1.1em" height="1.1em" style="vertical-align: -0.15em; margin-right: 4px;">
-                                        <path style="fill:#FF8B9B;" d="M0,304.543l198.815,99.407c8.58,4.29,18.041,6.524,27.635,6.524h59.102c9.593,0,19.054-2.233,27.635-6.524L512,304.543H0z"/>
-                                        <path style="fill:#FFAAB9;" d="M495.262,162.27c-0.523-4.446-4.29-7.796-8.767-7.796H25.505c-4.477,0-8.244,3.35-8.767,7.796L0,304.543c0,0,135.732-7.985,202.177,89.946c6.679,9.844,17.591,15.985,29.487,15.985h48.67c11.896,0,22.808-6.141,29.487-15.985C376.268,296.559,512,304.543,512,304.543L495.262,162.27z"/>
-                                        <path style="fill:#FF9BA9;" d="M25.505,154.474c-4.477,0-8.244,3.35-8.767,7.796l-3.238,27.514h484.997l-3.237-27.514c-0.523-4.446-4.29-7.796-8.767-7.796H25.505z"/>
-                                        <path style="fill:#FFAAB9;" d="M317.569,110.56c-12.052-12.052-31.638-12.039-43.69-0.004c-5.56,5.56-12.418,21.184-17.879,35.37c-5.461-14.185-12.32-29.809-17.879-35.366c-12.052-12.052-31.638-12.039-43.69-0.004c-5.836,5.836-9.052,13.594-9.052,21.849s3.215,16.013,9.052,21.845c9.37,9.37,47.362,22.465,58.784,26.259c0.914,0.301,1.854,0.448,2.784,0.448c0.93,0,1.87-0.147,2.784-0.448c11.423-3.794,49.414-16.888,58.784-26.254c5.836-5.836,9.052-13.594,9.052-21.849S323.405,116.392,317.569,110.56z M206.914,141.764c-2.5-2.496-3.88-5.823-3.88-9.357c0-3.534,1.379-6.862,3.88-9.362c2.5-2.499,5.827-3.88,9.362-3.88s6.862,1.379,9.362,3.884c3.258,3.254,9.818,18.306,15.905,34.625C225.224,151.591,210.182,145.031,206.914,141.764z M305.086,141.768c-3.259,3.258-18.311,9.818-34.63,15.905c6.087-16.319,12.638-31.367,15.905-34.63c2.5-2.5,5.827-3.88,9.362-3.88c3.534,0,6.862,1.379,9.362,3.884c2.5,2.496,3.88,5.823,3.88,9.357C308.964,135.94,307.586,139.268,305.086,141.768z"/>
-                                        <path style="fill:#FF8B9B;" d="M282.483,242.75c-4.879,0-8.828-3.953-8.828-8.828c0-25.117-10.845-41.565-17.664-49.427c-6.836,7.85-17.646,24.246-17.646,49.427c0,4.875-3.948,8.828-8.828,8.828s-8.828-3.953-8.828-8.828c0-44.995,28.672-67.81,29.888-68.762c3.19-2.474,7.656-2.474,10.845,0c1.216,0.952,29.888,23.767,29.888,68.762C291.31,238.798,287.362,242.75,282.483,242.75z"/>
-                                    </svg>
-                                    内裤
-                                </div>
+                                <div class="gear-label"><span class="s-svg-icon">${SVGS.neiku}</span> 内裤</div>
                                 <div class="gear-text">${isCurrentStatus ? (sData['内裤']||'-') : '-'}</div>
                             </div>
-                            
-                            <!-- 第三排：鞋袜占满整行 -->
                             <div class="gear-item" style="grid-column:1/-1;"><div class="gear-label"><i class="bi bi-cursor-fill"></i> 鞋袜</div><div class="gear-text">${isCurrentStatus ? (sData['鞋袜']||'-') : '-'}</div></div>
-                            
-                            <!-- 第四排：饰品配件占满整行 -->
                             <div class="gear-item" style="grid-column:1/-1;"><div class="gear-label"><i class="bi bi-gem"></i> 饰品配件</div><div class="gear-text">${isCurrentStatus ? (sData['持有佩戴品']||'-') : '-'}</div></div>
                         </div>
                     </div>
                  </div>`;
 
-
-        // 2. 身体监察子面板
+        // 2. 身体监察子面板 (应用胸部、小穴、菊花SVG)
         html += `<div class="sub-panel" id="pad-status-body">
                     <div class="sub-panel-header">
                         <button class="btn-sub-back" onclick="closeSubPanel('pad-status-body')"><i class="bi bi-arrow-left" style="margin:0;"></i></button>
@@ -154,25 +161,24 @@ function renderStatusPage(parsedSysData) {
                         <div class="body-list">
                             <div class="body-node"><div class="node-title"><i class="bi bi-brightness-high"></i> 皮肤</div><div class="node-text">${isCurrentStatus ? (sData['皮肤']||'-') : '-'}</div></div>
                             <div class="body-node"><div class="node-title"><i class="bi bi-droplet-half"></i> 口腔</div><div class="node-text">${isCurrentStatus ? (sData['口腔']||'-') : '-'}</div></div>
-                            <div class="body-node sensitive"><div class="node-title node-sensitive-title"><i class="bi bi-suit-heart-fill"></i> 胸部</div><div class="node-text">${isCurrentStatus ? (sData['胸部']||'-') : '-'}</div></div>
+                            <div class="body-node sensitive"><div class="node-title node-sensitive-title"><span class="s-svg-icon">${SVGS.xiongbu}</span> 胸部</div><div class="node-text">${isCurrentStatus ? (sData['胸部']||'-') : '-'}</div></div>
                             <div class="body-node sensitive"><div class="node-title node-sensitive-title"><i class="bi bi-record-circle"></i> 乳头</div><div class="node-text">${isCurrentStatus ? (sData['乳头']||'-') : '-'}</div></div>
                             <div class="body-node"><div class="node-title"><i class="bi bi-circle-half"></i> 臀部</div><div class="node-text">${isCurrentStatus ? (sData['臀部']||'-') : '-'}</div></div>
-                            <div class="body-node sensitive"><div class="node-title node-sensitive-title"><i class="bi bi-flower1"></i> 小穴</div><div class="node-text">${isCurrentStatus ? (sData['小穴']||'-') : '-'}</div></div>
-                            <div class="body-node"><div class="node-title"><i class="bi bi-bullseye"></i> 菊花</div><div class="node-text">${isCurrentStatus ? (sData['菊花']||'-') : '-'}</div></div>
+                            <div class="body-node sensitive"><div class="node-title node-sensitive-title"><span class="s-svg-icon">${SVGS.yindaojiao}</span> 小穴</div><div class="node-text">${isCurrentStatus ? (sData['小穴']||'-') : '-'}</div></div>
+                            <div class="body-node"><div class="node-title"><span class="s-svg-icon">${SVGS.gangjiao}</span> 菊花</div><div class="node-text">${isCurrentStatus ? (sData['菊花']||'-') : '-'}</div></div>
                             <div class="body-node"><div class="node-title"><i class="bi bi-arrow-through-heart"></i> 子宫</div><div class="node-text">${isCurrentStatus ? (sData['子宫']||'-') : '-'}</div></div>
                         </div>
                     </div>
                  </div>`;
 
-        // 3. 经验统计子面板
+        // 3. 经验统计子面板 (应用全面替换的SVG)
         html += `<div class="sub-panel" id="pad-status-exp">
                     <div class="sub-panel-header">
                         <button class="btn-sub-back" onclick="closeSubPanel('pad-status-exp')"><i class="bi bi-arrow-left" style="margin:0;"></i></button>
                         <div class="sub-panel-title"><i class="bi bi-journal-text"></i> 性爱经验档案</div>
                     </div>
                     <div class="sub-panel-content">
-                        
-                        <!-- 新增：综合性经验总计 -->
+                        <!-- 综合性经验总计 -->
                         <div style="text-align: center; margin-bottom: 20px; padding: 20px; background: white; border-radius: 16px; border: 1px solid var(--s-glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
                             <div style="font-size: 14px; color: var(--s-text-light); font-weight: bold; margin-bottom: 5px;">综合性经验 (Total)</div>
                             <div style="font-size: 36px; font-weight: 900; color: var(--s-accent); display: flex; justify-content: center; align-items: center;">
@@ -182,13 +188,12 @@ function renderStatusPage(parsedSysData) {
                         </div>
 
                         <div class="exp-grid">
-                            <div class="exp-item"><div class="exp-icon"><i class="bi bi-emoji-kiss-fill"></i></div><div class="exp-label">口交次数</div><div class="exp-val">${isCurrentStatus ? (sData['口交次数']||'0') : '0'}</div></div>
-
-                            <div class="exp-item"><div class="exp-icon"><i class="bi bi-suit-heart-fill"></i></div><div class="exp-label">乳交次数</div><div class="exp-val">${isCurrentStatus ? (sData['乳交次数']||'0') : '0'}</div></div>
-                            <div class="exp-item"><div class="exp-icon"><i class="bi bi-hand-index-fill"></i></div><div class="exp-label">手交次数</div><div class="exp-val">${isCurrentStatus ? (sData['手交次数']||'0') : '0'}</div></div>
-                            <div class="exp-item"><div class="exp-icon"><i class="bi bi-flower1"></i></div><div class="exp-label">阴道交次数</div><div class="exp-val">${isCurrentStatus ? (sData['阴道交次数']||'0') : '0'}</div></div>
-                            <div class="exp-item"><div class="exp-icon"><i class="bi bi-bullseye"></i></div><div class="exp-label">肛交次数</div><div class="exp-val">${isCurrentStatus ? (sData['肛交次数']||'0') : '0'}</div></div>
-                            <div class="exp-item"><div class="exp-icon"><i class="bi bi-droplet-fill"></i></div><div class="exp-label">体内中出</div><div class="exp-val">${isCurrentStatus ? (sData['中出次数']||'0') : '0'}</div></div>
+                            <div class="exp-item"><div class="exp-icon"><span class="s-svg-icon">${SVGS.koujiao}</span></div><div class="exp-label">口交次数</div><div class="exp-val">${isCurrentStatus ? (sData['口交次数']||'0') : '0'}</div></div>
+                            <div class="exp-item"><div class="exp-icon"><span class="s-svg-icon">${SVGS.rujiao}</span></div><div class="exp-label">乳交次数</div><div class="exp-val">${isCurrentStatus ? (sData['乳交次数']||'0') : '0'}</div></div>
+                            <div class="exp-item"><div class="exp-icon"><span class="s-svg-icon">${SVGS.shoujiao}</span></div><div class="exp-label">手交次数</div><div class="exp-val">${isCurrentStatus ? (sData['手交次数']||'0') : '0'}</div></div>
+                            <div class="exp-item"><div class="exp-icon"><span class="s-svg-icon">${SVGS.yindaojiao}</span></div><div class="exp-label">阴道交次数</div><div class="exp-val">${isCurrentStatus ? (sData['阴道交次数']||'0') : '0'}</div></div>
+                            <div class="exp-item"><div class="exp-icon"><span class="s-svg-icon">${SVGS.gangjiao}</span></div><div class="exp-label">肛交次数</div><div class="exp-val">${isCurrentStatus ? (sData['肛交次数']||'0') : '0'}</div></div>
+                            <div class="exp-item"><div class="exp-icon"><span class="s-svg-icon">${SVGS.zhongchu}</span></div><div class="exp-label">体内中出</div><div class="exp-val">${isCurrentStatus ? (sData['中出次数']||'0') : '0'}</div></div>
                         </div>
                     </div>
                  </div>`;
