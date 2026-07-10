@@ -35,22 +35,22 @@ const customIcons = {
             </svg>`,
 
     // 3. 经验统计面板使用的图标 (这些图标在独立的圆圈里，不需要额外间距)
-    '口交': `<svg viewBox="0 0 512 512" width="1em" height="1em">
+    '口交': `<svg viewBox="0 0 512 512" width="32px" height="32px">
                 <!-- 粘贴 口交.txt 里面的所有 <path> 代码到这里 -->
             </svg>`,
-    '乳交': `<svg viewBox="0 0 512 512" width="1em" height="1em">
+    '乳交': `<svg viewBox="0 0 512 512" width="32px" height="32px">
                 <!-- 粘贴 乳交.txt 里面的所有 <path> 代码到这里 -->
             </svg>`,
-    '手交': `<svg viewBox="0 0 512 512" width="1em" height="1em">
+    '手交': `<svg viewBox="0 0 512 512" width="32px" height="32px">
                 <!-- 粘贴 手交.txt 里面的所有 <path> 代码到这里 -->
             </svg>`,
-    '阴道交': `<svg viewBox="0 0 512 512" width="1em" height="1em">
+    '阴道交': `<svg viewBox="0 0 512 512" width="32px" height="32px">
                 <!-- 粘贴 阴道交.txt 里面的所有 <path> 代码到这里 -->
             </svg>`,
-    '肛交': `<svg viewBox="0 0 512 512" width="1em" height="1em">
+    '肛交': `<svg viewBox="0 0 512 512" width="32px" height="32px">
                 <!-- 粘贴 肛交.txt 里面的所有 <path> 代码到这里 -->
             </svg>`,
-    '中出': `<svg viewBox="0 0 512 512" width="1em" height="1em">
+    '中出': `<svg viewBox="0 0 512 512" width="32px" height="32px">
                 <!-- <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generator: https://ezgif.com/png-to-svg -->
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512">
