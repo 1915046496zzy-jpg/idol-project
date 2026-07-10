@@ -112,14 +112,32 @@ function renderStatusPage(parsedSysData) {
                     </div>
                     <div class="sub-panel-content">
                         <div class="gear-list">
+                            <!-- 第一排：外衣并排 -->
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-layers-half"></i> 上衣</div><div class="gear-text">${isCurrentStatus ? (sData['上衣']||'-') : '-'}</div></div>
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-layers"></i> 下衣</div><div class="gear-text">${isCurrentStatus ? (sData['下衣']||'-') : '-'}</div></div>
                             
-                            <!-- 修改部分：拆分为独立的内衣和内裤 -->
+                            <!-- 第二排：内衣裤并排 (内裤使用自定义SVG) -->
                             <div class="gear-item"><div class="gear-label"><i class="bi bi-suit-heart-fill"></i> 内衣</div><div class="gear-text">${isCurrentStatus ? (sData['内衣']||'-') : '-'}</div></div>
-                            <div class="gear-item"><div class="gear-label"><i class="bi bi-triangle-half"></i> 内裤</div><div class="gear-text">${isCurrentStatus ? (sData['内裤']||'-') : '-'}</div></div>
+                            <div class="gear-item">
+                                <div class="gear-label">
+                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                         viewBox="0 0 512 512" xml:space="preserve" 
+                                         width="1.1em" height="1.1em" style="vertical-align: -0.15em; margin-right: 4px;">
+                                        <path style="fill:#FF8B9B;" d="M0,304.543l198.815,99.407c8.58,4.29,18.041,6.524,27.635,6.524h59.102c9.593,0,19.054-2.233,27.635-6.524L512,304.543H0z"/>
+                                        <path style="fill:#FFAAB9;" d="M495.262,162.27c-0.523-4.446-4.29-7.796-8.767-7.796H25.505c-4.477,0-8.244,3.35-8.767,7.796L0,304.543c0,0,135.732-7.985,202.177,89.946c6.679,9.844,17.591,15.985,29.487,15.985h48.67c11.896,0,22.808-6.141,29.487-15.985C376.268,296.559,512,304.543,512,304.543L495.262,162.27z"/>
+                                        <path style="fill:#FF9BA9;" d="M25.505,154.474c-4.477,0-8.244,3.35-8.767,7.796l-3.238,27.514h484.997l-3.237-27.514c-0.523-4.446-4.29-7.796-8.767-7.796H25.505z"/>
+                                        <path style="fill:#FFAAB9;" d="M317.569,110.56c-12.052-12.052-31.638-12.039-43.69-0.004c-5.56,5.56-12.418,21.184-17.879,35.37c-5.461-14.185-12.32-29.809-17.879-35.366c-12.052-12.052-31.638-12.039-43.69-0.004c-5.836,5.836-9.052,13.594-9.052,21.849s3.215,16.013,9.052,21.845c9.37,9.37,47.362,22.465,58.784,26.259c0.914,0.301,1.854,0.448,2.784,0.448c0.93,0,1.87-0.147,2.784-0.448c11.423-3.794,49.414-16.888,58.784-26.254c5.836-5.836,9.052-13.594,9.052-21.849S323.405,116.392,317.569,110.56z M206.914,141.764c-2.5-2.496-3.88-5.823-3.88-9.357c0-3.534,1.379-6.862,3.88-9.362c2.5-2.499,5.827-3.88,9.362-3.88s6.862,1.379,9.362,3.884c3.258,3.254,9.818,18.306,15.905,34.625C225.224,151.591,210.182,145.031,206.914,141.764z M305.086,141.768c-3.259,3.258-18.311,9.818-34.63,15.905c6.087-16.319,12.638-31.367,15.905-34.63c2.5-2.5,5.827-3.88,9.362-3.88c3.534,0,6.862,1.379,9.362,3.884c2.5,2.496,3.88,5.823,3.88,9.357C308.964,135.94,307.586,139.268,305.086,141.768z"/>
+                                        <path style="fill:#FF8B9B;" d="M282.483,242.75c-4.879,0-8.828-3.953-8.828-8.828c0-25.117-10.845-41.565-17.664-49.427c-6.836,7.85-17.646,24.246-17.646,49.427c0,4.875-3.948,8.828-8.828,8.828s-8.828-3.953-8.828-8.828c0-44.995,28.672-67.81,29.888-68.762c3.19-2.474,7.656-2.474,10.845,0c1.216,0.952,29.888,23.767,29.888,68.762C291.31,238.798,287.362,242.75,282.483,242.75z"/>
+                                    </svg>
+                                    内裤
+                                </div>
+                                <div class="gear-text">${isCurrentStatus ? (sData['内裤']||'-') : '-'}</div>
+                            </div>
                             
-                            <div class="gear-item"><div class="gear-label"><i class="bi bi-cursor-fill"></i> 鞋袜</div><div class="gear-text">${isCurrentStatus ? (sData['鞋袜']||'-') : '-'}</div></div>
+                            <!-- 第三排：鞋袜占满整行 -->
+                            <div class="gear-item" style="grid-column:1/-1;"><div class="gear-label"><i class="bi bi-cursor-fill"></i> 鞋袜</div><div class="gear-text">${isCurrentStatus ? (sData['鞋袜']||'-') : '-'}</div></div>
+                            
+                            <!-- 第四排：饰品配件占满整行 -->
                             <div class="gear-item" style="grid-column:1/-1;"><div class="gear-label"><i class="bi bi-gem"></i> 饰品配件</div><div class="gear-text">${isCurrentStatus ? (sData['持有佩戴品']||'-') : '-'}</div></div>
                         </div>
                     </div>
