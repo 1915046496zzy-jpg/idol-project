@@ -1,4 +1,4 @@
-// ui_cultivate.js - 培养模块独立渲染逻辑 (终极修复版：精准初始数值 + 精准抓取 + UI修正)
+// ui_cultivate.js - 培养模块独立渲染逻辑 (MVU直读终极版)
 
 // ==========================================
 // 1. 自动注入专属 CSS (包含面板的弹窗动画与新按钮)
@@ -139,11 +139,22 @@ function findItemInfo(itemName) {
 }
 
 // ==========================================
-// 3. 高精度提取偶像状态数据 (彻底修复初始值读取与动态覆盖)
+// 3. 全新 MVU 解锁判定与状态直读
 // ==========================================
-function getCurrentIdolData(idolName, parsedSysData) {
-    let dbData = typeof idolDatabase !== 'undefined' ? idolDatabase.find(i => i.name === idolName) : null;
+window.checkIsUnlocked = function(idolName) {
+    if (typeof TEST_MODE_ALL_UNLOCKED !== 'undefined' && TEST_MODE_ALL_UNLOCKED) return true;
+    try {
+        let allVars = typeof getAllVariables === 'function' ? getAllVariables() : {};
+        let unlockedList = _.get(allVars, 'stat_data.世界.已获得偶像', []);
+        // 如果系统里存的是字符串，转成数组
+        if (typeof unlockedList === 'string') unlockedList = [unlockedList];
+        return unlockedList.includes(idolName);
+    } catch(e) {
+        return false;
+    }
+};
 
+function getCurrentIdolData(idolName) {
     let stats = {
         vocal: { val: 0, desc: "E级", color: "#ec4899", icon: "bi-mic-fill" },
         dance: { val: 0, desc: "E级", color: "#8b5cf6", icon: "bi-music-player-fill" },
@@ -157,51 +168,34 @@ function getCurrentIdolData(idolName, parsedSysData) {
         lust: { val: 0, color: "#a855f7", icon: "bi-droplet-fill", name: "Lust" }
     };
 
-    // 1. 精准提取数据库中的初始数值（兼容Emoji键名）
-    if (dbData) {
-        if (dbData.stats) {
-            let vKey = Object.keys(dbData.stats).find(k => k.includes('Vocal') || k.includes('唱功'));
-            if(vKey) { stats.vocal.val = dbData.stats[vKey].value; stats.vocal.desc = dbData.stats[vKey].desc.split('-')[0].trim(); }
+    try {
+        let allVars = typeof getAllVariables === 'function' ? getAllVariables() : {};
+        let idolData = _.get(allVars, `stat_data.登场艺人名单.${idolName}`, null);
 
-            let dKey = Object.keys(dbData.stats).find(k => k.includes('Dance') || k.includes('舞蹈'));
-            if(dKey) { stats.dance.val = dbData.stats[dKey].value; stats.dance.desc = dbData.stats[dKey].desc.split('-')[0].trim(); }
+        if (idolData) {
+            // 读取业务能力与评级
+            const getLvl = (v) => v >= 96 ? "S级" : v >= 81 ? "A级" : v >= 61 ? "B级" : v >= 41 ? "C级" : v >= 21 ? "D级" : "E级";
 
-            let visKey = Object.keys(dbData.stats).find(k => k.includes('Visual') || k.includes('视觉'));
-            if(visKey) { stats.visual.val = dbData.stats[visKey].value; stats.visual.desc = dbData.stats[visKey].desc.split('-')[0].trim(); }
+            if (idolData.业务能力) {
+                stats.vocal.val = idolData.业务能力.Vocal_唱功 || 0;
+                stats.vocal.desc = getLvl(stats.vocal.val);
+
+                stats.dance.val = idolData.业务能力.Dance_舞蹈 || 0;
+                stats.dance.desc = getLvl(stats.dance.val);
+
+                stats.visual.val = idolData.业务能力.Visual_视觉 || 0;
+                stats.visual.desc = getLvl(stats.visual.val);
+            }
+            // 读取心理状态
+            if (idolData.心理与互动状态) {
+                status.stress.val = idolData.心理与互动状态.Stress_压力值 || 0;
+                status.affection.val = idolData.心理与互动状态.Affection_羁绊 || 0;
+                status.obedience.val = idolData.心理与互动状态.Obedience_服从度 || 0;
+                status.lust.val = idolData.心理与互动状态.Lust_堕落度 || 0;
+            }
         }
-        if (dbData.status) {
-            let sKey = Object.keys(dbData.status).find(k => k.includes('Stress') || k.includes('压力'));
-            if(sKey) status.stress.val = dbData.status[sKey].value;
-
-            let aKey = Object.keys(dbData.status).find(k => k.includes('Affection') || k.includes('羁绊'));
-            if(aKey) status.affection.val = dbData.status[aKey].value;
-
-            let oKey = Object.keys(dbData.status).find(k => k.includes('Obedience') || k.includes('服从'));
-            if(oKey) status.obedience.val = dbData.status[oKey].value;
-
-            let lKey = Object.keys(dbData.status).find(k => k.includes('Lust') || k.includes('堕落'));
-            if(lKey) status.lust.val = dbData.status[lKey].value;
-        }
-    }
-
-    // 2. 如果 AI 在本次回复中输出了状态变化，则覆盖初始值
-    if (parsedSysData && parsedSysData.status && Object.keys(parsedSysData.status).length > 0) {
-        let sysStr = Object.keys(parsedSysData.status).map(k => k + ":" + parsedSysData.status[k]).join(' | ');
-
-        function extractNum(str, keyword) {
-            let regex = new RegExp(keyword + "[^\\d]*(\\d+)", "i");
-            let m = str.match(regex);
-            return m ? parseInt(m[1]) : null;
-        }
-
-        let vVal = extractNum(sysStr, '(?:Vocal|唱功)'); if(vVal !== null) stats.vocal.val = vVal;
-        let dVal = extractNum(sysStr, '(?:Dance|舞蹈)'); if(dVal !== null) stats.dance.val = dVal;
-        let visVal = extractNum(sysStr, '(?:Visual|视觉)'); if(visVal !== null) stats.visual.val = visVal;
-
-        let strVal = extractNum(sysStr, '(?:Stress|压力)'); if(strVal !== null) status.stress.val = strVal;
-        let affVal = extractNum(sysStr, '(?:Affection|羁绊)'); if(affVal !== null) status.affection.val = affVal;
-        let obeVal = extractNum(sysStr, '(?:Obedience|服从)'); if(obeVal !== null) status.obedience.val = obeVal;
-        let lusVal = extractNum(sysStr, '(?:Lust|堕落)'); if(lusVal !== null) status.lust.val = lusVal;
+    } catch(e) {
+        console.error("MVU 数据读取失败，返回默认值", e);
     }
 
     return { stats, status };
@@ -213,8 +207,19 @@ function getCurrentIdolData(idolName, parsedSysData) {
 function renderCultivatePage(parsedSysData) {
     let html = '';
 
-    if(!window.currentIdolNameForCultivate) window.currentIdolNameForCultivate = (parsedSysData.status && parsedSysData.status['当前偶像']) || '';
-    if(!window.currentIdolNameForCultivate && typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) window.currentIdolNameForCultivate = idolDatabase[0].name;
+    // 默认展示的偶像（优先从 MVU 提取已解锁的第一个）
+    try {
+        let allVars = typeof getAllVariables === 'function' ? getAllVariables() : {};
+        let unlockedList = _.get(allVars, 'stat_data.世界.已获得偶像', []);
+        if (typeof unlockedList === 'string') unlockedList = [unlockedList];
+        if (!window.currentIdolNameForCultivate && unlockedList.length > 0) {
+            window.currentIdolNameForCultivate = unlockedList[0];
+        }
+    } catch(e) {}
+
+    if(!window.currentIdolNameForCultivate && typeof idolDatabase !== 'undefined' && idolDatabase.length > 0) {
+        window.currentIdolNameForCultivate = idolDatabase[0].name;
+    }
 
     html += '<div id="page-cultivate" class="page">';
 
@@ -239,7 +244,8 @@ function renderCultivatePage(parsedSysData) {
 
     html += `<div class="btn-open-monitor" onclick="window.toggleMonitorPanel()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'} title="查看状态面板"><i class="bi bi-radar"></i></div>`;
 
-    let currentData = getCurrentIdolData(window.currentIdolNameForCultivate, parsedSysData);
+    // 调用 MVU 提取函数
+    let currentData = getCurrentIdolData(window.currentIdolNameForCultivate);
 
     html += `<div class="status-monitor-panel" id="cultivate-monitor-popup" ${currentCultivateUnlocked ? '' : 'style="filter: grayscale(1); opacity: 0.5;"'}>
                 <div class="monitor-header">
@@ -264,7 +270,6 @@ function renderCultivatePage(parsedSysData) {
                     <div class="monitor-subtitle">心理状态 (Status)</div>`;
     Object.values(currentData.status).forEach(st => {
         let warningAnim = (st.name === 'Stress' && st.val >= 80) ? 'stress-warning' : '';
-        // 【修正】仅对 Stress 显示百分号
         let unit = st.name === 'Stress' ? '%' : '';
         html += `   <div class="status-row ${warningAnim}">
                         <div class="status-label"><i class="bi ${st.icon}" style="color:${st.color}"></i> ${st.name}</div>
@@ -315,13 +320,20 @@ function renderCultivatePage(parsedSysData) {
     // 5. 背包展开按钮
     html += `<div class="btn-open-inv" onclick="toggleCultivateInv()" ${currentCultivateUnlocked ? '' : 'style="display:none;"'}><i class="bi bi-bag-fill"></i></div>`;
 
+    // 全新 MVU 背包数据提取
     let stardustCount = "0";
     let realItems = [];
-    if(parsedSysData.inventory && Array.isArray(parsedSysData.inventory)) {
-        parsedSysData.inventory.forEach(itemName => {
-            if(itemName.includes("星尘")) stardustCount = itemName.replace(/[^0-9]/ig,"");
-            else realItems.push(itemName);
+    try {
+        let allVars = typeof getAllVariables === 'function' ? getAllVariables() : {};
+        stardustCount = _.get(allVars, 'stat_data.世界.星尘', 0).toString();
+        let mvuBag = _.get(allVars, 'stat_data.世界.背包', {});
+
+        Object.keys(mvuBag).forEach(itemName => {
+            let count = mvuBag[itemName].数量 || 1;
+            realItems.push(`${itemName} * ${count}`);
         });
+    } catch(e) {
+        console.error("提取 MVU 背包数据失败", e);
     }
 
     // 6. 弹出式背包面板
@@ -364,3 +376,16 @@ function renderCultivatePage(parsedSysData) {
 
     return html;
 }
+
+// ==========================================
+// 5. 挂载自动刷新监听 (只要MVU数值变化，UI立刻刷新)
+// ==========================================
+$(function() {
+    if (typeof eventOn === 'function' && typeof Mvu !== 'undefined' && Mvu.events) {
+        eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, () => {
+            if (typeof renderAllPages === 'function') {
+                renderAllPages();
+            }
+        });
+    }
+});
