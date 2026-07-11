@@ -362,8 +362,63 @@ function renderStatusPage(parsedSysData) {
         html += '</div>';
 
         // 数据防呆
-        var sData = parsedSysData.status || {};
-        var isCurrentStatus = (sData['当前偶像'] === window.currentIdolNameForStatus);
+        // ======= MVU 数据直读与映射拦截 =======
+        var sData = {};
+        var isCurrentStatus = true; // MVU直读始终为最新状态
+        try {
+            let allVars = typeof getAllVariables === 'function' ? getAllVariables() : {};
+            let idolName = window.currentIdolNameForStatus;
+            let idolData = _.get(allVars, `stat_data.登场艺人名单.${idolName}`, null);
+
+            if (idolData) {
+                sData['当前偶像'] = idolName;
+
+                // 映射心理与姿势
+                if(idolData.心理与互动状态) {
+                    sData['姿势'] = idolData.心理与互动状态.当前姿势 || '-';
+                    sData['心声'] = idolData.心理与互动状态.当前心理 || '...';
+                }
+
+                // 映射核心生理与深度监察
+                if(idolData.生理与开发状态) {
+                    sData['生理状态'] = idolData.生理与开发状态.生理期状态 || '-';
+                    sData['处女膜'] = idolData.生理与开发状态.处女膜状态 || '-';
+                    sData['皮肤'] = idolData.生理与开发状态.皮肤 || '-';
+                    sData['口腔'] = idolData.生理与开发状态.口腔 || '-';
+                    sData['胸部'] = idolData.生理与开发状态.胸部 || '-';
+                    sData['乳头'] = idolData.生理与开发状态.乳头 || '-';
+                    sData['臀部'] = idolData.生理与开发状态.臀部 || '-';
+                    sData['小穴'] = idolData.生理与开发状态.小穴 || '-';
+                    sData['菊花'] = idolData.生理与开发状态.菊花 || '-';
+                    sData['子宫'] = idolData.生理与开发状态.子宫 || '-';
+                }
+
+                // 映射衣物着装
+                if(idolData.穿着与衣物) {
+                    sData['上衣'] = idolData.穿着与衣物.上衣 || '-';
+                    sData['下衣'] = idolData.穿着与衣物.下衣 || '-';
+                    sData['内衣'] = idolData.穿着与衣物.内衣 || '-';
+                    sData['内裤'] = idolData.穿着与衣物.内裤 || '-';
+                    sData['鞋袜'] = idolData.穿着与衣物.鞋袜 || '-';
+                    sData['持有佩戴品'] = idolData.穿着与衣物.饰品配件 || '-';
+                }
+
+                // 映射性爱经验
+                if(idolData.经验记录) {
+                    sData['性爱次数'] = idolData.经验记录.综合性经验_Total || 0;
+                    sData['口交次数'] = idolData.经验记录.口交次数 || 0;
+                    sData['乳交次数'] = idolData.经验记录.乳交次数 || 0;
+                    sData['手交次数'] = idolData.经验记录.手交次数 || 0;
+                    sData['阴道交次数'] = idolData.经验记录.阴道交次数 || 0;
+                    sData['肛交次数'] = idolData.经验记录.肛交次数 || 0;
+                    sData['中出次数'] = idolData.经验记录.体内中出次数 || 0;
+                }
+            }
+        } catch(e) {
+            console.error("提取 MVU 状态数据失败", e);
+        }
+        // ===================================
+
         let currentStatusUnlocked = (typeof checkIsUnlocked === 'function') ? checkIsUnlocked(window.currentIdolNameForStatus) : true;
 
         let avatarImg = typeof getAssetUrl === 'function' ? getAssetUrl(window.currentIdolNameForStatus + "_立绘", "avatar") : '';
