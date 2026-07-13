@@ -4,7 +4,7 @@
 
 /* 基础重置 */
 body, html {
-    font-family: <q>"Microsoft YaHei"</q>, -apple-system, sans-serif;
+    font-family: "Microsoft YaHei", -apple-system, sans-serif;
     color: #334155;
     background: transparent;
 }
@@ -46,13 +46,12 @@ body, html {
 ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
 
-/* ================= 核心修复：外层容器高度限制与弹性布局 ================= */
+/* ================= 终极高度修复：强制固定极高像素 ================= */
 .screen-panel {
     display: none;
     width: 100%;
-    /* 给气泡内的一个明确高度，占据屏幕80%，防截断 */
-    height: 80vh;
-    min-height: 600px;
+    /* 放弃 vh 单位，直接强制撑开 850px 的超长高度！ */
+    height: 850px;
     position: relative;
     padding: 20px 10px;
     z-index: 10;
@@ -62,16 +61,16 @@ body, html {
 .screen-panel.active {
     display: flex;
     justify-content: center;
-    align-items: center; /* 居中显示玻璃面板 */
+    align-items: center;
 }
 
-/* 玻璃面板：让它撑满父容器(screen-panel)，内部使用flex布局 */
+/* 玻璃面板：强制继承外层的 850px 极高高度 */
 .glass-panel {
     width: 100%;
     max-width: 1050px;
-    height: 100%; /* 撑满80vh */
+    height: 100%; /* 撑满外层的 850px */
     display: flex;
-    flex-direction: column; /* 让头部和滚动内容上下排列 */
+    flex-direction: column;
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.8);
@@ -81,9 +80,9 @@ body, html {
     transition: all 0.6s;
 }
 
-/* 面板头部固定，不参与滚动 */
+/* 面板头部固定 */
 .panel-header {
-    flex-shrink: 0; /* 防止被挤压 */
+    flex-shrink: 0;
     text-align: center;
     margin-bottom: 20px;
     position: relative;
@@ -92,13 +91,13 @@ body, html {
 .panel-header h1 { font-size: 32px; color: var(--theme-text-main, #db2777); margin-bottom: 8px; letter-spacing: 4px; font-weight: 900; }
 .panel-header p { font-size: 13px; color: #64748b; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; }
 
-/* 核心修复：滚动区域填满剩余空间并触发内部滚动 */
+/* 滚动区域填满 850px 剩余的庞大空间 */
 .scrollable-content {
-    flex: 1; /* 占据剩余全部高度 */
-    overflow-y: auto; /* 内容超出时内部滚动 */
+    flex: 1;
+    overflow-y: auto;
     padding-right: 15px;
     padding-bottom: 20px;
-    height: 0; /* 兼容flex布局的滚动条bug */
+    height: 0;
 }
 
 /* ================= 其他样式保持不变 ================= */
@@ -148,7 +147,7 @@ body, html {
 .card-type-D .card-title { color: #44403c; }
 .card-type-D .info-label { color: #57534e; }
 .card-type-E { background: linear-gradient(135deg, #fef9c3, #fef08a); border-radius: 8px 32px 8px 32px; border: none; box-shadow: 4px 4px 0 #eab308; }
-.card-type-E .card-title { color: #ca8a04; font-family: <q>"Comic Sans MS"</q>, cursive;}
+.card-type-E .card-title { color: #ca8a04; font-family: "Comic Sans MS", cursive;}
 .card-type-E .info-label { color: #b45309; }
 .card-type-F { background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1px solid rgba(216, 180, 254, 0.5); }
 .card-type-F .card-title { color: #6d28d9; }
