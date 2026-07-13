@@ -30,21 +30,8 @@ function showToast(msg) {
 }
 
 function switchScreen(screenId) {
-    // 隐藏所有面板
     document.querySelectorAll('.screen-panel').forEach(el => el.classList.remove('active'));
-
-    // 显示目标面板
-    const targetScreen = document.getElementById(screenId);
-    if (targetScreen) {
-        targetScreen.classList.add('active');
-
-        // 🌟【核心修复】🌟：把目标面板内所有的滚动区域强制拉回最顶部！
-        targetScreen.querySelectorAll('.scrollable-content').forEach(scrollArea => {
-            scrollArea.scrollTop = 0;
-        });
-    }
-
-    // 处理左上角返回按钮和特定页面的渲染逻辑
+    document.getElementById(screenId).classList.add('active');
     if(screenId === 'splash-screen' || screenId === 'title-screen') {
         updateTopReturnBtn('', null);
     } else {
@@ -64,7 +51,6 @@ function switchScreen(screenId) {
         }
     }
 }
-
 
 function returnToMenu() { switchScreen('title-screen'); }
 
