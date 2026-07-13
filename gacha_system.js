@@ -385,19 +385,39 @@ function renderGachaResult() {
 
 function executeFinalGachaCommand() {
     var idolsCount = currentGachaResults.filter(r => r.type === 'idol' || r.type === 'duplicate').length;
+
+    // 1. 整理具体的抽卡物资清单，方便 AI 直接写入 JSON Patch
+    var stardustTotal = 0;
+    var itemNames = [];
+    var idolNames = [];
+
+    currentGachaResults.forEach(res => {
+        if (res.type === 'stardust') stardustTotal += res.amount;
+        if (res.type === 'item') itemNames.push(res.data.name);
+        if (res.type === 'idol' || res.type === 'duplicate') idolNames.push(res.name);
+    });
+
+    var resourceText = "【本次发掘资源清单】\\n" +
+                       "- 获得星尘: " + stardustTotal + "\\n" +
+                       "- 获得道具: " + (itemNames.length > 0 ? itemNames.join("、") : "无") + "\\n" +
+                       "- 获得偶像: " + idolNames.join("、");
+
+    // 2. 拼装发给 AI 的终极系统指令
     var finalMessage = "";
 
     if(currentGachaType === 'direct') {
-        finalMessage = '/send 【星探发掘确认】当前阵营：' + currentSelectedAgency['名称'] + '\\n本次十连获得偶像（含重复印记）数量：' + idolsCount + '位。请求根据抽卡结果生成剧情与入职档案。|/trigger';
+        finalMessage = "/send [系统日志：新档案录入请求]\\n当前阵营：" + currentSelectedAgency['名称'] + "\\n" + resourceText + "\\n\\n[系统指令]\\n请基于上述信息创作开场白剧情：描述制作人查阅这些档案或迎接偶像入职的场景。\\n⚠️你必须在回复最末尾输出 <sys_ui> 标签块。\\n⚠️你必须在回复最末尾输出 <UpdateVariable> 标签块，并将上述获得的星尘、道具以及新角色的初始状态写入 JSON Patch！|/trigger";
     } else {
-        finalMessage = '/send 【自定义星探发掘确认】当前阵营：' + currentSelectedAgency['名称'] + '\\n\\n【保底目标档案】\\n' + finalCharDesignText + '\\n本次十连获得偶像（含重复印记）总数：' + idolsCount + '位。请求根据抽卡结果生成保底偶像入职档案与剧情。|/trigger';
+        finalMessage = "/send [系统日志：自定义星探发掘确认]\\n当前阵营：" + currentSelectedAgency['名称'] + "\\n" + resourceText + "\\n\\n【保底目标详细设定】\\n" + finalCharDesignText + "\\n\\n[系统指令]\\n请基于上述设定与资源，创作保底偶像入职的开场白剧情。\\n⚠️你必须在回复最末尾输出 <sys_ui> 标签块。\\n⚠️你必须在回复最末尾输出 <UpdateVariable> 标签块，并在 JSON Patch 中初始化这位自定义角色的基础变量，同时将获得的星尘与道具入账！|/trigger";
     }
+
     if (typeof triggerSlash === 'function') {
         triggerSlash(finalMessage);
     } else {
         alert("未检测到酒馆环境，发送指令: " + finalMessage);
     }
 }
+
 
 /* ================= 入口：渲染主界面 ================= */
 function renderGamePage() {
