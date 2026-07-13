@@ -30,7 +30,7 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
 
-.scrollable-content { max-height: 65vh; overflow-y: auto; padding-right: 15px; padding-bottom: 20px; }
+.scrollable-content { max-height: 80vh; overflow-y: auto; padding-right: 15px; padding-bottom: 20px; }
 
 .sakura-petal { background: linear-gradient(135deg, #fda4af, #fbcfe8); border-radius: 2px 20px 2px 20px; box-shadow: inset 0 0 5px rgba(255,255,255,0.8), 0 2px 5px rgba(219,39,119,0.1); }
 .summer-leaf { background: linear-gradient(135deg, rgba(74,222,128,0.9), rgba(34,197,94,0.7)); border-radius: 0 50% 0 50%; box-shadow: inset 0 0 6px rgba(255,255,255,0.6), 0 2px 8px rgba(22,163,74,0.15); }
