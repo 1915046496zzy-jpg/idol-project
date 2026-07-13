@@ -1,4 +1,4 @@
-/* ================= 抽卡系统全局变量 ================= */
+/* ================= 抽卡系统全局变量1 ================= */
 var currentSelectedAgency = null;
 var finalCharDesignText = "";
 var currentGachaType = "direct";
