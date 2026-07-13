@@ -2,14 +2,14 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* 基础重置，适应酒馆的文本容器 */
+/* 基础重置 */
 body, html {
-    font-family: "Microsoft YaHei", -apple-system, sans-serif;
+    font-family: <q>"Microsoft YaHei"</q>, -apple-system, sans-serif;
     color: #334155;
     background: transparent;
 }
 
-/* 背景固定在屏幕后方，不影响气泡流 */
+/* 背景和粒子层固定在底层 */
 #global-bg {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: -1; pointer-events: none; transition: opacity 1s ease, background 1s ease;
@@ -21,10 +21,10 @@ body, html {
 .bg-autumn { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fef08a 100%); }
 .bg-winter { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%); }
 
-/* 粒子层也固定在后方，防止撑乱布局 */
 #particles-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; overflow: hidden; }
 .particle { position: absolute; will-change: transform, opacity; }
 
+/* 粒子动画样式 */
 .sakura-petal { background: linear-gradient(135deg, #fda4af, #fbcfe8); border-radius: 2px 20px 2px 20px; box-shadow: inset 0 0 5px rgba(255,255,255,0.8), 0 2px 5px rgba(219,39,119,0.1); }
 .summer-leaf { background: linear-gradient(135deg, rgba(74,222,128,0.9), rgba(34,197,94,0.7)); border-radius: 0 50% 0 50%; box-shadow: inset 0 0 6px rgba(255,255,255,0.6), 0 2px 8px rgba(22,163,74,0.15); }
 .autumn-leaf { background: linear-gradient(135deg, #ea580c, #fbbf24); border-radius: 0 50% 0 50%; box-shadow: inset 0 0 5px rgba(255,255,255,0.3), 0 2px 5px rgba(217,119,6,0.2); }
@@ -40,54 +40,86 @@ body, html {
     100% { transform: translate(calc(var(--sway-x) * 1.5), 110vh) rotateX(360deg) rotateY(360deg) rotateZ(360deg); opacity: 0; }
 }
 
-/* ================= 核心修复区域：取消绝对定位，让文档流自动撑高 ================= */
+/* 滚动条美化 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
+
+/* ================= 核心修复：外层容器高度限制与弹性布局 ================= */
 .screen-panel {
     display: none;
     width: 100%;
-    /* 移除了 position: absolute 和 min-height */
+    /* 给气泡内的一个明确高度，占据屏幕80%，防截断 */
+    height: 80vh;
+    min-height: 600px;
     position: relative;
-    padding: 40px 10px;
+    padding: 20px 10px;
     z-index: 10;
     animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
 .screen-panel.active {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center; /* 居中显示玻璃面板 */
 }
 
-/* 移除了滚动条限制，让内容直接铺开把酒馆气泡撑到底 */
+/* 玻璃面板：让它撑满父容器(screen-panel)，内部使用flex布局 */
+.glass-panel {
+    width: 100%;
+    max-width: 1050px;
+    height: 100%; /* 撑满80vh */
+    display: flex;
+    flex-direction: column; /* 让头部和滚动内容上下排列 */
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.5);
+    transition: all 0.6s;
+}
+
+/* 面板头部固定，不参与滚动 */
+.panel-header {
+    flex-shrink: 0; /* 防止被挤压 */
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.panel-header::after { content: ''; display: block; width: 60px; height: 3px; background: currentColor; margin: 15px auto 0; border-radius: 2px; opacity: 0.3; }
+.panel-header h1 { font-size: 32px; color: var(--theme-text-main, #db2777); margin-bottom: 8px; letter-spacing: 4px; font-weight: 900; }
+.panel-header p { font-size: 13px; color: #64748b; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; }
+
+/* 核心修复：滚动区域填满剩余空间并触发内部滚动 */
 .scrollable-content {
-    height: auto;
-    overflow: visible;
+    flex: 1; /* 占据剩余全部高度 */
+    overflow-y: auto; /* 内容超出时内部滚动 */
+    padding-right: 15px;
     padding-bottom: 20px;
+    height: 0; /* 兼容flex布局的滚动条bug */
 }
 
+/* ================= 其他样式保持不变 ================= */
 .btn-return-title { position: fixed; top: 20px; left: 20px; z-index: 100; padding: 10px 20px; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.9); border-radius: 30px; font-size: 13px; font-weight: bold; cursor: pointer; color: #475569; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s; display: none; }
 .btn-return-title:hover { background: #fff; transform: translateX(-5px); color: var(--theme-text-main, #db2777); }
 
 /* Splash & Title */
-#splash-screen { align-items: center; justify-content: center; flex-direction: column; z-index: 30; cursor: pointer; padding-top: 15vh;}
+#splash-screen { align-items: center; justify-content: center; flex-direction: column; z-index: 30; cursor: pointer; }
 .splash-logo-main, .title-logo-main { font-family: 'Noto Serif SC', serif; font-size: 6vw; font-weight: 900; color: var(--theme-text-main, #db2777); letter-spacing: 0.2em; margin-bottom: 10px; text-shadow: 2px 2px 0 rgba(255,255,255,0.8); transition: color 1s; text-align: center; }
 .title-logo-main { font-size: 4vw; z-index: 2; position: relative; }
 .splash-logo-sub, .title-logo-sub { font-size: 1.5vw; letter-spacing: 0.8em; color: var(--theme-text-sub, #f472b6); font-weight: bold; font-family: sans-serif; transition: color 1s; text-align: center; text-shadow: 1px 1px 0 rgba(255,255,255,0.8); }
-#click-to-start { margin-top: 15vh; font-size: 18px; color: var(--theme-text-main, #db2777); letter-spacing: 4px; animation: pulse 2s infinite; font-weight: bold; padding: 20px 40px; border-radius: 30px; background: rgba(255,255,255,0.3); backdrop-filter: blur(5px); }
+#click-to-start { margin-top: 5vh; font-size: 18px; color: var(--theme-text-main, #db2777); letter-spacing: 4px; animation: pulse 2s infinite; font-weight: bold; padding: 20px 40px; border-radius: 30px; background: rgba(255,255,255,0.3); backdrop-filter: blur(5px); }
 
-#title-screen { align-items: center; flex-direction: column; padding-top: 15vh; z-index: 20;}
-.title-logo-container { text-align: center; margin-bottom: 8vh; position: relative; }
+#title-screen { align-items: center; flex-direction: column; padding-top: 10vh; z-index: 20;}
+.title-logo-container { text-align: center; margin-bottom: 5vh; position: relative; }
 .title-menu { display: flex; flex-direction: column; gap: 20px; align-items: center; width: 320px; margin-top: 20px;}
 .menu-btn { width: 100%; padding: 16px 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.9); border-radius: 30px; font-size: 18px; font-weight: bold; color: var(--theme-text-main, #db2777); cursor: pointer; transition: all 0.3s; letter-spacing: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
 .menu-btn::before { content: '✦'; position: absolute; left: 20px; opacity: 0; transition: 0.3s; transform: translateX(-10px); }
 .menu-btn::after { content: '✦'; position: absolute; right: 20px; opacity: 0; transition: 0.3s; transform: translateX(10px); }
 .menu-btn:hover { background: #fff; transform: scale(1.05); border-color: var(--theme-text-sub, #f472b6); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
 .menu-btn:hover::before, .menu-btn:hover::after { opacity: 1; transform: translateX(0); }
-
-/* Glass Panel */
-.glass-panel { width: 100%; max-width: 1050px; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 24px; padding: 40px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.5); transition: all 0.6s; }
-.panel-header { text-align: center; margin-bottom: 30px; position: relative; }
-.panel-header::after { content: ''; display: block; width: 60px; height: 3px; background: currentColor; margin: 20px auto 0; border-radius: 2px; opacity: 0.3; }
-.panel-header h1 { font-size: 32px; color: var(--theme-text-main, #db2777); margin-bottom: 8px; letter-spacing: 4px; font-weight: 900; }
-.panel-header p { font-size: 13px; color: #64748b; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; }
 
 /* Agency Cards */
 .agency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; padding: 10px; }
@@ -116,7 +148,7 @@ body, html {
 .card-type-D .card-title { color: #44403c; }
 .card-type-D .info-label { color: #57534e; }
 .card-type-E { background: linear-gradient(135deg, #fef9c3, #fef08a); border-radius: 8px 32px 8px 32px; border: none; box-shadow: 4px 4px 0 #eab308; }
-.card-type-E .card-title { color: #ca8a04; font-family: "Comic Sans MS", cursive;}
+.card-type-E .card-title { color: #ca8a04; font-family: <q>"Comic Sans MS"</q>, cursive;}
 .card-type-E .info-label { color: #b45309; }
 .card-type-F { background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1px solid rgba(216, 180, 254, 0.5); }
 .card-type-F .card-title { color: #6d28d9; }
