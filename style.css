@@ -309,85 +309,102 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; bac
 .loading { text-align: center; padding: 60px; color: #94a3b8; font-size: 16px; font-weight: bold; letter-spacing: 2px; animation: pulse 1.5s infinite;}
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none;}
 
-/* ================= 手机端响应式适配 (Mobile Responsive) 终极修复 ================= */
+/* ================= 手机端响应式适配 (Mobile Responsive) 终极修复 V3 ================= */
 @media screen and (max-width: 768px) {
-    .screen-panel {
-        padding: 10px 5px;
-        height: auto !important;
-        min-height: 100vh;
-        overflow: visible;
-    }
+/* 1. 给顶部留出足够的空间，防止返回按钮遮挡标题 */
+.screen-panel {
+/* 上边距加大到 80px，把内容往下推，避开左上角的按钮 */
+padding: 80px 10px 10px 10px;
+height: auto !important;
+min-height: 100vh;
+overflow: visible;
+}
 
-    .glass-panel {
-        padding: 15px;
-        border-radius: 16px;
-        height: auto !important;
-    }
+.glass-panel {
+padding: 15px;
+border-radius: 16px;
+height: auto !important;
+/* 给玻璃面板内部顶部也加一点微调 */
+margin-top: 10px;
+}
 
-    .scrollable-content {
-        height: auto !important;
-        overflow: visible !important;
-    }
+.scrollable-content {
+height: auto !important;
+overflow: visible !important;
+}
 
-    .panel-header h1 { font-size: 24px; letter-spacing: 2px; }
-    .panel-header p { font-size: 11px; }
-    .splash-logo-main { font-size: 10vw; }
-    .splash-logo-sub { font-size: 3vw; }
-    .title-logo-main { font-size: 8vw; }
+/* 标题字号微调 */
+.panel-header h1 { font-size: 24px; letter-spacing: 2px; }
+.panel-header p { font-size: 11px; }
+.splash-logo-main { font-size: 10vw; }
+.splash-logo-sub { font-size: 3vw; }
+.title-logo-main { font-size: 8vw; }
 
-    .agency-grid { grid-template-columns: 1fr; gap: 15px; }
-    .detail-content-grid { grid-template-columns: 1fr; }
+/* 让返回按钮稍微变小一点点，省出空间 */
+.btn-return-title {
+top: 15px;
+left: 15px;
+padding: 8px 16px;
+font-size: 12px;
+}
 
-    .btn-group { flex-direction: column; gap: 12px; }
-    .btn { width: 100%; padding: 12px 20px; }
+.agency-grid { grid-template-columns: 1fr; gap: 15px; }
 
-    .form-row { flex-direction: column; align-items: stretch; gap: 5px; }
-    .form-label { text-align: left; width: auto; padding-top: 0; }
-    .form-grid { grid-template-columns: 1fr; }
+/* 哥哥要求的：入职阵营进一步的情报面板（如果想恢复双排可以把 1fr 改成 repeat(2, 1fr)）
+但文字太长建议单排。这里遵照上个版本的单列。 */
+.detail-content-grid { grid-template-columns: 1fr; }
 
-    /* ================= 修复核心：强制手机端图鉴为双排 ================= */
-    .gallery-grid {
-        grid-template-columns: repeat(2, 1fr) !important; /* 强制不管多窄都排两列 */
-        gap: 10px; /* 缩小间距防止挤爆 */
-        padding: 5px;
-    }
+.btn-group { flex-direction: column; gap: 12px; }
+.btn { width: 100%; padding: 12px 20px; }
 
-    .gallery-card {
-        border-radius: 12px;
-    }
+.form-row { flex-direction: column; align-items: stretch; gap: 5px; }
+.form-label { text-align: left; width: auto; padding-top: 0; }
+.form-grid { grid-template-columns: 1fr; }
 
-    .gallery-img-wrap {
-        aspect-ratio: 3/4; /* 强制锁定图片比例，绝对不许被拉长 */
-    }
+/* ================= 修复核心：强制各种卡片展示为两列 ================= */
 
-    .gallery-info {
-        padding: 8px; /* 缩小内部边距 */
-    }
+/* 偶像图鉴列表 */
+.gallery-grid {
+grid-template-columns: repeat(2, 1fr) !important;
+gap: 10px;
+padding: 5px;
+}
 
-    .gallery-name {
-        font-size: 14px; /* 手机上名字字号调小 */
-        margin-bottom: 2px;
-    }
+/* 哥哥要求的：卡池预览（包含但不限于）强制两列 */
+.gacha-item-grid {
+grid-template-columns: repeat(2, 1fr) !important;
+gap: 10px;
+margin-top: 15px;
+}
 
-    .gallery-tag {
-        font-size: 10px;
-        padding: 2px 6px;
-    }
+/* 抽卡结果页强制两列 */
+.gacha-result-grid {
+grid-template-columns: repeat(2, 1fr) !important;
+padding: 10px;
+gap: 10px;
+}
 
-    .gallery-profile { flex-direction: column; gap: 15px; }
-    .profile-left { flex: none; width: 100%; max-width: 200px; margin: 0 auto; }
+/* 图鉴内部微调锁定比例 */
+.gallery-card { border-radius: 12px; }
+.gallery-img-wrap { aspect-ratio: 3/4; }
+.gallery-info { padding: 8px; }
+.gallery-name { font-size: 14px; margin-bottom: 2px; }
+.gallery-tag { font-size: 10px; padding: 2px 6px; }
 
-    /* 相册也强制双排或三排 */
-    .memory-photo-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px;
-    }
+.gallery-profile { flex-direction: column; gap: 15px; }
+.profile-left { flex: none; width: 100%; max-width: 200px; margin: 0 auto; }
 
-    .gacha-result-grid { grid-template-columns: repeat(2, 1fr); padding: 10px; gap: 10px; }
-    .gacha-result-card { padding: 8px; }
-    .gacha-result-img { width: 60px; height: 60px; }
-    .gacha-result-emoji { font-size: 30px; line-height: 60px; }
+/* 相册记忆强制双排 */
+.memory-photo-grid {
+grid-template-columns: repeat(2, 1fr) !important;
+gap: 10px;
+}
 
-    .theme-grid { grid-template-columns: repeat(2, 1fr); }
-    #click-to-start { font-size: 14px; padding: 15px 25px; }
+/* 抽卡结果微调 */
+.gacha-result-card { padding: 8px; }
+.gacha-result-img { width: 60px; height: 60px; }
+.gacha-result-emoji { font-size: 30px; line-height: 60px; }
+
+.theme-grid { grid-template-columns: repeat(2, 1fr); }
+#click-to-start { font-size: 14px; padding: 15px 25px; }
 }
