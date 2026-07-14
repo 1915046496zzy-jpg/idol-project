@@ -386,29 +386,53 @@ function renderGachaResult() {
 function executeFinalGachaCommand() {
     var idolsCount = currentGachaResults.filter(r => r.type === 'idol' || r.type === 'duplicate').length;
 
-    // 1. 整理具体的抽卡物资清单，方便 AI 直接写入 JSON Patch
+    // 1. 初始化统计容器
     var stardustTotal = 0;
-    var itemNames = [];
-    var idolNames = [];
+    var itemCounts = {};  // 用于统计道具数量
+    var markCounts = {};  // 用于统计偶像印记数量
+    var newIdols = [];    // 用于记录新获得的偶像
 
+    // 2. 遍历抽卡结果，进行归类和计数
     currentGachaResults.forEach(res => {
-        if (res.type === 'stardust') stardustTotal += res.amount;
-        if (res.type === 'item') itemNames.push(res.data.name);
-        if (res.type === 'idol' || res.type === 'duplicate') idolNames.push(res.name);
+        if (res.type === 'stardust') {
+            stardustTotal += res.amount;
+        } else if (res.type === 'item') {
+            var itemName = res.data.name;
+            itemCounts[itemName] = (itemCounts[itemName] || 0) + 1;
+        } else if (res.type === 'idol') {
+            newIdols.push(res.name);
+        } else if (res.type === 'duplicate') {
+            // 重复偶像自动转化为印记
+            var markName = res.name + '·偶像印记';
+            markCounts[markName] = (markCounts[markName] || 0) + 1;
+        }
     });
 
+    // 3. 将字典转换为带数量的字符串数组
+    var itemStrings = [];
+    for (var iName in itemCounts) {
+        itemStrings.push(iName + " ×" + itemCounts[iName]);
+    }
+
+    var markStrings = [];
+    for (var mName in markCounts) {
+        markStrings.push(mName + " ×" + markCounts[mName]);
+    }
+
+    // 4. 拼装结构化资源清单
     var resourceText = "【本次发掘资源清单】\\n" +
                        "- 获得星尘: " + stardustTotal + "\\n" +
-                       "- 获得道具: " + (itemNames.length > 0 ? itemNames.join("、") : "无") + "\\n" +
-                       "- 获得偶像: " + idolNames.join("、");
+                       "- 获得道具: " + (itemStrings.length > 0 ? itemStrings.join("、") : "无") + "\\n" +
+                       "- 获得新偶像: " + (newIdols.length > 0 ? newIdols.join("、") : "无") + "\\n" +
+                       "- 获得印记转化: " + (markStrings.length > 0 ? markStrings.join("、") : "无");
 
-    // 2. 拼装发给 AI 的终极系统指令
+    // 5. 拼装发给 AI 的终极系统指令
     var finalMessage = "";
 
     if(currentGachaType === 'direct') {
-        finalMessage = "/send [系统日志：新档案录入请求]\\n当前阵营：" + currentSelectedAgency['名称'] + "\\n" + resourceText + "\\n\\n[系统指令]\\n请基于上述信息创作开场白剧情：描述制作人查阅这些档案或迎接偶像入职的场景。\\n⚠️你必须在回复最末尾输出 <sys_ui> 标签块。\\n⚠️你必须在回复最末尾输出 <UpdateVariable> 标签块，并将上述获得的星尘、道具以及新角色的初始状态写入 JSON Patch！|/trigger";
+        finalMessage = "/send [系统日志：新档案录入请求]\\n当前阵营：" + currentSelectedAgency['名称'] + "\\n" + resourceText + "\\n\\n[系统指令]\\n请基于上述信息创作开场白剧情：描述制作人查阅这些档案或迎接偶像入职的场景。\\n⚠️你必须在回复最末尾输出 <sys_ui> 标签块。\\n⚠️你必须在回复最末尾输出 <UpdateVariable> 标签块，并将上述获得的星尘、道具以及新角色的初始状态写入 JSON Patch（包含印记的入账）！|/trigger";
     } else {
-        finalMessage = "/send [系统日志：自定义星探发掘确认]\\n当前阵营：" + currentSelectedAgency['名称'] + "\\n" + resourceText + "\\n\\n【保底目标详细设定】\\n" + finalCharDesignText + "\\n\\n[系统指令]\\n请基于上述设定与资源，创作保底偶像入职的开场白剧情。\\n⚠️你必须在回复最末尾输出 <sys_ui> 标签块。\\n⚠️你必须在回复最末尾输出 <UpdateVariable> 标签块，并在 JSON Patch 中初始化这位自定义角色的基础变量，同时将获得的星尘与道具入账！|/trigger";
+        finalMessage = "/send [系统日志：自定义星探发掘确认]\\n当前阵营：" + currentSelectedAgency['名称'] + "\\n" + resourceText + "\\n\\n【保底目标详细设定】\\n" + finalCharDesignText + "\\n\\n[系统指令]\\n请基于上述设定与资源，创作保底偶像入职的开场白剧情。\\n⚠️你必须在回复最末尾输出 <sys_ui> 标签块。\\n⚠️你必须在回复最末尾输出 <UpdateVariable> 标签块，并在 JSON Patch 中初始化这位自定义角色的基础变量，同时将获得的星尘、道具与印记入账！|/trigger";
     }
 
     if (typeof triggerSlash === 'function') {
@@ -417,6 +441,7 @@ function executeFinalGachaCommand() {
         alert("未检测到酒馆环境，发送指令: " + finalMessage);
     }
 }
+
 
 
 /* ================= 入口：渲染主界面 ================= */
