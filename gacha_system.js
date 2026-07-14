@@ -442,8 +442,6 @@ function executeFinalGachaCommand() {
     }
 }
 
-
-
 /* ================= 入口：渲染主界面 ================= */
 function renderGamePage() {
     var html = '<div id="agency-selection" class="scrollable-content"><div class="agency-grid">';
