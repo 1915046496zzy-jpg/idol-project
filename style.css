@@ -309,17 +309,26 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; bac
 .loading { text-align: center; padding: 60px; color: #94a3b8; font-size: 16px; font-weight: bold; letter-spacing: 2px; animation: pulse 1.5s infinite;}
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none;}
 
-/* ================= 手机端响应式适配 (Mobile Responsive) ================= */
+/* ================= 手机端响应式适配 (Mobile Responsive) 终极修复 ================= */
 @media screen and (max-width: 768px) {
-    /* 1. 面板容器缩减边距以节省空间 */
+    /* 1. 彻底解除高度封印，让内容自然撑开手机屏幕 */
     .screen-panel {
         padding: 10px 5px;
-        min-height: 700px; /* 手机上稍微调低一点最小高度要求 */
-        height: 800px;
+        height: auto !important; /* 强制覆盖固定高度 */
+        min-height: 100vh;
+        overflow: visible; /* 允许内容溢出被正常看到 */
     }
+
     .glass-panel {
         padding: 15px;
         border-radius: 16px;
+        height: auto !important; /* 面板也随内容撑开 */
+    }
+
+    /* 修复内部滚动区域，手机上不再局限在小框里，而是把整个页面拉长 */
+    .scrollable-content {
+        height: auto !important;
+        overflow: visible !important;
     }
 
     /* 2. 标题字号缩小 */
