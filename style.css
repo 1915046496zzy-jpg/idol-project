@@ -311,106 +311,83 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; bac
 
 /* ================= 手机端响应式适配 (Mobile Responsive) 终极修复 ================= */
 @media screen and (max-width: 768px) {
-    /* 1. 彻底解除高度封印，让内容自然撑开手机屏幕 */
     .screen-panel {
         padding: 10px 5px;
-        height: auto !important; /* 强制覆盖固定高度 */
+        height: auto !important;
         min-height: 100vh;
-        overflow: visible; /* 允许内容溢出被正常看到 */
+        overflow: visible;
     }
 
     .glass-panel {
         padding: 15px;
         border-radius: 16px;
-        height: auto !important; /* 面板也随内容撑开 */
+        height: auto !important;
     }
 
-    /* 修复内部滚动区域，手机上不再局限在小框里，而是把整个页面拉长 */
     .scrollable-content {
         height: auto !important;
         overflow: visible !important;
     }
 
-    /* 2. 标题字号缩小 */
     .panel-header h1 { font-size: 24px; letter-spacing: 2px; }
     .panel-header p { font-size: 11px; }
     .splash-logo-main { font-size: 10vw; }
     .splash-logo-sub { font-size: 3vw; }
     .title-logo-main { font-size: 8vw; }
 
-    /* 3. 网格卡片适应小屏幕：让列宽占满100% */
-    .agency-grid {
-        grid-template-columns: 1fr; /* 强制单列显示 */
-        gap: 15px;
-    }
-    .detail-content-grid {
-        grid-template-columns: 1fr; /* 详情面板强制单列 */
-    }
+    .agency-grid { grid-template-columns: 1fr; gap: 15px; }
+    .detail-content-grid { grid-template-columns: 1fr; }
 
-    /* 4. 底部按钮由并排改为上下堆叠 */
-    .btn-group {
-        flex-direction: column; /* 竖向排列 */
-        gap: 12px;
-    }
-    .btn {
-        width: 100%;
-        padding: 12px 20px;
-    }
+    .btn-group { flex-direction: column; gap: 12px; }
+    .btn { width: 100%; padding: 12px 20px; }
 
-    /* 5. 角色设计表单适配：标签和输入框上下排列 */
-    .form-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 5px;
-    }
-    .form-label {
-        text-align: left;
-        width: auto;
-        padding-top: 0;
-    }
-    .form-grid {
-        grid-template-columns: 1fr; /* 表单也变单列 */
-    }
+    .form-row { flex-direction: column; align-items: stretch; gap: 5px; }
+    .form-label { text-align: left; width: auto; padding-top: 0; }
+    .form-grid { grid-template-columns: 1fr; }
 
-    /* 6. 图鉴与相册适配 */
-    .gallery-profile {
-        flex-direction: column; /* 手机上把左侧头像和右侧信息分开上下排 */
-        gap: 15px;
-    }
-    .profile-left {
-        flex: none;
-        width: 100%;
-        max-width: 200px;
-        margin: 0 auto; /* 头像居中 */
-    }
+    /* ================= 修复核心：强制手机端图鉴为双排 ================= */
     .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* 图鉴列表在手机上变小一点并排两张 */
+        grid-template-columns: repeat(2, 1fr) !important; /* 强制不管多窄都排两列 */
+        gap: 10px; /* 缩小间距防止挤爆 */
+        padding: 5px;
     }
 
-    /* 7. 抽卡结果网格适配：手机上可能一行塞不下5张卡 */
-    .gacha-result-grid {
-        grid-template-columns: repeat(2, 1fr); /* 手机上一行放2张抽卡结果 */
-        padding: 10px;
+    .gallery-card {
+        border-radius: 12px;
+    }
+
+    .gallery-img-wrap {
+        aspect-ratio: 3/4; /* 强制锁定图片比例，绝对不许被拉长 */
+    }
+
+    .gallery-info {
+        padding: 8px; /* 缩小内部边距 */
+    }
+
+    .gallery-name {
+        font-size: 14px; /* 手机上名字字号调小 */
+        margin-bottom: 2px;
+    }
+
+    .gallery-tag {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .gallery-profile { flex-direction: column; gap: 15px; }
+    .profile-left { flex: none; width: 100%; max-width: 200px; margin: 0 auto; }
+
+    /* 相册也强制双排或三排 */
+    .memory-photo-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 10px;
     }
-    .gacha-result-card {
-        padding: 8px;
-    }
-    .gacha-result-img {
-        width: 60px;
-        height: 60px;
-    }
-    .gacha-result-emoji {
-        font-size: 30px;
-        line-height: 60px;
-    }
 
-    /* 8. 其他微调 */
-    .theme-grid {
-        grid-template-columns: repeat(2, 1fr); /* 主题按钮一行2个 */
-    }
-    #click-to-start {
-        font-size: 14px;
-        padding: 15px 25px;
-    }
+    .gacha-result-grid { grid-template-columns: repeat(2, 1fr); padding: 10px; gap: 10px; }
+    .gacha-result-card { padding: 8px; }
+    .gacha-result-img { width: 60px; height: 60px; }
+    .gacha-result-emoji { font-size: 30px; line-height: 60px; }
+
+    .theme-grid { grid-template-columns: repeat(2, 1fr); }
+    #click-to-start { font-size: 14px; padding: 15px 25px; }
 }
