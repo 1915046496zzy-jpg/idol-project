@@ -24,11 +24,25 @@ var AssetsMap = {
     "鸭田志穂_表情_哼": "https://i.postimg.cc/T14s4ynw/ya-tian-zhi-sui-biao-qing-heng.png",
     "鸭田志穂_表情_抱歉啦": "https://i.postimg.cc/PJR7RL1q/ya-tian-zhi-sui-biao-qing-bao-qian-la.png",
 
-    // ================= 【剧情插图与CG】 =================
-    "浅宫加爱_SFW_偶像服": "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
-    "浅宫加爱_NSFW_传教士体位": "https://i.postimg.cc/rmmmB3xb/qian-gong-jia-ai-chuan-jiao-shi-ti-wei.png",
-    "芦田希未_SFW_偶像服": "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
-    "芦田希未_NSFW_后入": "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png",
+// ================= 【剧情插图与CG】 =================
+
+// ===== 浅宫加爱 =====
+// SFW
+"浅宫加爱_SFW_偶像服": "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
+"浅宫加爱_SFW_校服": "https://i.postimg.cc/43qwcb8c/qian-gong-jia-ai-xiao-fu.png",
+"浅宫加爱_SFW_厨房做面点": "https://i.postimg.cc/j555pmyq/qian-gong-jia-ai-zuo-mian-dian.png",
+"浅宫加爱_SFW_舞台流泪": "https://i.postimg.cc/gJJJCQ8C/qian-gong-jia-ai-gan-xie-ji.png",
+"浅宫加爱_SFW_雨中撑伞": "https://i.postimg.cc/JnnnfvZ9/qian-gong-jia-ai-yu-zhong.png",
+// NSFW
+"浅宫加爱_NSFW_床上脱衣": "https://i.postimg.cc/8kK9H3ZY/qian-gong-jia-ai-chuang-shang-tuo-yi.png",
+"浅宫加爱_NSFW_传教士体位": "https://i.postimg.cc/rmmmB3xb/qian-gong-jia-ai-chuan-jiao-shi-ti-wei.png",
+"浅宫加爱_NSFW_全裸紧张": "https://i.postimg.cc/B666rkHR/qian-gong-jia-ai-quan-luo-jin-zhang.png",
+
+// ===== 芦田希未 =====
+// SFW
+"芦田希未_SFW_偶像服": "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
+// NSFW
+"芦田希未_NSFW_后入": "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png"
 
     // ================= 【场景与大地图】 =================
     "场景_世界地图": "https://i.postimg.cc/02gmvkZy/da-de-tu.png",
