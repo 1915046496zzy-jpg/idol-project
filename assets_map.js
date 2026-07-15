@@ -28,15 +28,15 @@ var AssetsMap = {
 
 // ===== 浅宫加爱 =====
 // SFW
-"浅宫加爱_SFW_偶像服": "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
-"浅宫加爱_SFW_校服": "https://i.postimg.cc/43qwcb8c/qian-gong-jia-ai-xiao-fu.png",
-"浅宫加爱_SFW_厨房做面点": "https://i.postimg.cc/j555pmyq/qian-gong-jia-ai-zuo-mian-dian.png",
-"浅宫加爱_SFW_舞台流泪": "https://i.postimg.cc/gJJJCQ8C/qian-gong-jia-ai-gan-xie-ji.png",
-"浅宫加爱_SFW_雨中撑伞": "https://i.postimg.cc/JnnnfvZ9/qian-gong-jia-ai-yu-zhong.png",
+"浅宫加爱_SFW_偶像服": "https://i.postimg.cc/MHqDFTTk/qian-gong-jia-ai-ou-xiang-fu.jpg",
+"浅宫加爱_SFW_校服": "https://i.postimg.cc/Y0R3KH4s/qian-gong-jia-ai-xiao-fu.jpg",
+"浅宫加爱_SFW_厨房做面点": "https://i.postimg.cc/nr2kbJsW/qian-gong-jia-ai-zuo-mian-dian.jpg",
+"浅宫加爱_SFW_舞台流泪": "https://i.postimg.cc/QChbyttG/qian-gong-jia-ai-gan-xie-ji.jpg",
+"浅宫加爱_SFW_雨中撑伞": "https://i.postimg.cc/T109M6yH/qian-gong-jia-ai-yu-zhong.jpg",
 // NSFW
-"浅宫加爱_NSFW_床上脱衣": "https://i.postimg.cc/8kK9H3ZY/qian-gong-jia-ai-chuang-shang-tuo-yi.png",
-"浅宫加爱_NSFW_传教士体位": "https://i.postimg.cc/rmmmB3xb/qian-gong-jia-ai-chuan-jiao-shi-ti-wei.png",
-"浅宫加爱_NSFW_全裸紧张": "https://i.postimg.cc/B666rkHR/qian-gong-jia-ai-quan-luo-jin-zhang.png",
+"浅宫加爱_NSFW_床上脱衣": "https://i.postimg.cc/rsMJPmp7/qian-gong-jia-ai-chuang-shang-tuo-yi.jpg",
+"浅宫加爱_NSFW_传教士体位": "https://i.postimg.cc/sxscNX2q/qian-gong-jia-ai-chuan-jiao-shi-ti-wei.jpg",
+"浅宫加爱_NSFW_全裸紧张": "https://i.postimg.cc/sxmcdrBn/qian-gong-jia-ai-quan-luo-jin-zhang.jpg",
 
 // ===== 芦田希未 =====
 // SFW
