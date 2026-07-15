@@ -233,21 +233,21 @@ var idolDatabase = [
                 id: 1,
                 name: "浅宫加爱",
                 tag: "极具感染力的小太阳",
-                image: "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
-                memories: {
-                    sfw: [
-                        { url: "https://iili.io/Cf5fqlV.webp", title: "最后一步是勇气" },
-                        { url: "https://i.postimg.cc/43qwcb8c/qian-gong-jia-ai-xiao-fu.png", title: "夏服 · 笑容确认" },
-                        { url: "https://i.postimg.cc/gJJJCQ8C/qian-gong-jia-ai-gan-xie-ji.png", title: "谢谢你看到这里" },
-                        { url: "https://i.postimg.cc/JnnnfvZ9/qian-gong-jia-ai-yu-zhong.png", title: "伞下的空想临界" },
-                        { url: "https://i.postimg.cc/j555pmyq/qian-gong-jia-ai-zuo-mian-dian.png", title: "料理与笑容的配比" }
-                    ],
-                    nsfw: [
-                        { url: "https://i.postimg.cc/8kK9H3ZY/qian-gong-jia-ai-chuang-shang-tuo-yi.png", title: "剥落的茧与初绽之花" },
-                        { url: "https://i.postimg.cc/B666rkHR/qian-gong-jia-ai-quan-luo-jin-zhang.png", title: "突如其来的零距离" },
-                        { url: "https://i.postimg.cc/rmmmB3xb/qian-gong-jia-ai-chuan-jiao-shi-ti-wei.png", title: "魔力回路·直连校准" }
-                    ]
-                },
+                image: "https://i.postimg.cc/MHqDFTTk/qian-gong-jia-ai-ou-xiang-fu.jpg",
+memories: {
+    sfw: [
+        { url: "https://i.postimg.cc/MHqDFTTk/qian-gong-jia-ai-ou-xiang-fu.jpg", title: "浅宫加爱_SFW_偶像服" },
+        { url: "https://i.postimg.cc/Y0R3KH4s/qian-gong-jia-ai-xiao-fu.jpg", title: "浅宫加爱_SFW_校服" },
+        { url: "https://i.postimg.cc/nr2kbJsW/qian-gong-jia-ai-zuo-mian-dian.jpg", title: "浅宫加爱_SFW_厨房做面点" },
+        { url: "https://i.postimg.cc/QChbyttG/qian-gong-jia-ai-gan-xie-ji.jpg", title: "浅宫加爱_SFW_舞台流泪" },
+        { url: "https://i.postimg.cc/T109M6yH/qian-gong-jia-ai-yu-zhong.jpg", title: "浅宫加爱_SFW_雨中撑伞" }
+    ],
+    nsfw: [
+        { url: "https://i.postimg.cc/rsMJPmp7/qian-gong-jia-ai-chuang-shang-tuo-yi.jpg", title: "浅宫加爱_NSFW_床上脱衣" },
+        { url: "https://i.postimg.cc/sxmcdrBn/qian-gong-jia-ai-quan-luo-jin-zhang.jpg", title: "浅宫加爱_NSFW_全裸紧张" },
+        { url: "https://i.postimg.cc/sxscNX2q/qian-gong-jia-ai-chuan-jiao-shi-ti-wei.jpg", title: "浅宫加爱_NSFW_传教士体位" }
+    ]
+},
                 basic: {
                     "🎓 职业": "高中二年级学生",
                     "🎂 年龄": "16岁 (生日: 4月14日)",
