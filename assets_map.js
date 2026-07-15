@@ -1,7 +1,7 @@
 // 全局图床资源映射表
 var AssetsMap = {
     // ================= 【立绘与头像】 =================
-    "浅宫加爱_立绘": "https://i.postimg.cc/MGf2Z4Bp/qian-gong-jia-ai.png",
+    "浅宫加爱_立绘": "https://i.postimg.cc/MHqDFTTk/qian-gong-jia-ai-ou-xiang-fu.jpg",
     "芦田希未_立绘": "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
     "鸭田志穂_立绘": "https://i.postimg.cc/PJ3hH5zq/ya-tian-zhi-sui-wu-tai-ge-chang.png",
     "益田春子_立绘": "https://i.postimg.cc/hPgnBLnc/yi-tian-chun-zi-ou-xiang-wu-tai.png",
