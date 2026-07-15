@@ -42,7 +42,7 @@ var AssetsMap = {
 // SFW
 "芦田希未_SFW_偶像服": "https://i.postimg.cc/63ZtXc2K/lu-tian-xi-wei.png",
 // NSFW
-"芦田希未_NSFW_后入": "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png"
+"芦田希未_NSFW_后入": "https://i.postimg.cc/pr0cr96c/lu-tian-xi-wei-hou-ru.png",
 
     // ================= 【场景与大地图】 =================
     "场景_世界地图": "https://i.postimg.cc/02gmvkZy/da-de-tu.png",
